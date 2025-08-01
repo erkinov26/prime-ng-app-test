@@ -2,6 +2,7 @@ import {
   Component,
   ElementRef,
   inject,
+  Input,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -24,7 +25,6 @@ import { DatePickerModule } from 'primeng/datepicker';
 
 import * as XLSX from 'xlsx';
 import { MenuModule } from 'primeng/menu';
-import { ReceiptsService } from '../../pages/mfi/transh/tabs/receipts/service/receipts.service';
 interface ExportColumn {
   title: string;
   dataKey: string;
@@ -79,22 +79,18 @@ interface Column {
 })
 export class CustomTable implements OnInit {
   productDialog: boolean = false;
-  products!: Product[];
+
+  @Input() data!: Product[];
 
   product!: Product;
 
-  selectedProducts!: Product[] | null;
-
   submitted: boolean = false;
-
-  statuses!: any[];
 
   @ViewChild('dt') dt!: Table;
 
   cols!: Column[];
 
   exportColumns!: ExportColumn[];
-  receiptService = inject(ReceiptsService);
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
 
@@ -102,31 +98,8 @@ export class CustomTable implements OnInit {
 
   rows = 10;
 
-  tableData!: Column[];
+  @Input() tableData!: Column[];
   ngOnInit() {
-    this.products = this.receiptService.getReceipts();
-    console.log(this.products);
-    this.product = {
-      id: 0,
-      transh: '',
-      transaction: '',
-      doc_date: new Date(),
-      status: '',
-      remained: 0,
-    };
-    this.tableData = [
-      {
-        header: 'Transh',
-        field: 'transh',
-        type: 'string',
-        customExportHeader: 'Transh Code',
-      },
-      { header: 'Transaction', type: 'string', field: 'transaction' },
-      { header: 'Document Date', field: 'doc_date', type: 'date' },
-      { header: 'Status', field: 'status', type: 'string' },
-      { header: 'Remained', field: 'remained', type: 'string' },
-    ];
-
     this.exportColumns = this.tableData.map((col) => ({
       title: col.header,
       dataKey: col.field,
@@ -168,20 +141,18 @@ export class CustomTable implements OnInit {
     this.productDialog = true;
   }
   isLastPage(): boolean {
-    return this.products
-      ? this.first + this.rows >= this.products.length
-      : true;
+    return this.data ? this.first + this.rows >= this.data.length : true;
   }
 
   isFirstPage(): boolean {
-    return this.products ? this.first === 0 : true;
+    return this.data ? this.first === 0 : true;
   }
   hideDialog() {
     this.productDialog = false;
     this.submitted = false;
   }
   findIndexById(id: number): number {
-    return this.products.findIndex((product) => product.id === id);
+    return this.data.findIndex((product) => product.id === id);
   }
   createId(): string {
     let id = '';
@@ -213,11 +184,8 @@ export class CustomTable implements OnInit {
         label: 'Yes',
       },
       accept: () => {
-        this.products = this.products.filter(
-          (val) => val.transh !== product.transh
-        );
-        console.log(this.products);
-
+        this.data = this.data.filter((val) => val.transh !== product.transh);
+        console.log(this.data);
         this.product = {
           id: Math.random(),
           transh: '',
@@ -261,7 +229,7 @@ export class CustomTable implements OnInit {
         remained: Number(row['Remained']) || 0,
       }));
 
-      this.products = [...this.products, ...importedProducts];
+      this.data = [...this.data, ...importedProducts];
 
       this.messageService.add({
         severity: 'success',
@@ -281,7 +249,7 @@ export class CustomTable implements OnInit {
       const index = this.findIndexById(this.product.id);
 
       if (index !== -1) {
-        this.products[index] = { ...this.product };
+        this.data[index] = { ...this.product };
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
@@ -291,7 +259,7 @@ export class CustomTable implements OnInit {
       } else {
         this.product.id = Math.floor(Math.random() * 100000);
         this.product.transh = this.createId();
-        this.products.push({ ...this.product, status: 'Pending' });
+        this.data.push({ ...this.product, status: 'Pending' });
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
@@ -300,7 +268,7 @@ export class CustomTable implements OnInit {
         });
       }
 
-      this.products = [...this.products];
+      this.data = [...this.data];
       this.productDialog = false;
 
       this.product = {
