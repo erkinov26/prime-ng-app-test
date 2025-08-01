@@ -36,7 +36,7 @@ export class Receipts implements OnInit {
     { header: 'Remained', field: 'remained', type: 'string' },
   ];
   receiptsData!: Product[];
-  receiptsStructure = {
+  receiptsStructure: Product = {
     id: 0,
     transh: '',
     transaction: '',

@@ -29,15 +29,7 @@ interface ExportColumn {
   title: string;
   dataKey: string;
 }
-interface Product {
-  id: number;
-  transh: string;
-  transaction: string;
-  doc_date: Date;
-  status: string;
-  remained: number;
-  [key: string]: any;
-}
+
 interface Column {
   field: string;
   header: string;
@@ -179,7 +171,7 @@ export class CustomTable implements OnInit {
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
-          detail: 'Product Deleted',
+          detail: 'Data Deleted',
           life: 3000,
         });
       },
@@ -205,16 +197,16 @@ export class CustomTable implements OnInit {
         };
 
         for (const excelKey in this.excelFieldMapping) {
-          const productField = this.excelFieldMapping[excelKey];
+          const dataItemField = this.excelFieldMapping[excelKey];
 
-          if (productField === 'doc_date' && row[excelKey]) {
-            newItem[productField] = new Date(row[excelKey]);
+          if (dataItemField === 'doc_date' && row[excelKey]) {
+            newItem[dataItemField] = new Date(row[excelKey]);
           } else if (
-            typeof this.data_item_structure?.[productField] === 'number'
+            typeof this.data_item_structure?.[dataItemField] === 'number'
           ) {
-            newItem[productField] = Number(row[excelKey]) || 0;
+            newItem[dataItemField] = Number(row[excelKey]) || 0;
           } else {
-            newItem[productField] = row[excelKey] || '';
+            newItem[dataItemField] = row[excelKey] || '';
           }
         }
 
