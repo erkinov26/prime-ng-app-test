@@ -1,0 +1,58 @@
+<div class="flex flex-col min-h-screen">
+  <!-- Top Menubar -->
+  <p-menubar>
+    <ng-template #start>
+      <img
+        class="w-[100px]"
+        src="data:image/png;base64,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"
+        alt="logo"
+      />
+    </ng-template>
+
+    <ng-template #end>
+      <div class="flex items-center gap-2">
+        <p-avatar
+          image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+          shape="circle"
+        />
+        <p-button label="Secondary" variant="outlined" severity="secondary" />
+      </div>
+    </ng-template>
+  </p-menubar>
+
+  <!-- Main Content -->
+  <div class="flex flex-1">
+    <!-- Sidebar -->
+    <ul
+      class="w-[80px] flex flex-col gap-3 text-gray-700 font-medium p-4 border-r border-gray-300 bg-gray-50"
+    >
+      <li
+        routerLink="mfi"
+        class="border rounded-xl text-xs font-semibold h-10 flex items-center justify-center px-2 border-gray-400 hover:border-gray-500 hover:text-gray-500 cursor-pointer transition"
+      >
+        МФИ
+      </li>
+      <li
+        routerLink="agents"
+        class="border rounded-xl text-xs font-semibold h-10 flex items-center justify-center px-2 border-gray-400 hover:border-gray-500 hover:text-gray-500 cursor-pointer transition"
+      >
+        Agents
+      </li>
+    </ul>
+    <p-menu [model]="items" styleClass="w-full md:w-60 h-full">
+      <ng-template let-item pTemplate="item">
+        <a
+          pRipple
+          [routerLink]="item.routerLink"
+          [ngClass]="item.styleClass"
+          class="flex items-center p-menu-item-link"
+        >
+          <span class="ml-2">{{ item.label }}</span>
+        </a>
+      </ng-template>
+    </p-menu>
+    <div class="flex-6 p-4">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

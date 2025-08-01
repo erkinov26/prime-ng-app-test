@@ -1,0 +1,13 @@
+<p-tabs [value]="avtive_value" (valueChange)="onTabChange($event)" scrollable>
+  <p-tablist>
+    @for(tab of tabs; track tab.value){
+    <p-tab [value]="tab.value">
+      {{ tab.title }}
+    </p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="transh-documents"> <transh-documents /> </p-tabpanel>
+    <p-tabpanel value="transh-receipts"> <transh-receipts /> </p-tabpanel>
+  </p-tabpanels>
+</p-tabs>
