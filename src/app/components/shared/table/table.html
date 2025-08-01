@@ -1,1 +1,181 @@
-    
+<div>
+  <p-toast />
+
+  <p-table
+    #dt
+    [columns]="tableData"
+    [exportHeader]="'customExportHeader'"
+    [value]="products"
+    [paginator]="true"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    (onPage)="pageChange($event)"
+    [rowsPerPageOptions]="[10, 25, 50]"
+  >
+    <ng-template #caption>
+      <div class="flex items-center justify-between my-4">
+        <div>
+          <p-button
+            label="Добавит"
+            icon="pi pi-plus"
+            size="small"
+            (onClick)="openNew()"
+            severity="secondary"
+          />
+        </div>
+        <div class="flex items-center gap-2">
+          <p-fileUpload
+            mode="basic"
+            name="excelFile[]"
+            accept=".xlsx, .xls"
+            [maxFileSize]="1000000"
+            auto
+            customUpload
+            class="mr-2 inline-block"
+            [chooseButtonProps]="{ severity: 'secondary' }"
+            [showUploadButton]="false"
+            [showCancelButton]="false"
+            (uploadHandler)="importExcel($event)"
+            chooseIcon="pi pi-upload"
+            chooseLabel=" "
+          ></p-fileUpload>
+
+          <p-button
+            icon="pi pi-external-link"
+            variant="text"
+            severity="secondary"
+            (click)="dt.exportCSV()"
+          />
+          <p-iconfield>
+            <p-inputicon class="pi pi-search" />
+            <input
+              #searchBox
+              pInputText
+              type="text"
+              (input)="dt.filterGlobal(searchBox.value, 'contains')"
+              placeholder="Search..."
+            />
+          </p-iconfield>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #header let-columns>
+      <tr>
+        <th class="!bg-gray-700 !text-white !border-gray-600">No</th>
+        @for (col of columns; track $index) {
+        <th class="!bg-gray-700 !text-white !border-gray-600">
+          {{ col.header }}
+        </th>
+        }
+        <th class="!bg-gray-700 !text-white !border-gray-600">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-product let-i="rowIndex">
+      <tr>
+        <td>{{ i + 1 }}</td>
+        @for (item of tableData; track $index) { @if (item.field === 'doc_date')
+        {
+        <td>
+          {{ product[item.field.trim()] | date : "shortDate" }}
+        </td>
+        } @else {
+        <td>
+          {{ product[item.field.trim()] }}
+        </td>
+        } }
+        <td>
+          <div class="card flex justify-center">
+            <p-button
+              (click)="toggle(product.id)"
+              severity="secondary"
+              icon="pi pi-ellipsis-v"
+            />
+
+            <p-overlay
+              [visible]="activeProductId === product.id"
+              (onHide)="activeProductId = null"
+              contentStyleClass="p-2 flex flex-col gap-1 bg-gray-400 rounded"
+            >
+              <ng-template #content>
+                <button
+                  class="w-full !py-1"
+                  pButton
+                  size="small"
+                  type="button"
+                  icon="pi pi-pencil"
+                  label="Edit"
+                  (click)="editProduct(product)"
+                ></button>
+                <button
+                  class="!w-full !py-1"
+                  severity="danger"
+                  size="small"
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  label="Delete"
+                  (click)="deleteProduct(product)"
+                ></button>
+              </ng-template>
+            </p-overlay>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #paginatorleft>
+      <p-button type="button" icon="pi pi-plus" text />
+    </ng-template>
+    <ng-template #paginatorright>
+      <p-button type="button" icon="pi pi-cloud" text />
+    </ng-template>
+  </p-table>
+  <p-dialog
+    [(visible)]="productDialog"
+    [style]="{ width: '450px' }"
+    header="Product Details"
+    [modal]="true"
+  >
+    <div class="flex flex-col gap-3 py-2 !overflow-hidden">
+      <ng-container *ngFor="let item of tableData">
+        <p-floatlabel variant="on">
+          <ng-container *ngIf="item.type === 'date'; else defaultInput">
+            <p-datepicker
+              class="w-full"
+              [(ngModel)]="product[item.field]"
+              dateFormat="dd-mm-yy"
+              showIcon
+              inputId="{{ item.field }}"
+              appendTo="body"
+            />
+            <label [for]="item.field">{{ item.header }}</label>
+          </ng-container>
+          <ng-template #defaultInput>
+            <input
+              pInputText
+              [id]="item.field"
+              type="text"
+              required
+              fluid
+              [(ngModel)]="product[item.field]"
+              [attr.autocomplete]="item.field"
+            />
+            <label [for]="item.field">{{ item.header }}</label>
+          </ng-template>
+        </p-floatlabel>
+      </ng-container>
+    </div>
+
+    <ng-template #footer>
+      <p-button
+        label="Cancel"
+        severity="secondary"
+        icon="pi pi-times"
+        text
+        (click)="hideDialog()"
+      />
+      <p-button label="Save" icon="pi pi-check" (click)="saveProduct()" />
+    </ng-template>
+  </p-dialog>
+  <p-confirmDialog [style]="{ width: '450px' }" />
+</div>
