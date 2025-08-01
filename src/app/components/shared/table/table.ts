@@ -119,13 +119,6 @@ export class CustomTable implements OnInit {
   reset() {
     this.first = 0;
   }
-  onBasicUploadAuto(event: UploadEvent) {
-    this.messageService.add({
-      severity: 'info',
-      summary: 'Success',
-      detail: 'File Uploaded with Auto Mode',
-    });
-  }
 
   pageChange(event: any) {
     this.first = event.first;
@@ -206,7 +199,7 @@ export class CustomTable implements OnInit {
 
       const data = XLSX.utils.sheet_to_json(ws, { raw: true });
 
-      const importedProducts: any[] = (data as any[]).map((row, index) => {
+      const importedData: any[] = (data as any[]).map((row, index) => {
         const newItem: Record<string, any> = {
           id: Date.now() + index,
         };
@@ -228,12 +221,12 @@ export class CustomTable implements OnInit {
         return newItem;
       });
 
-      this.data = [...this.data, ...importedProducts];
+      this.data = [...this.data, ...importedData];
 
       this.messageService.add({
         severity: 'success',
         summary: 'Excel import',
-        detail: `${importedProducts.length} ta mahsulot import qilindi.`,
+        detail: `${importedData.length} ta mahsulot import qilindi.`,
         life: 3000,
       });
     };
@@ -244,34 +237,41 @@ export class CustomTable implements OnInit {
   saveProduct() {
     this.submitted = true;
 
-    if (this.data_item.transh?.trim()) {
+    if (!this.data_item.id) {
+      // Creating item
+      const newItem = { ...this.data_item };
+
+      newItem.id = Math.floor(Math.random() * 100000);
+
+      this.data.push(newItem);
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successful',
+        detail: 'Item Created',
+        life: 3000,
+      });
+    } else {
+      // Updating item
       const index = this.findIndexById(this.data_item.id);
 
       if (index !== -1) {
         this.data[index] = { ...this.data_item };
+
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
-          detail: 'Product Updated',
-          life: 3000,
-        });
-      } else {
-        this.data_item.id = Math.floor(Math.random() * 100000);
-        this.data_item.transh = this.createId();
-        this.data.push({ ...this.data_item, status: 'Pending' });
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Product Created',
+          detail: 'Item Updated',
           life: 3000,
         });
       }
-
-      this.data = [...this.data];
-      this.dataItemDialog = false;
-
-      this.data_item = this.data_item_structure;
     }
+
+    this.data = [...this.data];
+
+    this.dataItemDialog = false;
+
+    this.data_item = { ...this.data_item_structure };
   }
 
   activeProductId: number | null = null;
