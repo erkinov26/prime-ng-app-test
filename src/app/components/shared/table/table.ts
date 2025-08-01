@@ -78,13 +78,14 @@ interface Column {
 }`,
 })
 export class CustomTable implements OnInit {
-  productDialog: boolean = false;
+  dataItemDialog: boolean = false;
 
-  @Input() data!: Product[];
+  @Input() data!: any[];
 
-  data_item!: Product;
+  data_item!: any;
 
   @Input() data_item_structure!: Product;
+  @Input() excelFieldMapping!: { [key: string]: string };
 
   submitted: boolean = false;
 
@@ -133,7 +134,7 @@ export class CustomTable implements OnInit {
   openNew() {
     this.data_item = this.data_item_structure;
     this.submitted = false;
-    this.productDialog = true;
+    this.dataItemDialog = true;
   }
   isLastPage(): boolean {
     return this.data ? this.first + this.rows >= this.data.length : true;
@@ -143,7 +144,7 @@ export class CustomTable implements OnInit {
     return this.data ? this.first === 0 : true;
   }
   hideDialog() {
-    this.productDialog = false;
+    this.dataItemDialog = false;
     this.submitted = false;
   }
   findIndexById(id: number): number {
@@ -160,7 +161,7 @@ export class CustomTable implements OnInit {
   }
   editProduct(product: Product) {
     this.data_item = { ...product };
-    this.productDialog = true;
+    this.dataItemDialog = true;
   }
   deleteProduct(product: Product) {
     console.log(product);
@@ -205,16 +206,27 @@ export class CustomTable implements OnInit {
 
       const data = XLSX.utils.sheet_to_json(ws, { raw: true });
 
-      const importedProducts: Product[] = (data as any[]).map((row, index) => ({
-        id: Date.now() + index,
-        transh: row['Transh Code'] || '',
-        transaction: row['Transaction'] || '',
-        doc_date: row['Document Date']
-          ? new Date(row['Document Date'])
-          : new Date(),
-        status: row['Status'] || 'Pending',
-        remained: Number(row['Remained']) || 0,
-      }));
+      const importedProducts: any[] = (data as any[]).map((row, index) => {
+        const newItem: Record<string, any> = {
+          id: Date.now() + index,
+        };
+
+        for (const excelKey in this.excelFieldMapping) {
+          const productField = this.excelFieldMapping[excelKey];
+
+          if (productField === 'doc_date' && row[excelKey]) {
+            newItem[productField] = new Date(row[excelKey]);
+          } else if (
+            typeof this.data_item_structure?.[productField] === 'number'
+          ) {
+            newItem[productField] = Number(row[excelKey]) || 0;
+          } else {
+            newItem[productField] = row[excelKey] || '';
+          }
+        }
+
+        return newItem;
+      });
 
       this.data = [...this.data, ...importedProducts];
 
@@ -256,7 +268,7 @@ export class CustomTable implements OnInit {
       }
 
       this.data = [...this.data];
-      this.productDialog = false;
+      this.dataItemDialog = false;
 
       this.data_item = this.data_item_structure;
     }

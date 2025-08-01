@@ -16,6 +16,13 @@ interface Product {
   imports: [CustomTable],
 })
 export class Receipts implements OnInit {
+  excelFieldMapping = {
+    'Transh Code': 'transh',
+    Transaction: 'transaction',
+    'Document Date': 'doc_date',
+    Status: 'status',
+    Remained: 'remained',
+  };
   receiptsCols = [
     {
       header: 'Transh',
