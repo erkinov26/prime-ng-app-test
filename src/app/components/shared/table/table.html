@@ -142,7 +142,7 @@
           <ng-container *ngIf="item.type === 'date'; else defaultInput">
             <p-datepicker
               class="w-full"
-              [(ngModel)]="product[item.field]"
+              [(ngModel)]="data_item[item.field]"
               dateFormat="dd-mm-yy"
               showIcon
               inputId="{{ item.field }}"
@@ -157,7 +157,7 @@
               type="text"
               required
               fluid
-              [(ngModel)]="product[item.field]"
+              [(ngModel)]="data_item[item.field]"
               [attr.autocomplete]="item.field"
             />
             <label [for]="item.field">{{ item.header }}</label>

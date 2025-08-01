@@ -82,7 +82,9 @@ export class CustomTable implements OnInit {
 
   @Input() data!: Product[];
 
-  product!: Product;
+  data_item!: Product;
+
+  @Input() data_item_structure!: Product;
 
   submitted: boolean = false;
 
@@ -129,14 +131,7 @@ export class CustomTable implements OnInit {
     this.rows = event.rows;
   }
   openNew() {
-    this.product = {
-      id: 0,
-      transh: '',
-      transaction: '',
-      doc_date: new Date(),
-      status: '',
-      remained: 0,
-    };
+    this.data_item = this.data_item_structure;
     this.submitted = false;
     this.productDialog = true;
   }
@@ -164,7 +159,7 @@ export class CustomTable implements OnInit {
     return id;
   }
   editProduct(product: Product) {
-    this.product = { ...product };
+    this.data_item = { ...product };
     this.productDialog = true;
   }
   deleteProduct(product: Product) {
@@ -186,15 +181,7 @@ export class CustomTable implements OnInit {
       accept: () => {
         this.data = this.data.filter((val) => val.transh !== product.transh);
         console.log(this.data);
-        this.product = {
-          id: Math.random(),
-          transh: '',
-          transaction: '',
-          doc_date: new Date(),
-          status: '',
-          remained: 0,
-        };
-
+        this.data_item = this.data_item_structure;
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
@@ -245,11 +232,11 @@ export class CustomTable implements OnInit {
   saveProduct() {
     this.submitted = true;
 
-    if (this.product.transh?.trim()) {
-      const index = this.findIndexById(this.product.id);
+    if (this.data_item.transh?.trim()) {
+      const index = this.findIndexById(this.data_item.id);
 
       if (index !== -1) {
-        this.data[index] = { ...this.product };
+        this.data[index] = { ...this.data_item };
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
@@ -257,9 +244,9 @@ export class CustomTable implements OnInit {
           life: 3000,
         });
       } else {
-        this.product.id = Math.floor(Math.random() * 100000);
-        this.product.transh = this.createId();
-        this.data.push({ ...this.product, status: 'Pending' });
+        this.data_item.id = Math.floor(Math.random() * 100000);
+        this.data_item.transh = this.createId();
+        this.data.push({ ...this.data_item, status: 'Pending' });
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
@@ -271,14 +258,7 @@ export class CustomTable implements OnInit {
       this.data = [...this.data];
       this.productDialog = false;
 
-      this.product = {
-        id: 0,
-        transh: '',
-        transaction: '',
-        doc_date: new Date(),
-        status: '',
-        remained: 0,
-      };
+      this.data_item = this.data_item_structure;
     }
   }
 

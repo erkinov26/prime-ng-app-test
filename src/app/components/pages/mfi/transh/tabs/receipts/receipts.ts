@@ -29,7 +29,14 @@ export class Receipts implements OnInit {
     { header: 'Remained', field: 'remained', type: 'string' },
   ];
   receiptsData!: Product[];
-
+  receiptsStructure = {
+    id: 0,
+    transh: '',
+    transaction: '',
+    doc_date: new Date(),
+    status: '',
+    remained: 0,
+  };
   receiptService = inject(ReceiptsService);
   constructor() {
     this.receiptsData = this.receiptService.getReceipts();
