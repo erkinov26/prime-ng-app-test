@@ -84,7 +84,7 @@ export class CustomTable implements OnInit {
 
   data_item!: any;
 
-  @Input() data_item_structure!: Product;
+  @Input() data_item_structure!: any;
   @Input() excelFieldMapping!: { [key: string]: string };
 
   submitted: boolean = false;
@@ -141,7 +141,7 @@ export class CustomTable implements OnInit {
     this.submitted = false;
   }
   findIndexById(id: number): number {
-    return this.data.findIndex((product) => product.id === id);
+    return this.data.findIndex((data_item) => data_item.id === id);
   }
   createId(): string {
     let id = '';
@@ -152,15 +152,15 @@ export class CustomTable implements OnInit {
     }
     return id;
   }
-  editProduct(product: Product) {
-    this.data_item = { ...product };
+  editData(data_item: any) {
+    this.data_item = { ...data_item };
     this.dataItemDialog = true;
   }
-  deleteProduct(product: Product) {
-    console.log(product);
+  deleteData(data_item: any) {
+    console.log(data_item);
 
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete ' + product.transh + '?',
+      message: 'Are you sure you want to delete ' + data_item.id + '?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       rejectButtonProps: {
@@ -173,7 +173,7 @@ export class CustomTable implements OnInit {
         label: 'Yes',
       },
       accept: () => {
-        this.data = this.data.filter((val) => val.transh !== product.transh);
+        this.data = this.data.filter((val) => val.id !== data_item.id);
         console.log(this.data);
         this.data_item = this.data_item_structure;
         this.messageService.add({
@@ -234,7 +234,7 @@ export class CustomTable implements OnInit {
     reader.readAsBinaryString(file);
   }
 
-  saveProduct() {
+  saveData() {
     this.submitted = true;
 
     if (!this.data_item.id) {
@@ -274,10 +274,10 @@ export class CustomTable implements OnInit {
     this.data_item = { ...this.data_item_structure };
   }
 
-  activeProductId: number | null = null;
+  activeDataID: number | null = null;
 
-  toggle(productId: number) {
-    this.activeProductId =
-      this.activeProductId === productId ? null : productId;
+  toggle(data_item_id: number) {
+    this.activeDataID =
+      this.activeDataID === data_item_id ? null : data_item_id;
   }
 }

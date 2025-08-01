@@ -71,30 +71,30 @@
         <th class="!bg-gray-700 !text-white !border-gray-600">Actions</th>
       </tr>
     </ng-template>
-    <ng-template #body let-product let-i="rowIndex">
+    <ng-template #body let-data_item let-i="rowIndex">
       <tr>
         <td>{{ i + 1 }}</td>
         @for (item of tableData; track $index) { @if (item.field === 'doc_date')
         {
         <td>
-          {{ product[item.field.trim()] | date : "shortDate" }}
+          {{ data_item[item.field.trim()] | date : "shortDate" }}
         </td>
         } @else {
         <td>
-          {{ product[item.field.trim()] }}
+          {{ data_item[item.field.trim()] }}
         </td>
         } }
         <td>
           <div class="card flex justify-center">
             <p-button
-              (click)="toggle(product.id)"
+              (click)="toggle(data_item.id)"
               severity="secondary"
               icon="pi pi-ellipsis-v"
             />
 
             <p-overlay
-              [visible]="activeProductId === product.id"
-              (onHide)="activeProductId = null"
+              [visible]="activeDataID === data_item.id"
+              (onHide)="activeDataID = null"
               contentStyleClass="p-2 flex flex-col gap-1 bg-gray-400 rounded"
             >
               <ng-template #content>
@@ -105,7 +105,7 @@
                   type="button"
                   icon="pi pi-pencil"
                   label="Edit"
-                  (click)="editProduct(product)"
+                  (click)="editData(data_item)"
                 ></button>
                 <button
                   class="!w-full !py-1"
@@ -115,7 +115,7 @@
                   type="button"
                   icon="pi pi-trash"
                   label="Delete"
-                  (click)="deleteProduct(product)"
+                  (click)="deleteData(data_item)"
                 ></button>
               </ng-template>
             </p-overlay>
@@ -133,7 +133,7 @@
   <p-dialog
     [(visible)]="dataItemDialog"
     [style]="{ width: '450px' }"
-    header="Product Details"
+    header="Data Details"
     [modal]="true"
   >
     <div class="flex flex-col gap-3 py-2 !overflow-hidden">
@@ -174,7 +174,7 @@
         text
         (click)="hideDialog()"
       />
-      <p-button label="Save" icon="pi pi-check" (click)="saveProduct()" />
+      <p-button label="Save" icon="pi pi-check" (click)="saveData()" />
     </ng-template>
   </p-dialog>
   <p-confirmDialog [style]="{ width: '450px' }" />
