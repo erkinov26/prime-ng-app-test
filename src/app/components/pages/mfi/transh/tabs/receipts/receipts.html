@@ -136,57 +136,44 @@
     header="Product Details"
     [modal]="true"
   >
-    <ng-template #content>
-      <div class="flex flex-col gap-6 my-2">
-        <div class="flex flex-col gap-4">
-          <p-floatlabel variant="on">
+    <div class="flex flex-col gap-3 py-2 !overflow-hidden">
+      <ng-container *ngFor="let item of tableData">
+        <p-floatlabel variant="on">
+          <ng-container *ngIf="item.type === 'date'; else defaultInput">
+            <p-datepicker
+              class="w-full"
+              [(ngModel)]="product[item.field]"
+              dateFormat="dd-mm-yy"
+              showIcon
+              inputId="{{ item.field }}"
+              appendTo="body"
+            />
+            <label [for]="item.field">{{ item.header }}</label>
+          </ng-container>
+          <ng-template #defaultInput>
             <input
               pInputText
-              id="on_label"
+              [id]="item.field"
               type="text"
               required
-              autofocus
               fluid
-              [(ngModel)]="product.transh"
-              autocomplete="transaction-amount"
+              [(ngModel)]="product[item.field]"
+              [attr.autocomplete]="item.field"
             />
-            <label for="on_label">Transh</label>
-          </p-floatlabel>
-          <p-floatlabel variant="on">
-            <input
-              pInputText
-              id="on_label"
-              type="text"
-              required
-              autofocus
-              fluid
-              [(ngModel)]="product.transaction"
-              autocomplete="transaction-amount"
-            />
-            <label for="on_label">Transaction</label>
-          </p-floatlabel>
-          <p-floatlabel variant="on">
-            <input
-              pInputText
-              id="on_label"
-              type="text"
-              required
-              autofocus
-              fluid
-              [(ngModel)]="product.remained"
-              autocomplete="transaction-amount"
-            />
-            <label for="on_label">Remained</label>
-          </p-floatlabel>
-          <small class="text-red-500" *ngIf="submitted && !product.transh"
-            >Name is required.</small
-          >
-        </div>
-      </div>
-    </ng-template>
+            <label [for]="item.field">{{ item.header }}</label>
+          </ng-template>
+        </p-floatlabel>
+      </ng-container>
+    </div>
 
     <ng-template #footer>
-      <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
+      <p-button
+        label="Cancel"
+        severity="secondary"
+        icon="pi pi-times"
+        text
+        (click)="hideDialog()"
+      />
       <p-button label="Save" icon="pi pi-check" (click)="saveProduct()" />
     </ng-template>
   </p-dialog>

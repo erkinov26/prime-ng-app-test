@@ -12,7 +12,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { FileUploadModule, UploadEvent } from 'primeng/fileupload';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, DatePipe, NgIf } from '@angular/common';
+import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
@@ -21,6 +21,8 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { OverlayModule } from 'primeng/overlay';
+import { DatePickerModule } from 'primeng/datepicker';
+
 import * as XLSX from 'xlsx';
 import { MenuModule } from 'primeng/menu';
 interface ExportColumn {
@@ -34,10 +36,12 @@ interface Product {
   doc_date: Date;
   status: string;
   remained: number;
+  [key: string]: any;
 }
 interface Column {
   field: string;
   header: string;
+  type: string;
   customExportHeader?: string;
 }
 @Component({
@@ -45,6 +49,7 @@ interface Column {
   templateUrl: 'receipts.html',
   standalone: true,
   imports: [
+    DatePickerModule,
     OverlayModule,
     FloatLabelModule,
     IconFieldModule,
@@ -57,7 +62,7 @@ interface Column {
     FileUploadModule,
     DialogModule,
     FormsModule,
-    NgIf,
+    NgFor,
     DatePipe,
     CommonModule,
     ToastModule,
@@ -101,13 +106,25 @@ export class Receipts implements OnInit {
   ngOnInit() {
     this.products = this.receiptService.getReceipts();
     console.log(this.products);
-
+    this.product = {
+      id: 0,
+      transh: '',
+      transaction: '',
+      doc_date: new Date(),
+      status: '',
+      remained: 0,
+    };
     this.tableData = [
-      { header: 'Transh', field: 'transh', customExportHeader: 'Transh Code' },
-      { header: 'Transaction', field: 'transaction' },
-      { header: 'Document Date', field: 'doc_date' },
-      { header: 'Status', field: 'status' },
-      { header: 'Remained', field: 'remained' },
+      {
+        header: 'Transh',
+        field: 'transh',
+        type: 'string',
+        customExportHeader: 'Transh Code',
+      },
+      { header: 'Transaction', type: 'string', field: 'transaction' },
+      { header: 'Document Date', field: 'doc_date', type: 'date' },
+      { header: 'Status', field: 'status', type: 'string' },
+      { header: 'Remained', field: 'remained', type: 'string' },
     ];
 
     this.exportColumns = this.tableData.map((col) => ({
