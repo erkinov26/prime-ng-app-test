@@ -136,34 +136,30 @@
     <div class="flex flex-col gap-3 py-2 !overflow-hidden">
       @for (item of tableData; track $index) {
       <p-floatlabel variant="on">
-        @if (item.type!=='date') {
-        <ng-container>
-          <!-- <p-datepicker
-            class="w-full"
-            [(ngModel)]="data_item[item.field]"
-            dateFormat="dd-mm-yy"
-            showIcon
-            inputId="{{ item.field }}"
-            appendTo="body"
-          /> -->
-          <label [for]="item.field">{{ item.header }}</label></ng-container
-        >
-        }@else {
-        <ng-template>
-          <input
-            pInputText
-            [id]="item.field"
-            type="text"
-            required
-            fluid
-            [(ngModel)]="data_item[item.field]"
-            [attr.autocomplete]="item.field"
-          />
-          <label [for]="item.field">{{ item.header }}</label>
-        </ng-template>
-        }
-      </p-floatlabel>
-      }
+        @if (item.type==='date') {
+        <p-datepicker
+          class="w-full"
+          [(ngModel)]="data_item[item.field]"
+          dateFormat="dd-mm-yy"
+          showIcon
+          inputId="{{ item.field }}"
+          appendTo="body"
+        />
+        <label [for]="item.field">{{ item.header }}</label>
+        } @else{
+        <input
+          pInputText
+          [id]="item.field"
+          [placeholder]="item.header"
+          type="text"
+          required
+          fluid
+          [(ngModel)]="data_item[item.field]"
+          [attr.autocomplete]="item.field"
+        />
+        <label [for]="item.field">{{ item.header }}</label>
+        } </p-floatlabel
+      >}
     </div>
 
     <ng-template #footer>

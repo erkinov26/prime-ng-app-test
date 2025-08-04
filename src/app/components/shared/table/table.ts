@@ -17,7 +17,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 
 import * as XLSX from 'xlsx';
 import { MenuModule } from 'primeng/menu';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 interface ExportColumn {
   title: string;
   dataKey: string;
@@ -50,6 +50,7 @@ interface Column {
     ToastModule,
     MenuModule,
     DatePipe,
+    CommonModule,
   ],
   providers: [MessageService, ConfirmationService],
   styles: `::ng-deep .no-label-button .p-button-label {
@@ -86,9 +87,9 @@ export class CustomTable implements OnInit {
 
   @Input() tableData!: Column[];
 
-  ngOnInit() {
-    console.log(this.tableData);
-    console.log(this.data);
+  ngOnInit() { 
+
+    this.data_item = this.data_item_structure;
 
     this.exportColumns = this.tableData.map((col) => ({
       title: col.header,
@@ -139,8 +140,8 @@ export class CustomTable implements OnInit {
     }
     return id;
   }
-  editData(data_item: any) {
-    this.data_item = { ...data_item };
+  editData(value: any) { 
+    this.data_item = { ...value }; 
     this.dataItemDialog = true;
   }
   deleteData(data_item: any) {
