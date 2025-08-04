@@ -1,1 +1,41 @@
-<h1>Document Html</h1>
+<form
+  #exampleForm="ngForm"
+  (ngSubmit)="onSubmit(exampleForm)"
+  class="flex flex-col gap-4 w-full"
+>
+  <h1 class="mx-auto text-[1.2vw] mb-3">Условия соглашения</h1>
+  <div class="flex flex-wrap justify-between gap-3">
+    @for (label_item of formLabel; track $index) { @if(label_item.type==='text')
+    {
+    <div class="flex w-[48%] justify-between items-start">
+      <label class="w-[50%]" [for]="label_item.key">{{
+        label_item.label
+      }}</label>
+      <input
+        class="w-[45%]"
+        pInputText
+        size="small"
+        required
+        type="text"
+        [id]="label_item.key"
+        [name]="label_item.key"
+        [(ngModel)]="formData[label_item.key]"
+        #model="ngModel"
+        [ngClass]="{
+          'ng-invalid':
+            model.invalid && (model.touched || exampleForm.submitted)
+        }"
+      />
+    </div>
+    } }
+  </div>
+  <button
+    pButton
+    severity="secondary"
+    type="submit"
+    [disabled]="!exampleForm.valid"
+    class="w-[30%] mx-auto mt-2.5"
+  >
+    <span pButtonLabel>Submit</span>
+  </button>
+</form>
