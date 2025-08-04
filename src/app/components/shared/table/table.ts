@@ -68,7 +68,7 @@ export interface Column {
   display: none !important;
   ::ng-deep .p-menu.p-menu-overlay {
   left: auto !important;
-  right: 0 !important; /* buttonning o'ng tarafida chiqadi */
+  right: 0 !important; 
 }
 }`,
 })
