@@ -36,7 +36,7 @@ export interface Column {
   field: string;
   type: 'string' | 'date' | 'select';
   customExportHeader?: string;
-  options?: { code: string; name: string }[]; // <-- ixtiyoriy qildik
+  options?: { code: string; name: string }[];
 }
 
 @Component({
@@ -94,7 +94,7 @@ export class CustomTable implements OnInit {
   first = 0;
   rows = 10;
   activeDataID: number | null = null;
-  
+
   // Injections
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);

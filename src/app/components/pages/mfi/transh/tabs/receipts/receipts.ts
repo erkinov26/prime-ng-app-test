@@ -15,7 +15,8 @@ interface Product {
   templateUrl: 'receipts.html',
   imports: [CustomTable],
 })
-export class Receipts implements OnInit {
+export class Receipts {
+  receiptService = inject(ReceiptsService);
   excelFieldMapping = {
     'Transh Code': 'transh',
     Transaction: 'transaction',
@@ -53,10 +54,7 @@ export class Receipts implements OnInit {
     status: '',
     remained: 0,
   };
-  receiptService = inject(ReceiptsService);
   constructor() {
     this.receiptsData = this.receiptService.getReceipts();
   }
-
-  ngOnInit() {}
 }

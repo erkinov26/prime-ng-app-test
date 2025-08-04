@@ -89,6 +89,14 @@
         @for (col of columns; track $index) {
         <th class="!bg-gray-700 !text-white !border-gray-600">
           {{ col.header }}
+          <!-- @if (col.type==='date') { 
+          <p-columnFilter
+            type="date"
+            field="date"
+            display="menu"
+            class="ml-auto !text-white"
+          />
+          } -->
         </th>
         }
         <th class="!bg-gray-700 !text-white !border-gray-600">Actions</th>
