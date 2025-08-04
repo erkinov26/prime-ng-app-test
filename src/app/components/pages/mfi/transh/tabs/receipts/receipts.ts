@@ -32,7 +32,16 @@ export class Receipts implements OnInit {
     },
     { header: 'Transaction', type: 'string', field: 'transaction' },
     { header: 'Document Date', field: 'doc_date', type: 'date' },
-    { header: 'Status', field: 'status', type: 'string' },
+    {
+      header: 'Status',
+      field: 'status',
+      type: 'select',
+      options: [
+        { code: 'pending', name: 'Pending' },
+        { code: 'reject', name: 'Reject' },
+        { code: 'accept', name: 'Accept' },
+      ],
+    },
     { header: 'Remained', field: 'remained', type: 'string' },
   ];
   receiptsData!: Product[];

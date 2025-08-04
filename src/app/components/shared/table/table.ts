@@ -14,6 +14,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { OverlayModule } from 'primeng/overlay';
 import { DatePickerModule } from 'primeng/datepicker';
+import { SelectModule } from 'primeng/select';
 
 import * as XLSX from 'xlsx';
 import { MenuModule } from 'primeng/menu';
@@ -28,12 +29,14 @@ interface Column {
   header: string;
   type: string;
   customExportHeader?: string;
+  options: [{ code: string; name: string }[]];
 }
 @Component({
   selector: 'custom-table',
   templateUrl: 'table.html',
   standalone: true,
   imports: [
+    SelectModule,
     DatePickerModule,
     OverlayModule,
     FloatLabelModule,
@@ -87,8 +90,7 @@ export class CustomTable implements OnInit {
 
   @Input() tableData!: Column[];
 
-  ngOnInit() { 
-
+  ngOnInit() {
     this.data_item = this.data_item_structure;
 
     this.exportColumns = this.tableData.map((col) => ({
@@ -125,6 +127,7 @@ export class CustomTable implements OnInit {
     return this.data ? this.first === 0 : true;
   }
   hideDialog() {
+    this.data_item = this.data_item_structure;
     this.dataItemDialog = false;
     this.submitted = false;
   }
@@ -140,8 +143,8 @@ export class CustomTable implements OnInit {
     }
     return id;
   }
-  editData(value: any) { 
-    this.data_item = { ...value }; 
+  editData(value: any) {
+    this.data_item = { ...value };
     this.dataItemDialog = true;
   }
   deleteData(data_item: any) {

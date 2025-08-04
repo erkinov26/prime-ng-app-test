@@ -146,6 +146,16 @@
           appendTo="body"
         />
         <label [for]="item.field">{{ item.header }}</label>
+        } @else if (item.type==='select') {
+        <p-select
+          appendTo="body"
+          class="w-full"
+          [options]="item.options"
+          [(ngModel)]="data_item[item.field]"
+          optionLabel="name"
+          [showClear]="true"
+          placeholder="Select option"
+        />
         } @else{
         <input
           pInputText
