@@ -71,29 +71,26 @@
         <th class="!bg-gray-700 !text-white !border-gray-600">Actions</th>
       </tr>
     </ng-template>
-    <ng-template #body let-data_item let-i="rowIndex">
+    <ng-template #body let-value let-i="rowIndex">
       <tr>
         <td>{{ i + 1 }}</td>
-        @for (item of tableData; track $index) { @if (item.field === 'doc_date')
-        {
+
+        @for (col of tableData; track $index) {
         <td>
-          {{ data_item[item.field.trim()] | date : "shortDate" }}
+          @if (col.field==='doc_date') {
+          {{ value[col.field.trim()] | date : "shortDate" }}
+          }@else { {{ value[col.field.trim()] }}}
         </td>
-        } @else {
-        <td>
-          {{ data_item[item.field.trim()] }}
-        </td>
-        } }
+        }
         <td>
           <div class="card flex justify-center">
             <p-button
-              (click)="toggle(data_item.id)"
+              (click)="toggle(value.id)"
               severity="secondary"
               icon="pi pi-ellipsis-v"
             />
-
             <p-overlay
-              [visible]="activeDataID === data_item.id"
+              [visible]="activeDataID === value.id"
               (onHide)="activeDataID = null"
               contentStyleClass="p-2 flex flex-col gap-1 bg-gray-400 rounded"
             >
@@ -105,7 +102,7 @@
                   type="button"
                   icon="pi pi-pencil"
                   label="Edit"
-                  (click)="editData(data_item)"
+                  (click)="editData(value)"
                 ></button>
                 <button
                   class="!w-full !py-1"
@@ -115,7 +112,7 @@
                   type="button"
                   icon="pi pi-trash"
                   label="Delete"
-                  (click)="deleteData(data_item)"
+                  (click)="deleteData(value)"
                 ></button>
               </ng-template>
             </p-overlay>
@@ -137,33 +134,36 @@
     [modal]="true"
   >
     <div class="flex flex-col gap-3 py-2 !overflow-hidden">
-      <ng-container *ngFor="let item of tableData">
-        <p-floatlabel variant="on">
-          <ng-container *ngIf="item.type === 'date'; else defaultInput">
-            <p-datepicker
-              class="w-full"
-              [(ngModel)]="data_item[item.field]"
-              dateFormat="dd-mm-yy"
-              showIcon
-              inputId="{{ item.field }}"
-              appendTo="body"
-            />
-            <label [for]="item.field">{{ item.header }}</label>
-          </ng-container>
-          <ng-template #defaultInput>
-            <input
-              pInputText
-              [id]="item.field"
-              type="text"
-              required
-              fluid
-              [(ngModel)]="data_item[item.field]"
-              [attr.autocomplete]="item.field"
-            />
-            <label [for]="item.field">{{ item.header }}</label>
-          </ng-template>
-        </p-floatlabel>
-      </ng-container>
+      @for (item of tableData; track $index) {
+      <p-floatlabel variant="on">
+        @if (item.type!=='date') {
+        <ng-container>
+          <!-- <p-datepicker
+            class="w-full"
+            [(ngModel)]="data_item[item.field]"
+            dateFormat="dd-mm-yy"
+            showIcon
+            inputId="{{ item.field }}"
+            appendTo="body"
+          /> -->
+          <label [for]="item.field">{{ item.header }}</label></ng-container
+        >
+        }@else {
+        <ng-template>
+          <input
+            pInputText
+            [id]="item.field"
+            type="text"
+            required
+            fluid
+            [(ngModel)]="data_item[item.field]"
+            [attr.autocomplete]="item.field"
+          />
+          <label [for]="item.field">{{ item.header }}</label>
+        </ng-template>
+        }
+      </p-floatlabel>
+      }
     </div>
 
     <ng-template #footer>

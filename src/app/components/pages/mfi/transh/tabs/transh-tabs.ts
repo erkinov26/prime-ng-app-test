@@ -1,14 +1,13 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TabsModule } from 'primeng/tabs';
-import { Documents } from "./documents/documents";
-import { Receipts } from "./receipts/receipts";
+import { Documents } from './documents/documents';
+import { Receipts } from './receipts/receipts';
 @Component({
   selector: 'transh-tabs',
   standalone: true,
   templateUrl: 'transh-tabs.html',
-  imports: [CommonModule, TabsModule, Documents, Receipts],
+  imports: [TabsModule, Documents, Receipts],
 })
 export class TranshTabs implements OnInit {
   avtive_value: string | number = 'transh-documents';

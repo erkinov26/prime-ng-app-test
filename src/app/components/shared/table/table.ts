@@ -1,19 +1,11 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
-import { FileUploadModule, UploadEvent } from 'primeng/fileupload';
+import { FileUploadModule } from 'primeng/fileupload';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
-import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { InputIconModule } from 'primeng/inputicon';
@@ -25,6 +17,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 
 import * as XLSX from 'xlsx';
 import { MenuModule } from 'primeng/menu';
+import { DatePipe } from '@angular/common';
 interface ExportColumn {
   title: string;
   dataKey: string;
@@ -54,11 +47,9 @@ interface Column {
     FileUploadModule,
     DialogModule,
     FormsModule,
-    NgFor,
-    DatePipe,
-    CommonModule,
     ToastModule,
     MenuModule,
+    DatePipe,
   ],
   providers: [MessageService, ConfirmationService],
   styles: `::ng-deep .no-label-button .p-button-label {
@@ -94,7 +85,11 @@ export class CustomTable implements OnInit {
   rows = 10;
 
   @Input() tableData!: Column[];
+
   ngOnInit() {
+    console.log(this.tableData);
+    console.log(this.data);
+
     this.exportColumns = this.tableData.map((col) => ({
       title: col.header,
       dataKey: col.field,
