@@ -94,6 +94,7 @@ export class CustomTable implements OnInit {
   first = 0;
   rows = 10;
   activeDataID: number | null = null;
+  formType: 'updating' | 'creating' = 'creating';
 
   // Injections
   private confirmationService = inject(ConfirmationService);
@@ -151,6 +152,7 @@ export class CustomTable implements OnInit {
 
   //Table CRUD
   openNew() {
+    this.formType = 'creating';
     this.data_item = this.data_item_structure;
     this.submitted = false;
     this.dataItemDialog = true;
@@ -162,12 +164,20 @@ export class CustomTable implements OnInit {
   }
 
   editData(value: any) {
-    this.data_item = { ...value };
+    this.formType = 'updating';
+    console.log(value);
+    console.log(this.data_item);
+
+    if (value.status) {
+      this.data_item = { ...value, status: value.status.toLowerCase() };
+      console.log(this.data_item, 'in if ');
+    } else {
+      this.data_item = { ...value };
+    }
+
     this.dataItemDialog = true;
   }
   deleteData(data_item: any) {
-    console.log(data_item);
-
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete ' + data_item.id + '?',
       header: 'Confirm',
@@ -294,8 +304,14 @@ export class CustomTable implements OnInit {
       const index = this.findIndexById(this.data_item.id);
 
       if (index !== -1) {
-        this.data[index] = { ...this.data_item };
-
+        if (this.data[index].status) {
+          this.data[index] = {
+            ...this.data_item,
+            status: this.data_item.status.code,
+          };
+        } else {
+          this.data[index] = { ...this.data_item };
+        }
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',

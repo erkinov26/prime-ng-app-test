@@ -115,7 +115,10 @@
         <td>
           @if (col.field==='doc_date') {
           {{ value[col.field.trim()] | date : "shortDate" }}
-          }@else { {{ value[col.field.trim()] }}}
+          }@else if (col.field==='status') {
+          {{ value[col.field.trim()] | titlecase }}
+          }@else {
+          {{ value[col.field.trim()] }}}
         </td>
         }
         <td>
@@ -170,9 +173,10 @@
     [modal]="true"
   >
     <div class="flex flex-col gap-3 py-2 !overflow-hidden">
-      @for (item of tableData; track $index) {
+      @for (item of tableData; track $index) { @if (!(formType === 'creating' &&
+      item.field === 'status')) {
       <p-floatlabel variant="on">
-        @if (item.type==='date') {
+        @if (item.type === 'date') {
         <p-datepicker
           class="w-full"
           [(ngModel)]="data_item[item.field]"
@@ -182,17 +186,20 @@
           appendTo="body"
         />
         <label [for]="item.field">{{ item.header }}</label>
-        } @else if (item.type==='select') {
+        } @else if (item.type === 'select') {
         <p-select
           appendTo="body"
           class="w-full"
           [options]="item.options"
           [(ngModel)]="data_item[item.field]"
           optionLabel="name"
+          optionValue="code"
           [showClear]="true"
           placeholder="Select option"
         />
-        } @else{
+        <label [for]="item.field">{{ item.header }}</label>
+
+        } @else {
         <input
           pInputText
           [id]="item.field"
@@ -204,8 +211,9 @@
           [attr.autocomplete]="item.field"
         />
         <label [for]="item.field">{{ item.header }}</label>
-        } </p-floatlabel
-      >}
+        }
+      </p-floatlabel>
+      } }
     </div>
 
     <ng-template #footer>
