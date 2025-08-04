@@ -1,4 +1,11 @@
-import { Component, inject, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -66,41 +73,45 @@ export interface Column {
 }`,
 })
 export class CustomTable implements OnInit {
-  dataItemDialog: boolean = false;
-
+  //INPUTS
   @Input() isImportVisible: boolean = false;
   @Input() isExportVisible: boolean = false;
+  @Input() isDeleteSelectionVisible: boolean = false;
   @Input() data!: any[];
-
-  data_item!: any;
-
   @Input() data_item_structure!: any;
   @Input() excelFieldMapping!: { [key: string]: string };
-
-  submitted: boolean = false;
+  @Input() tableData!: Column[];
 
   @ViewChild('dt') dt!: Table;
 
+  // Variables
+  dataItemDialog: boolean = false;
+  data_item!: any;
+  submitted: boolean = false;
+  selectedProducts!: any[] | null;
   cols!: Column[];
-
   exportColumns!: ExportColumn[];
+  first = 0;
+  rows = 10;
+  activeDataID: number | null = null;
+  
+  // Injections
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
+  private cd = inject(ChangeDetectorRef);
 
-  first = 0;
-
-  rows = 10;
-
-  @Input() tableData!: Column[];
-
+  // Life Sycle
   ngOnInit() {
     this.data_item = this.data_item_structure;
+    this.cd.markForCheck();
 
     this.exportColumns = this.tableData.map((col) => ({
       title: col.header,
       dataKey: col.field,
     }));
   }
+
+  // Pagination
   next() {
     this.first = this.first + this.rows;
   }
@@ -117,23 +128,14 @@ export class CustomTable implements OnInit {
     this.first = event.first;
     this.rows = event.rows;
   }
-  openNew() {
-    this.data_item = this.data_item_structure;
-    this.submitted = false;
-    this.dataItemDialog = true;
-  }
   isLastPage(): boolean {
     return this.data ? this.first + this.rows >= this.data.length : true;
   }
-
   isFirstPage(): boolean {
     return this.data ? this.first === 0 : true;
   }
-  hideDialog() {
-    this.data_item = this.data_item_structure;
-    this.dataItemDialog = false;
-    this.submitted = false;
-  }
+
+  //Table Utils
   findIndexById(id: number): number {
     return this.data.findIndex((data_item) => data_item.id === id);
   }
@@ -146,6 +148,19 @@ export class CustomTable implements OnInit {
     }
     return id;
   }
+
+  //Table CRUD
+  openNew() {
+    this.data_item = this.data_item_structure;
+    this.submitted = false;
+    this.dataItemDialog = true;
+  }
+  hideDialog() {
+    this.data_item = this.data_item_structure;
+    this.dataItemDialog = false;
+    this.submitted = false;
+  }
+
   editData(value: any) {
     this.data_item = { ...value };
     this.dataItemDialog = true;
@@ -174,6 +189,35 @@ export class CustomTable implements OnInit {
           severity: 'success',
           summary: 'Successful',
           detail: 'Data Deleted',
+          life: 3000,
+        });
+      },
+    });
+  }
+
+  deleteSelectedProducts() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete the selected products?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      rejectButtonProps: {
+        label: 'No',
+        severity: 'secondary',
+        variant: 'text',
+      },
+      acceptButtonProps: {
+        severity: 'danger',
+        label: 'Yes',
+      },
+      accept: () => {
+        this.data = this.data.filter(
+          (val) => !this.selectedProducts?.includes(val)
+        );
+        this.selectedProducts = null;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Products Deleted',
           life: 3000,
         });
       },
@@ -267,8 +311,6 @@ export class CustomTable implements OnInit {
 
     this.data_item = { ...this.data_item_structure };
   }
-
-  activeDataID: number | null = null;
 
   toggle(data_item_id: number) {
     this.activeDataID =
