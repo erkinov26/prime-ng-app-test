@@ -24,13 +24,14 @@ interface ExportColumn {
   dataKey: string;
 }
 
-interface Column {
-  field: string;
+export interface Column {
   header: string;
-  type: string;
+  field: string;
+  type: 'string' | 'date' | 'select';
   customExportHeader?: string;
-  options: [{ code: string; name: string }[]];
+  options?: { code: string; name: string }[]; // <-- ixtiyoriy qildik
 }
+
 @Component({
   selector: 'custom-table',
   templateUrl: 'table.html',
@@ -67,6 +68,8 @@ interface Column {
 export class CustomTable implements OnInit {
   dataItemDialog: boolean = false;
 
+  @Input() isImportVisible: boolean = false;
+  @Input() isExportVisible: boolean = false;
   @Input() data!: any[];
 
   data_item!: any;

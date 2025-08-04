@@ -25,6 +25,7 @@
           />
         </div>
         <div class="flex items-center gap-2">
+          @if (isImportVisible) {
           <p-fileUpload
             mode="basic"
             name="excelFile[]"
@@ -40,13 +41,14 @@
             chooseIcon="pi pi-upload"
             chooseLabel=" "
           ></p-fileUpload>
-
+          } @if (isExportVisible) {
           <p-button
             icon="pi pi-external-link"
             variant="text"
             severity="secondary"
             (click)="dt.exportCSV()"
           />
+          }
           <p-iconfield>
             <p-inputicon class="pi pi-search" />
             <input

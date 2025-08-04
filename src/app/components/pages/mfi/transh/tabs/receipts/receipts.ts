@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CustomTable } from '../../../../../shared/table/table';
+import { Column, CustomTable } from '../../../../../shared/table/table';
 import { ReceiptsService } from './service/receipts.service';
 interface Product {
   id: number;
@@ -23,7 +23,7 @@ export class Receipts implements OnInit {
     Status: 'status',
     Remained: 'remained',
   };
-  receiptsCols = [
+  receiptsCols: Column[] = [
     {
       header: 'Transh',
       field: 'transh',
