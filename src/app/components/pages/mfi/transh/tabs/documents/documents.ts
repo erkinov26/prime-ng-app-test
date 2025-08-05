@@ -1,6 +1,5 @@
-import { NgClass } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 
@@ -13,10 +12,10 @@ interface FormLabelT {
 @Component({
   selector: 'transh-documents',
   templateUrl: 'documents.html',
-  imports: [InputTextModule, FormsModule, ButtonModule, NgClass],
+  imports: [InputTextModule, ButtonModule, ReactiveFormsModule],
   standalone: true,
 })
-export class Documents implements OnInit {
+export class Documents {
   constructor() {}
 
   formLabel: FormLabelT[] = [
@@ -100,59 +99,40 @@ export class Documents implements OnInit {
       type: 'text',
     },
   ];
-  formData: {
-    // liniya: string;
-    // contractNumber: string;
-    // contractDate: string;
-    // baseAgreementAmount: string;
-    // startDate: string;
-    // endDate: string;
-    // purpose: string;
-    // renewalType: string;
-    // currency: string;
-    // guarantee: string;
-    // maxCreditAmount: string;
-    // minCreditAmount: string;
-    // maxCreditTerm: string;
-    // indicativeInterestRate: string;
-    // gracePeriod: string;
-    // commitmentFee: string;
-    // unusedCreditFee: string;
-    // managementFee: string;
-    // commissionTypes: string;
-    // ekaCommission: string;
-    // contractShareFinanced: string;
-    // allowedRegions: string;
-    // bankParticipationRequirement: string;
-    [key: string]: string;
-  } = {
-    liniya: '',
-    contractNumber: '',
-    contractDate: '',
-    baseAgreementAmount: '',
-    startDate: '',
-    endDate: '',
-    purpose: '',
-    renewalType: '',
-    currency: '',
-    guarantee: '',
-    maxCreditAmount: '',
-    minCreditAmount: '',
-    maxCreditTerm: '',
-    indicativeInterestRate: '',
-    gracePeriod: '',
-    commitmentFee: '',
-    unusedCreditFee: '',
-    managementFee: '',
-    commissionTypes: '',
-    ekaCommission: '',
-    contractShareFinanced: '',
-    allowedRegions: '',
-    bankParticipationRequirement: '',
-  };
 
-  ngOnInit() {}
-  onSubmit(data: any) {
-    console.log(data.value);
+  private fb = inject(FormBuilder);
+  form = this.fb.group({
+    liniya: ['', Validators.required],
+    contractNumber: [''],
+    contractDate: [''],
+    baseAgreementAmount: [''],
+    startDate: [''],
+    endDate: [''],
+    purpose: [''],
+    renewalType: [''],
+    currency: [''],
+    guarantee: [''],
+    maxCreditAmount: [''],
+    minCreditAmount: [''],
+    maxCreditTerm: [''],
+    indicativeInterestRate: [''],
+    gracePeriod: [''],
+    commitmentFee: [''],
+    unusedCreditFee: [''],
+    managementFee: [''],
+    commissionTypes: [''],
+    ekaCommission: [''],
+    contractShareFinanced: [''],
+    allowedRegions: [''],
+    bankParticipationRequirement: [''],
+  });
+
+  onSubmit() {
+    console.log(this.form.value);
+  }
+  onUpdate() {
+    this.form.patchValue({
+      liniya: 'Liniya',
+    });
   }
 }
