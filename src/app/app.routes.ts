@@ -3,6 +3,7 @@ import { Layout } from './components/layout/layout';
 import { Transh } from './components/pages/mfi/transh/transh';
 import { AgentList } from './components/pages/agents/agent-list/agent-list';
 import { MfiCreditLine } from './components/pages/mfi/credit-line/credit-line';
+import { FormsPage } from './components/pages/mfi/forms/forms';
 
 export const routes: Routes = [
   {
@@ -15,6 +16,7 @@ export const routes: Routes = [
           { path: '', redirectTo: 'credit-line', pathMatch: 'full' },
           { path: 'credit-line', component: MfiCreditLine },
           { path: 'transh', component: Transh },
+          { path: 'forms', component: FormsPage },
         ],
       },
       {

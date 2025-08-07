@@ -1,0 +1,14 @@
+<p-tabs [value]="active_value" (valueChange)="onTabChange($event)" scrollable>
+  <p-tablist>
+    @for(tab of tabs; track tab.value){
+    <p-tab [value]="tab.value">
+      {{ tab.title }}
+    </p-tab>
+    }
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="request-resource"> <app-request-resource /> </p-tabpanel>
+
+    <p-tabpanel value="operations"> <app-operation /> </p-tabpanel>
+  </p-tabpanels>
+</p-tabs>

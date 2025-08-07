@@ -57,6 +57,10 @@ export class Layout implements OnInit {
       label: 'Transh',
       routerLink: 'mfi/transh',
     },
+    {
+      label: 'Forms',
+      routerLink: 'mfi/forms',
+    },
   ];
   agentsRoutes: MenuItem[] = [
     { label: 'Agents List', routerLink: 'agents/agents-list' },
