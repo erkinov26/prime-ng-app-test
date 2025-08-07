@@ -1,5 +1,46 @@
-<h1>Operations</h1>
-<form [formGroup]="operation">
-  <app-text-input controlName="operation_type" label="Operation Type" />
-  <button (click)="onSubmit()">Click</button>
+<h1 class="text-center text-2xl font-medium mb-4">Добавление обязательство</h1>
+<form
+  [formGroup]="operation"
+  class="flex w-full flex-wrap justify-center gap-4"
+>
+  @for (item of input_fields; track $index; let i = $index) { @if
+  (item.controlName==='operation_type') {
+  <app-select-input
+    class="w-[45%] mx-auto"
+    [controlName]="item.controlName"
+    [label]="item.label"
+    [options]="[{ name: 'Key', code: 'key' }]"
+  />
+  <div class="w-full bg-gray-200 h-[1px]"></div>
+  <hr />
+  } @else if (item.type === 'text' || item.type === 'number') {
+  <app-text-input
+    [controlName]="item.controlName"
+    [label]="item.label"
+    [ngClass]="returnClass(i)"
+  />
+  } @else if (item.type === 'date') {
+  <app-date-picker
+    [controlName]="item.controlName"
+    [label]="item.label"
+    [ngClass]="returnClass(i)"
+  />
+  } @else if (item.type === 'select') {
+  <app-select-input
+    [controlName]="item.controlName"
+    [label]="item.label"
+    [options]="[{ name: 'Key', code: 'key' }]"
+    [ngClass]="returnClass(i)"
+  />
+  } }
+  <div class="flex justify-end w-full">
+    <button
+      pButton
+      severity="secondary"
+      (click)="onSubmit()"
+      [disabled]="!operation.valid"
+    >
+      Отправит
+    </button>
+  </div>
 </form>
