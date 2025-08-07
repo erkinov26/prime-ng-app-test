@@ -1,0 +1,33 @@
+<h1 class="text-center text-2xl font-medium mb-4">Добавление обязательство</h1>
+<form
+  [formGroup]="commitment"
+  class="flex w-full flex-wrap justify-center gap-4"
+>
+  @for (item of input_fields; track $index; let i=$index) { @if
+  (item.type==='date') {
+  <app-date-picker
+    [controlName]="item.controlName"
+    [ngClass]="returnClass(i)"
+    class="min-w-fit w-[20%]"
+    [label]="item.label"
+  />
+  } @else if (item.type === 'select') {
+  <app-select-input
+    [controlName]="item.controlName"
+    [label]="item.label"
+    [options]="[{ name: 'Key', code: 'key' }]"
+    [ngClass]="returnClass(i)"
+  />
+  }}
+
+  <div class="flex justify-end w-full">
+    <button
+      pButton
+      severity="secondary"
+      (click)="onSubmit()"
+      [disabled]="!commitment.valid"
+    >
+      Отправит
+    </button>
+  </div>
+</form>
