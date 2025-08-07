@@ -1,5 +1,9 @@
-// request-resource.component.ts
-import { Component, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  inject,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TextInput } from '../../../../shared/inputs/text-input/text-input';
 import { DatePicker } from '../../../../shared/inputs/date-picker/date-picker';
@@ -12,9 +16,9 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './request-resource.html',
   styleUrl: './request-resource.css',
 })
-export class RequestResource {
+export class RequestResource implements AfterViewInit {
   private fb = inject(FormBuilder);
-
+  private cdr = inject(ChangeDetectorRef);
   requestResource = this.fb.group({});
 
   input_fields: any[] = [
@@ -64,6 +68,10 @@ export class RequestResource {
       label: 'Сумма анкета транша',
     },
   ];
+
+  ngAfterViewInit(): void {
+    this.cdr.detectChanges();
+  }
 
   onSubmit() {
     console.log('Form submitted:', this.requestResource.value);
