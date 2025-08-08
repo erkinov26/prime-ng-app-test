@@ -1,13 +1,4 @@
-import {
-  Component,
-  inject,
-  Input,
-  OnInit,
-  OnDestroy,
-  computed,
-  effect,
-  signal,
-} from '@angular/core';
+import { Component, inject, Input, OnInit, OnDestroy } from '@angular/core';
 import {
   ControlContainer,
   FormControl,
@@ -24,13 +15,12 @@ import { SelectModule } from 'primeng/select';
   imports: [ReactiveFormsModule, SelectModule, FloatLabelModule],
   template: `
     <label [for]="controlName">{{
-      options ? label : 'No Option to Select'
+      options && options.length ? label : 'No Option to Select'
     }}</label>
     <p-select
       [placeholder]="placeholder"
-      size="small"
       class="w-full min-h-[35px]"
-      [options]="options || [{ name: '', code: '' }]"
+      [options]="options || []"
       [formControl]="control"
       optionLabel="name"
       optionValue="code"
@@ -61,7 +51,8 @@ export class SelectInput implements OnInit, OnDestroy {
   control!: FormControl;
 
   ngOnInit(): void {
-    const isDisabled = !this.options || this.options.length === 0;
+    const isDisabled =
+      !this.options || this.options.length === 0 || this.disabled;
 
     this.control = new FormControl(
       { value: '', disabled: isDisabled },
@@ -72,6 +63,8 @@ export class SelectInput implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.parentFormGroup.removeControl(this.controlName);
+    if (this.parentFormGroup.contains(this.controlName)) {
+      this.parentFormGroup.removeControl(this.controlName);
+    }
   }
 }
