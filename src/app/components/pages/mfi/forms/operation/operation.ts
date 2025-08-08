@@ -20,7 +20,7 @@ export class Operation {
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
 
-  operation: FormGroup;
+  operation: FormGroup = this.fb.group({});
 
   input_fields: InputFieldsI[] = [
     {
@@ -115,7 +115,7 @@ export class Operation {
       type: 'text',
       label: 'Код назначения',
       placeholder: 'Назначение кодини киритинг',
-      class: 'w-[20%] items-center [&>*:first-child]:w-[60%]',
+      class: 'w-[20%] items-center [&>*:first-child]:w-[80%]',
     },
     {
       controlName: 'debt_repayment',
@@ -135,19 +135,19 @@ export class Operation {
   ];
 
   constructor() {
-    this.operation = this.buildForm();
+    // this.operation = this.buildForm();
   }
 
-  buildForm(): FormGroup {
-    const group: { [key: string]: any } = {};
-    this.input_fields.forEach((field) => {
-      group[field.controlName] = [
-        { value: '', disabled: field.disabled || false },
-        Validators.nullValidator,
-      ];
-    });
-    return this.fb.group(group);
-  }
+  // buildForm(): FormGroup {
+  //   const group: { [key: string]: any } = {};
+  //   this.input_fields.forEach((field) => {
+  //     group[field.controlName] = [
+  //       { value: '', disabled: field.disabled || false },
+  //       Validators.nullValidator,
+  //     ];
+  //   });
+  //   return this.fb.group(group);
+  // }
 
   ngAfterViewInit(): void {
     this.cdr.detectChanges();

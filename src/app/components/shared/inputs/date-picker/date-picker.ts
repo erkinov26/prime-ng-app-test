@@ -37,6 +37,7 @@ export class DatePicker {
   @Input({ required: true }) label!: string;
   @Input({ required: true }) controlName!: string;
   @Input() placeholder: string = '';
+  @Input() disabled: boolean = false;
 
   get parentFormGroup() {
     return this.parentContainer.control as FormGroup;
@@ -45,7 +46,10 @@ export class DatePicker {
   ngOnInit(): void {
     this.parentFormGroup.addControl(
       this.controlName,
-      new FormControl('', Validators.required)
+      new FormControl(
+        { value: false, disabled: this.disabled },
+        Validators.required
+      )
     );
   }
 

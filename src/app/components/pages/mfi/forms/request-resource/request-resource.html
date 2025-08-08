@@ -1,35 +1,35 @@
 <h1 class="text-center text-2xl font-medium mb-4">Запрос pecypca №</h1>
+
 <form
   [formGroup]="requestResource"
-  class="flex w-full flex-wrap justify-between gap-4"
+  class="flex w-full flex-wrap justify-center gap-2"
 >
-  @for (item of input_fields; track $index; let i=$index) { @if
-  (item.type==='text'|| item.type==='number') {
+  @for (item of input_fields; track $index) { @if (item.type === 'text' ||
+  item.type === 'number') {
   <app-text-input
     [controlName]="item.controlName"
-    [ngClass]="{
-      'w-[18%]': i < 6,
-      'w-[27%]': i >= input_fields.length - 4
-    }"
-    class="min-w-fit"
     [label]="item.label"
+    [placeholder]="item.placeholder"
+    class="{{ item.class }}"
   />
-  }@else if (item.type==='date') {
+  } @else if (item.type === 'date') {
   <app-date-picker
     [controlName]="item.controlName"
-    class="min-w-fit w-[20%]"
     [label]="item.label"
+    class="{{ item.class }}"
+    [placeholder]="item.placeholder"
   />
   } }
 
-  <div class="flex justify-end w-full">
+  <div class="flex justify-end w-full gap-2 mt-4">
     <button
       pButton
       severity="secondary"
+      type="submit"
       (click)="onSubmit()"
       [disabled]="!requestResource.valid"
     >
-      Отправит
+      Отправить
     </button>
   </div>
 </form>

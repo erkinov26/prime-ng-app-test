@@ -28,7 +28,7 @@ export class ComissionCrud {
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
 
-  comission_form: FormGroup;
+  comission_form: FormGroup = this.fb.group({});
 
   input_fields: InputFieldsI[] = [
     {
@@ -95,19 +95,19 @@ export class ComissionCrud {
   ];
 
   constructor() {
-    this.comission_form = this.buildForm();
+    // this.comission_form = this.buildForm();
   }
 
-  buildForm(): FormGroup {
-    const group: { [key: string]: any } = {};
-    this.input_fields.forEach((field) => {
-      group[field.controlName] = [
-        { value: '', disabled: field.disabled || false },
-        Validators.nullValidator,
-      ];
-    });
-    return this.fb.group(group);
-  }
+  // buildForm(): FormGroup {
+  //   const group: { [key: string]: any } = {};
+  //   this.input_fields.forEach((field) => {
+  //     group[field.controlName] = [
+  //       { value: '', disabled: field.disabled || false },
+  //       Validators.nullValidator,
+  //     ];
+  //   });
+  //   return this.fb.group(group);
+  // }
 
   ngAfterViewInit(): void {
     this.cdr.detectChanges();

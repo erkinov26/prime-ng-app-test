@@ -6,7 +6,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
@@ -27,7 +26,7 @@ export class TextInput implements OnInit, OnDestroy {
   @Input({ required: true }) label!: string;
   @Input() disabled: boolean = false;
   @Input({ required: true }) controlName!: string;
-  @Input() placeholder!: string; 
+  @Input() placeholder: string = '';
   get parentFormGroup() {
     return this.parentContainer.control as FormGroup;
   }
@@ -35,7 +34,10 @@ export class TextInput implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.parentFormGroup.addControl(
       this.controlName,
-      new FormControl('', Validators.required)
+      new FormControl(
+        { value: '', disabled: this.disabled },
+        Validators.required
+      )
     );
   }
 
