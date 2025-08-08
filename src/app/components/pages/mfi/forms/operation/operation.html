@@ -1,46 +1,39 @@
-<h1 class="text-center text-2xl font-medium mb-4">Добавление обязательство</h1>
+<h1 class="text-2xl font-medium mb-4">Обязательство қўшиш</h1>
+
 <form
   [formGroup]="operation"
-  class="flex w-full flex-wrap justify-center gap-4"
+  class="flex w-full flex-wrap gap-2 justify-center"
 >
-  @for (item of input_fields; track $index; let i = $index) { @if
-  (item.controlName==='operation_type') {
-  <app-select-input
-    class="w-[45%] mx-auto"
-    [controlName]="item.controlName"
-    [label]="item.label"
-    [options]="[{ name: 'Key', code: 'key' }]"
-  />
-  <div class="w-full bg-gray-200 h-[1px]"></div>
-  <hr />
-  } @else if (item.type === 'text' || item.type === 'number') {
+  @for (item of input_fields; track $index; let i = $index) { @if (item.type ===
+  'text' || item.type === 'number') {
   <app-text-input
     [controlName]="item.controlName"
+    [disabled]="item.disabled || false"
     [label]="item.label"
-    [ngClass]="returnClass(i)"
-  />
-  } @else if (item.type === 'date') {
-  <app-date-picker
-    [controlName]="item.controlName"
-    [label]="item.label"
-    [ngClass]="returnClass(i)"
+    [placeholder]="item.placeholder"
+    class="{{ item.class }} my-2 flex item-center gap-2"
   />
   } @else if (item.type === 'select') {
   <app-select-input
     [controlName]="item.controlName"
+    [disabled]="item.disabled || false"
     [label]="item.label"
-    [options]="[{ name: 'Key', code: 'key' }]"
-    [ngClass]="returnClass(i)"
+    [placeholder]="item.placeholder"
+    [options]="item.options || []"
+    class="{{ item.class }} my-2 flex item-center gap-2"
   />
+  } @if (item.controlName === 'operation_type') {
+  <div class="w-full bg-gray-200 h-[1px] mt-5 mb-3"></div>
   } }
-  <div class="flex justify-end w-full">
+
+  <div class="flex justify-end w-full mt-4">
     <button
       pButton
       severity="secondary"
       (click)="onSubmit()"
       [disabled]="!operation.valid"
     >
-      Отправит
+      Отправить
     </button>
   </div>
 </form>

@@ -12,7 +12,7 @@ import { InputTextModule } from 'primeng/inputtext';
 @Component({
   selector: 'app-text-input',
   standalone: true,
-  imports: [FloatLabel, InputTextModule, ReactiveFormsModule],
+  imports: [InputTextModule, ReactiveFormsModule],
   templateUrl: './text-input.html',
   styleUrl: './text-input.css',
   viewProviders: [
@@ -25,8 +25,9 @@ import { InputTextModule } from 'primeng/inputtext';
 export class TextInput implements OnInit, OnDestroy {
   parentContainer = inject(ControlContainer);
   @Input({ required: true }) label!: string;
+  @Input() disabled: boolean = false;
   @Input({ required: true }) controlName!: string;
-
+  @Input() placeholder!: string;
   get parentFormGroup() {
     return this.parentContainer.control as FormGroup;
   }

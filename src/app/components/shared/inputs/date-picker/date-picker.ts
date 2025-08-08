@@ -18,23 +18,25 @@ import { FloatLabelModule } from 'primeng/floatlabel';
       useFactory: () => inject(ControlContainer, { skipSelf: true }),
     },
   ],
-  template: ` <p-floatlabel class="w-full" variant="on">
-    <p-datepicker
+  template: `
+    <label [for]="controlName" class="">{{ label }}</label
+    ><p-datepicker
       class="w-full"
+      [placeholder]="placeholder"
       [formControlName]="controlName"
       [inputId]="controlName"
       showIcon
       size="small"
       iconDisplay="input"
     />
-    <label [for]="controlName">{{ label }}</label>
-  </p-floatlabel>`,
+  `,
   styleUrl: './date-picker.css',
 })
 export class DatePicker {
   parentContainer = inject(ControlContainer);
   @Input({ required: true }) label!: string;
   @Input({ required: true }) controlName!: string;
+  @Input() placeholder: string = '';
 
   get parentFormGroup() {
     return this.parentContainer.control as FormGroup;

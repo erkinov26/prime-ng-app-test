@@ -23,19 +23,18 @@ import { SelectModule } from 'primeng/select';
   standalone: true,
   imports: [ReactiveFormsModule, SelectModule, FloatLabelModule],
   template: `
-    <p-floatLabel variant="on" class="w-full ">
-      <p-select
-        size="small"
-        class="w-full min-h-[35px]"
-        [options]="options || [{ name: '', code: '' }]"
-        [formControl]="control"
-        optionLabel="name"
-        optionValue="code"
-      ></p-select>
-      <label [for]="controlName">{{
-        options ? label : 'No Option to Select'
-      }}</label>
-    </p-floatLabel>
+    <label [for]="controlName">{{
+      options ? label : 'No Option to Select'
+    }}</label>
+    <p-select
+      [placeholder]="placeholder"
+      size="small"
+      class="w-full min-h-[35px]"
+      [options]="options || [{ name: '', code: '' }]"
+      [formControl]="control"
+      optionLabel="name"
+      optionValue="code"
+    ></p-select>
   `,
   styleUrl: './select-input.css',
   viewProviders: [
@@ -49,6 +48,9 @@ export class SelectInput implements OnInit, OnDestroy {
   @Input({ required: true }) label!: string;
   @Input({ required: true }) options!: { name: string; code: string }[] | null;
   @Input({ required: true }) controlName!: string;
+  @Input() placeholder: string = '';
+  @Input() disabled: boolean = false;
+  @Input() externallClass: string = '';
 
   private parentContainer = inject(ControlContainer);
 
