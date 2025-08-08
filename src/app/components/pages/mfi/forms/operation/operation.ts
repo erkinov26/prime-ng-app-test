@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { TextInput } from '../../../../shared/inputs/text-input/text-input';
 import { SelectInput } from '../../../../shared/inputs/select-input/select-input';
+import { InputFieldsI } from '../../../../../core/interfaces/input_fields';
 
 @Component({
   selector: 'app-operation',
@@ -21,7 +22,7 @@ export class Operation {
 
   operation: FormGroup;
 
-  input_fields = [
+  input_fields: InputFieldsI[] = [
     {
       controlName: 'operation_type',
       type: 'select',

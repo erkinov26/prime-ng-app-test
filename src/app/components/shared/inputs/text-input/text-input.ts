@@ -27,7 +27,7 @@ export class TextInput implements OnInit, OnDestroy {
   @Input({ required: true }) label!: string;
   @Input() disabled: boolean = false;
   @Input({ required: true }) controlName!: string;
-  @Input() placeholder!: string;
+  @Input() placeholder!: string; 
   get parentFormGroup() {
     return this.parentContainer.control as FormGroup;
   }
