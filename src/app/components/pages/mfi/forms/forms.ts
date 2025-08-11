@@ -6,6 +6,7 @@ import { Operation } from './operation/operation';
 import { ComissionCrud } from './comission-crud/comission-crud';
 import { Commitment } from './commitment/commitment';
 import { Settings } from './settings/settings';
+import { Booking } from './booking/booking';
 
 @Component({
   selector: 'app-forms-page',
@@ -17,6 +18,7 @@ import { Settings } from './settings/settings';
     ComissionCrud,
     Commitment,
     Settings,
+    Booking,
   ],
 })
 export class FormsPage implements OnInit {
@@ -41,6 +43,10 @@ export class FormsPage implements OnInit {
     {
       title: 'Настройка режима работи',
       value: 'settings',
+    },
+    {
+      title: 'Брони',
+      value: 'booking',
     },
   ];
   ngOnInit() {

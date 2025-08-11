@@ -1,4 +1,9 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  inject,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -16,7 +21,7 @@ import { InputFieldsI } from '../../../../../core/interfaces/input_fields';
   templateUrl: './operation.html',
   styleUrl: './operation.css',
 })
-export class Operation {
+export class Operation implements AfterViewInit {
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
 
