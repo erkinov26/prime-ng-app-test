@@ -8,6 +8,9 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { TextInput } from '../../../../shared/inputs/text-input/text-input';
+import { SelectInput } from '../../../../shared/inputs/select-input/select-input';
 
 export interface CommissionFormData {
   summaPost: number | null;
@@ -26,38 +29,54 @@ export interface CommissionFormData {
 @Component({
   selector: 'app-receipts',
   templateUrl: 'receipts.html',
-  imports: [NgIf, NgFor, ReactiveFormsModule, JsonPipe],
+  imports: [
+    NgIf,
+    NgFor,
+    ReactiveFormsModule,
+    JsonPipe,
+    ButtonModule,
+    TextInput,
+    SelectInput,
+  ],
 })
 export class Receipts implements OnInit {
   mainForm: FormGroup;
-
-  // Dropdown options
-  commissionTypeOptions = [
-    { value: 'key', label: 'Key' },
-    { value: 'percentage', label: 'Percentage' },
-    { value: 'fixed', label: 'Fixed' },
+  table_data = [
+    // { key: 'number', name: '№' },
+    { key: 'post_amount', name: 'Сумма пост.' },
+    { key: 'post_balance', name: 'Остатка пост.' },
+    { key: 'tranche_amount', name: 'Сумма транша' },
+    { key: 'usage', name: 'Использование' },
+    { key: 'available', name: 'Доступно' },
+    { key: 'blocked_amount', name: 'Запр.сумма' },
+    { key: 'value_date', name: 'Дата валют.' },
+    { key: 'view_amount', name: 'Вид.сумма' },
+    { key: 'action', name: 'Действие' },
+    { key: 'file', name: 'Файл' },
+    { key: 'status', name: 'Статус' },
+    { key: 'actions', name: 'Действия' },
   ];
 
   ispolzovanieOptions = [
-    { value: 'active', label: 'Активный' },
-    { value: 'inactive', label: 'Неактивный' },
+    { code: 'active', name: 'Активный' },
+    { code: 'inactive', name: 'Неактивный' },
   ];
 
   deystvieOptions = [
-    { value: 'active', label: 'Активен' },
-    { value: 'inactive', label: 'Неактивен' },
+    { code: 'active', name: 'Активен' },
+    { code: 'inactive', name: 'Неактивен' },
   ];
 
   currencyOptions = [
-    { value: 'USD', label: 'USD' },
-    { value: 'EUR', label: 'EUR' },
-    { value: 'UZS', label: 'UZS' },
+    { code: 'USD', name: 'USD' },
+    { code: 'EUR', name: 'EUR' },
+    { code: 'UZS', name: 'UZS' },
   ];
 
   statusOptions = [
-    { value: 'pending', label: 'Отправлять Га' },
-    { value: 'sent', label: 'Отправлено' },
-    { value: 'confirmed', label: 'Подтверждено' },
+    { code: 'pending', name: 'Отправлять Га' },
+    { code: 'sent', name: 'Отправлено' },
+    { code: 'confirmed', name: 'Подтверждено' },
   ];
 
   constructor(private fb: FormBuilder) {
@@ -65,14 +84,12 @@ export class Receipts implements OnInit {
   }
 
   ngOnInit(): void {
-    // Boshlang'ich bitta qator qo'shish
     this.addFormItem();
   }
 
   // Asosiy formani yaratish
   createMainForm(): FormGroup {
     return this.fb.group({
-      commissionType: ['', [Validators.required]],
       formItems: this.fb.array([]),
     });
   }
@@ -132,7 +149,6 @@ export class Receipts implements OnInit {
   onSubmit(): void {
     if (this.mainForm.valid) {
       const formData = {
-        commissionType: this.mainForm.get('commissionType')?.value,
         items: this.formItemsArray.value,
       };
 
@@ -221,20 +237,3 @@ export class Receipts implements OnInit {
     return errors;
   }
 }
-
-// commission-form.component.html
-/*
-
-*/
-
-// app.module.ts ga qo'shish kerak:
-/*
-import { ReactiveFormsModule } from '@angular/forms';
-
-@NgModule({
-  imports: [
-    ReactiveFormsModule,
-    // other imports...
-  ],
-})
-*/

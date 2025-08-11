@@ -25,6 +25,7 @@ import { SelectModule } from 'primeng/select';
       [formControl]="control"
       optionLabel="name"
       optionValue="code"
+      appendTo="body"
     ></p-select>
   `,
   styleUrl: './select-input.css',

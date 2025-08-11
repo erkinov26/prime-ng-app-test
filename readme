@@ -1,0 +1,273 @@
+ <table class="w-full border-collapse border border-gray-200">
+          <thead>
+            <tr class="bg-gray-100">
+              <th
+                class="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700"
+              >
+                №
+              </th>
+              <th
+                class="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700"
+              >
+                Сумма пост.
+              </th>
+              <th
+                class="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700"
+              >
+                Остатка пост.
+              </th>
+              <th
+                class="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700"
+              >
+                Сумма транша
+              </th>
+              <th
+                class="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700"
+              >
+                Использование
+              </th>
+              <th
+                class="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700"
+              >
+                Доступно
+              </th>
+              <th
+                class="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700"
+              >
+                Запр.сумма
+              </th>
+              <th
+                class="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700"
+              >
+                Дата валют.
+              </th>
+              <th
+                class="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700"
+              >
+                Вид.сумма
+              </th>
+              <th
+                class="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700"
+              >
+                Действие
+              </th>
+              <th
+                class="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700"
+              >
+                Файл
+              </th>
+              <th
+                class="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700"
+              >
+                Статус
+              </th>
+              <th
+                class="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700"
+              >
+                Действия
+              </th>
+            </tr>
+          </thead>
+          <tbody formArrayName="formItems">
+            <tr
+              *ngFor="let item of formItemsArray.controls; let i = index"
+              [formGroupName]="i"
+              class="hover:bg-gray-50"
+              [class.bg-red-50]="
+                !isFormItemValid(i) && formItemsArray.at(i).touched
+              "
+            >
+              <td
+                class="border border-gray-200 px-2 py-2 text-sm font-medium text-gray-600"
+              >
+                {{ i + 1 }}
+              </td>
+
+              <!-- Сумма пост -->
+              <td class="border border-gray-200 px-2 py-2">
+                <input
+                  type="number"
+                  formControlName="summaPost"
+                  class="w-full px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  [class.border-red-500]="getFieldError(i, 'summaPost')"
+                  placeholder="0.00"
+                  min="0"
+                  step="0.01"
+                />
+                <div
+                  *ngIf="getFieldError(i, 'summaPost')"
+                  class="text-red-500 text-xs mt-1"
+                >
+                  {{ getFieldError(i, "summaPost") }}
+                </div>
+              </td>
+
+              <!-- Остатка пост -->
+              <td class="border border-gray-200 px-2 py-2">
+                <input
+                  type="number"
+                  formControlName="ostatkaPost"
+                  class="w-full px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  placeholder="0.00"
+                  min="0"
+                  step="0.01"
+                />
+              </td>
+
+              <!-- Сумма транша -->
+              <td class="border border-gray-200 px-2 py-2">
+                <input
+                  type="number"
+                  formControlName="summaTransh"
+                  class="w-full px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  placeholder="0.00"
+                  min="0"
+                  step="0.01"
+                />
+              </td>
+
+              <!-- Использование -->
+              <td class="border border-gray-200 px-2 py-2">
+                <select
+                  formControlName="ispolzovanie"
+                  class="w-full px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option
+                    *ngFor="let option of ispolzovanieOptions"
+                    [value]="option.value"
+                  >
+                    {{ option.label }}
+                  </option>
+                </select>
+              </td>
+
+              <!-- Доступно -->
+              <td class="border border-gray-200 px-2 py-2">
+                <input
+                  type="number"
+                  formControlName="dostupno"
+                  class="w-full px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  placeholder="0.00"
+                  min="0"
+                  step="0.01"
+                />
+              </td>
+
+              <!-- Запр.сумма -->
+              <td class="border border-gray-200 px-2 py-2">
+                <input
+                  type="number"
+                  formControlName="zaprSumma"
+                  class="w-full px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  placeholder="0.00"
+                  min="0"
+                  step="0.01"
+                />
+              </td>
+
+              <!-- Дата валют -->
+              <td class="border border-gray-200 px-2 py-2">
+                <input
+                  type="date"
+                  formControlName="dataValyut"
+                  class="w-full px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  [class.border-red-500]="getFieldError(i, 'dataValyut')"
+                />
+                <div
+                  *ngIf="getFieldError(i, 'dataValyut')"
+                  class="text-red-500 text-xs mt-1"
+                >
+                  {{ getFieldError(i, "dataValyut") }}
+                </div>
+              </td>
+
+              <!-- Вид.сумма -->
+              <td class="border border-gray-200 px-2 py-2">
+                <select
+                  formControlName="vidSumma"
+                  class="w-full px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option
+                    *ngFor="let option of currencyOptions"
+                    [value]="option.value"
+                  >
+                    {{ option.label }}
+                  </option>
+                </select>
+              </td>
+
+              <!-- Действие -->
+              <td class="border border-gray-200 px-2 py-2">
+                <select
+                  formControlName="deystvie"
+                  class="w-full px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option
+                    *ngFor="let option of deystvieOptions"
+                    [value]="option.value"
+                  >
+                    {{ option.label }}
+                  </option>
+                </select>
+              </td>
+
+              <!-- Файл -->
+              <td class="border border-gray-200 px-2 py-2">
+                <input
+                  type="file"
+                  (change)="onFileSelected($event, i)"
+                  class="w-full text-xs"
+                  accept=".pdf,.doc,.docx,.jpg,.png"
+                />
+                <div
+                  *ngIf="item.get('fayl')?.value"
+                  class="text-xs text-blue-600 mt-1"
+                >
+                  {{ item.get("fayl")?.value?.name }}
+                </div>
+              </td>
+
+              <!-- Статус -->
+              <td class="border border-gray-200 px-2 py-2">
+                <select
+                  formControlName="status"
+                  class="w-full px-2 py-1 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                >
+                  <option
+                    *ngFor="let option of statusOptions"
+                    [value]="option.value"
+                  >
+                    {{ option.label }}
+                  </option>
+                </select>
+              </td>
+
+              <!-- Actions -->
+              <td class="border border-gray-200 px-2 py-2">
+                <div class="flex gap-1">
+                  <button
+                    type="button"
+                    (click)="removeFormItem(i)"
+                    class="text-red-600 hover:text-red-800 p-1"
+                    title="Удалить"
+                    [disabled]="formItemsArray.length === 1"
+                  >
+                    <svg
+                      class="w-3 h-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
