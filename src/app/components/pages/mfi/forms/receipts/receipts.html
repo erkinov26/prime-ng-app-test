@@ -11,171 +11,81 @@
       </div>
 
       <div class="overflow-x-auto">
-        <tbody formArrayName="formItems">
-          <tr
-            *ngFor="let item of formItemsArray.controls; let i = index"
-            [formGroupName]="i"
-            class="hover:bg-gray-50"
-            [class.bg-red-50]="
-              !isFormItemValid(i) && formItemsArray.at(i).touched
-            "
-          >
-            <!-- № -->
-            <td
-              class="border border-gray-200 px-2 py-2 text-sm font-medium text-gray-600"
+        <table class="table-auto border-collapse border border-gray-200 w-full">
+          <thead>
+            <tr>
+              <th class="border px-2 py-2">№</th>
+              <th *ngFor="let col of table_data" class="border px-2 py-2">
+                {{ col.name }}
+              </th>
+            </tr>
+          </thead>
+
+          <tbody formArrayName="formItems">
+            <tr
+              *ngFor="let item of formItemsArray.controls; let i = index"
+              [formGroupName]="i"
+              class="hover:bg-gray-50"
             >
-              {{ i + 1 }}
-            </td>
+              <!-- № -->
+              <td class="border px-2 py-2">{{ i + 1 }}</td>
 
-            <!-- Сумма пост -->
-            <td class="border border-gray-200 px-2 py-2">
-              <app-text-input
-                label=""
-                controlName="summaPost"
-                type="number"
-                placeholder="0.00"
-                step="0.01"
-                [class.border-red-500]="getFieldError(i, 'summaPost')"
-              ></app-text-input>
-              <div
-                *ngIf="getFieldError(i, 'summaPost')"
-                class="text-red-500 text-xs mt-1"
-              >
-                {{ getFieldError(i, "summaPost") }}
-              </div>
-            </td>
+              <!-- Dynamic columns -->
+              <td *ngFor="let col of table_data" class="border px-2 py-2">
+                <ng-container [ngSwitch]="col.type">
+                  <!-- Number / Text / Date -->
+                  <app-text-input
+                    *ngSwitchCase="'number'"
+                    [controlName]="col.key"
+                    [placeholder]="col.placeholder"
+                    label=""
+                  ></app-text-input>
 
-            <!-- Остатка пост -->
-            <td class="border border-gray-200 px-2 py-2">
-              <app-text-input
-                controlName="ostatkaPost"
-                type="number"
-                placeholder="0.00"
-                min="0"
-                step="0.01"
-                label=""
-              ></app-text-input>
-            </td>
+                  <app-text-input
+                    *ngSwitchCase="'date'"
+                    [controlName]="col.key"
+                    label=""
+                  ></app-text-input>
 
-            <!-- Сумма транша -->
-            <td class="border border-gray-200 px-2 py-2">
-              <app-text-input
-                controlName="summaTransh"
-                type="number"
-                placeholder="0.00"
-                min="0"
-                step="0.01"
-                label=""
-              ></app-text-input>
-            </td>
+                  <!-- Select -->
+                  <app-select-input
+                    *ngSwitchCase="'select'"
+                    [options]="col.options"
+                    [controlName]="col.key"
+                    label=""
+                  ></app-select-input>
 
-            <!-- Использование -->
-            <td class="border border-gray-200 px-2 py-2">
-              <app-select-input
-                [options]="ispolzovanieOptions || []"
-                controlName="ispolzovanie"
-                label=""
-              ></app-select-input>
-            </td>
+                  <!-- File -->
+                  <app-text-input
+                    *ngSwitchCase="'file'"
+                    [controlName]="col.key"
+                    (change)="onFileSelected($event, i)"
+                    label=""
+                  ></app-text-input>
+                  <div
+                    *ngIf="item.get(col.key)?.value?.name"
+                    class="text-xs text-blue-600 mt-1"
+                  >
+                    {{ item.get(col.key)?.value?.name }}
+                  </div>
 
-            <!-- Доступно -->
-            <td class="border border-gray-200 px-2 py-2">
-              <app-text-input
-                controlName="dostupno"
-                type="number"
-                label=""
-              ></app-text-input>
-            </td>
-
-            <!-- Запр.сумма -->
-            <td class="border border-gray-200 px-2 py-2">
-              <app-text-input
-                label=""
-                controlName="zaprSumma"
-                type="number"
-                placeholder="0.00"
-                min="0"
-                step="0.01"
-              ></app-text-input>
-            </td>
-
-            <!-- Дата валют -->
-            <td class="border border-gray-200 px-2 py-2">
-              <app-text-input
-                label=""
-                controlName="dataValyut"
-                type="date"
-                [class.border-red-500]="getFieldError(i, 'dataValyut')"
-              ></app-text-input>
-              <div
-                *ngIf="getFieldError(i, 'dataValyut')"
-                class="text-red-500 text-xs mt-1"
-              >
-                {{ getFieldError(i, "dataValyut") }}
-              </div>
-            </td>
-
-            <!-- Вид.сумма -->
-            <td class="border border-gray-200 px-2 py-2">
-              <app-select-input
-                label=""
-                [options]="currencyOptions"
-                controlName="vidSumma"
-              ></app-select-input>
-            </td>
-
-            <!-- Действие -->
-            <td class="border border-gray-200 px-2 py-2">
-              <app-select-input
-                label=""
-                [options]="deystvieOptions"
-                controlName="deystvie"
-              ></app-select-input>
-            </td>
-
-            <!-- Файл -->
-            <td class="border border-gray-200 px-2 py-2">
-              <app-text-input
-                label=""
-                controlName="fayl"
-                type="file"
-                (change)="onFileSelected($event, i)"
-                accept=".pdf,.doc,.docx,.jpg,.png"
-              ></app-text-input>
-              <div
-                *ngIf="item.get('fayl')?.value"
-                class="text-xs text-blue-600 mt-1"
-              >
-                {{ item.get("fayl")?.value?.name }}
-              </div>
-            </td>
-
-            <!-- Статус -->
-            <td class="border border-gray-200 px-2 py-2">
-              <app-select-input
-                label=""
-                [options]="statusOptions"
-                controlName="status"
-              ></app-select-input>
-            </td>
-
-            <!-- Actions -->
-            <td class="border border-gray-200 px-2 py-2">
-              <div class="flex gap-1">
-                <button
-                  type="button"
-                  pButton
-                  severity="danger"
-                  (click)="removeFormItem(i)"
-                  title="Удалить"
-                  [disabled]="formItemsArray.length === 1"
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
+                  <!-- Button actions -->
+                  <div *ngSwitchCase="'button'" class="flex gap-1">
+                    <button
+                      type="button"
+                      pButton
+                      severity="danger"
+                      (click)="removeFormItem(i)"
+                      [disabled]="formItemsArray.length === 1"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <!-- Form Actions -->
@@ -192,13 +102,13 @@
         </div>
 
         <div class="flex gap-3">
-          <button
+          <!-- <button
             type="button"
             (click)="clearAllItems()"
             class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
           >
             Очистить все
-          </button>
+          </button> -->
 
           <button
             type="submit"
@@ -213,14 +123,14 @@
 
     <!-- Debug Panel -->
     <div class="mt-6 p-4 bg-gray-100 rounded-lg">
-      <details>
+      <!-- <details>
         <summary class="cursor-pointer text-sm font-medium text-gray-600">
           Debug: Текущие данные формы (клик для просмотра)
         </summary>
         <pre class="mt-2 text-xs text-gray-600 overflow-auto">{{
           getFormValue() | json
         }}</pre>
-      </details>
+      </details> -->
     </div>
   </div>
 </div>
