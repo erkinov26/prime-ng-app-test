@@ -28,6 +28,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
       showIcon
       size="small"
       iconDisplay="input"
+      appendTo="body"
     />
   `,
   styleUrl: './date-picker.css',

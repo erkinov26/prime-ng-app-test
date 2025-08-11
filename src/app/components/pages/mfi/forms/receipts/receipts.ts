@@ -1,19 +1,19 @@
 import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TextInput } from '../../../../shared/inputs/text-input/text-input';
 import { SelectInput } from '../../../../shared/inputs/select-input/select-input';
-
+import { DatePicker } from '../../../../shared/inputs/date-picker/date-picker';
+import { FileUploadModule } from 'primeng/fileupload';
+import { FileUploader } from '../../../../shared/inputs/file-uploader/file-uploader';
 interface TableColumn {
   key: string;
   name: string;
   type: 'number' | 'text' | 'date' | 'select' | 'file' | 'button';
   placeholder: string;
-  step: string;
-  min: string;
-  accept: string;
-  options: any[];
+
+  options?: any[];
 }
 
 @Component({
@@ -28,12 +28,15 @@ interface TableColumn {
     FormsModule, // ✅ Agar ngModel ishlatsa
     TextInput,
     SelectInput,
+    DatePicker,
+    FileUploadModule,
+    FileUploader,
   ],
   templateUrl: './receipts.html',
 })
 export class Receipts {
   private fb = inject(FormBuilder);
-
+  private cdr = inject(ChangeDetectorRef);
   mainForm = this.fb.group({
     formItems: this.fb.array([]),
   });
@@ -43,23 +46,23 @@ export class Receipts {
   }
 
   ispolzovanieOptions = [
-    { label: 'Option 1', value: '1' },
-    { label: 'Option 2', value: '2' },
+    { name: 'Option 1', code: '1' },
+    { name: 'Option 2', code: '2' },
   ];
 
   currencyOptions = [
-    { label: 'USD', value: 'USD' },
-    { label: 'EUR', value: 'EUR' },
+    { name: 'USD', code: 'USD' },
+    { name: 'EUR', code: 'EUR' },
   ];
 
   deystvieOptions = [
-    { label: 'Действие 1', value: 'act1' },
-    { label: 'Действие 2', value: 'act2' },
+    { name: 'Действие 1', code: 'act1' },
+    { name: 'Действие 2', code: 'act2' },
   ];
 
   statusOptions = [
-    { label: 'Активный', value: 'active' },
-    { label: 'Неактивный', value: 'inactive' },
+    { name: 'Активный', code: 'active' },
+    { name: 'Неактивный', code: 'inactive' },
   ];
 
   table_data: TableColumn[] = [
@@ -68,39 +71,25 @@ export class Receipts {
       name: 'Сумма пост.',
       type: 'number',
       placeholder: '0.00',
-      step: '0.01',
-      min: '0',
-      accept: '',
-      options: [],
     },
     {
       key: 'post_balance',
       name: 'Остатка пост.',
       type: 'number',
       placeholder: '0.00',
-      step: '0.01',
-      min: '0',
-      accept: '',
-      options: [],
     },
     {
       key: 'tranche_amount',
       name: 'Сумма транша',
       type: 'number',
       placeholder: '0.00',
-      step: '0.01',
-      min: '0',
-      accept: '',
-      options: [],
     },
     {
       key: 'usage',
       name: 'Использование',
       type: 'select',
       placeholder: '',
-      step: '',
-      min: '',
-      accept: '',
+
       options: this.ispolzovanieOptions,
     },
     {
@@ -108,39 +97,25 @@ export class Receipts {
       name: 'Доступно',
       type: 'number',
       placeholder: '',
-      step: '',
-      min: '',
-      accept: '',
-      options: [],
     },
     {
       key: 'blocked_amount',
       name: 'Запр.сумма',
       type: 'number',
       placeholder: '0.00',
-      step: '0.01',
-      min: '0',
-      accept: '',
-      options: [],
     },
     {
       key: 'value_date',
       name: 'Дата валют.',
       type: 'date',
       placeholder: '',
-      step: '',
-      min: '',
-      accept: '',
-      options: [],
     },
     {
       key: 'view_amount',
       name: 'Вид.сумма',
       type: 'select',
       placeholder: '',
-      step: '',
-      min: '',
-      accept: '',
+
       options: this.currencyOptions,
     },
     {
@@ -148,9 +123,7 @@ export class Receipts {
       name: 'Действие',
       type: 'select',
       placeholder: '',
-      step: '',
-      min: '',
-      accept: '',
+
       options: this.deystvieOptions,
     },
     {
@@ -158,19 +131,13 @@ export class Receipts {
       name: 'Файл',
       type: 'file',
       placeholder: '',
-      step: '',
-      min: '',
-      accept: '.pdf,.doc,.docx,.jpg,.png',
-      options: [],
     },
     {
       key: 'status',
       name: 'Статус',
       type: 'select',
       placeholder: '',
-      step: '',
-      min: '',
-      accept: '',
+
       options: this.statusOptions,
     },
     {
@@ -178,10 +145,6 @@ export class Receipts {
       name: 'Действия',
       type: 'button',
       placeholder: '',
-      step: '',
-      min: '',
-      accept: '',
-      options: [],
     },
   ];
 
@@ -191,12 +154,15 @@ export class Receipts {
 
   addFormItem() {
     const group: FormGroup = this.fb.group({});
+    console.log('🚀 ~ Receipts ~ addFormItem ~ group:', group);
     this.table_data.forEach((col) => {
       if (col.type !== 'button') {
         group.addControl(col.key, this.fb.control(''));
       }
     });
     this.formItemsArray.push(group);
+    console.log('🚀 ~ Receipts ~ addFormItem ~ group:', group);
+    console.log(this.formItemsArray);
   }
 
   removeFormItem(index: number) {
@@ -208,6 +174,9 @@ export class Receipts {
     if (file) {
       this.formItemsArray.at(index).get('file')?.setValue(file);
     }
+  }
+  ngAfterViewInit(): void {
+    this.cdr.detectChanges();
   }
   onSubmit() {
     console.log(this.mainForm.value);

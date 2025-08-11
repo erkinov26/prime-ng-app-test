@@ -41,27 +41,26 @@
                     label=""
                   ></app-text-input>
 
-                  <app-text-input
+                  <app-date-picker
                     *ngSwitchCase="'date'"
                     [controlName]="col.key"
                     label=""
-                  ></app-text-input>
+                  ></app-date-picker>
 
                   <!-- Select -->
                   <app-select-input
                     *ngSwitchCase="'select'"
-                    [options]="col.options"
+                    [options]="col.options || []"
                     [controlName]="col.key"
+                    placeholder="Select"
                     label=""
                   ></app-select-input>
 
                   <!-- File -->
-                  <app-text-input
+                  <app-file-uploader
                     *ngSwitchCase="'file'"
-                    [controlName]="col.key"
-                    (change)="onFileSelected($event, i)"
-                    label=""
-                  ></app-text-input>
+                    [formControlName]="col.key"
+                  ></app-file-uploader>
                   <div
                     *ngIf="item.get(col.key)?.value?.name"
                     class="text-xs text-blue-600 mt-1"
