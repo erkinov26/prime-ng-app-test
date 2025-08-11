@@ -17,29 +17,30 @@ import { FileUploadModule } from 'primeng/fileupload';
   template: `
     <p-fileupload
       mode="basic"
-      chooseLabel=""
       chooseIcon="pi pi-upload"
+      chooseLabel=""
       name="file"
       [accept]="accept"
       [maxFileSize]="maxFileSize"
       (onSelect)="onSelect($event)"
     ></p-fileupload>
-    <div *ngIf="fileName" class="text-xs text-green-600 mt-1">Uploaded</div>
+
+    <div *ngIf="isUploaded" class="text-xs text-green-600 mt-1">Uploaded</div>
   `,
 })
 export class FileUploader implements ControlValueAccessor {
   @Input() accept = '.pdf,.doc,.docx,.jpg,.png';
   @Input() maxFileSize = 100000000000000;
 
-  fileName: string = '';
+  isUploaded = false;
   private onChange: any = () => {};
   private onTouched: any = () => {};
 
   writeValue(value: File | null): void {
     if (value) {
-      this.fileName = value.name;
+      this.isUploaded = true;
     } else {
-      this.fileName = '';
+      this.isUploaded = false;
     }
   }
 
@@ -56,7 +57,7 @@ export class FileUploader implements ControlValueAccessor {
   onSelect(event: any) {
     const file = event.files[0];
     if (file) {
-      this.fileName = file.name;
+      this.isUploaded = true;
       this.onChange(file);
       this.onTouched();
     }
