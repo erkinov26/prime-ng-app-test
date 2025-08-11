@@ -14,75 +14,71 @@
         <table class="table-auto border-collapse border border-gray-200 w-full">
           <thead>
             <tr>
-              <th class="border px-2 py-2">№</th>
-              <th *ngFor="let col of table_data" class="border px-2 py-2">
+              <th class="border border-gray-300 px-2 py-2">№</th>
+              @for (col of table_data; track $index;let i=$index) {
+              <th class="border border-gray-300 px-2 py-2">
                 {{ col.name }}
               </th>
+              }
             </tr>
           </thead>
 
           <tbody formArrayName="formItems">
-            <tr
-              *ngFor="let item of formItemsArray.controls; let i = index"
-              [formGroupName]="i"
-              class="hover:bg-gray-50"
-            >
-              <!-- № -->
-              <td class="border px-2 py-2">{{ i + 1 }}</td>
+            @for(item of formItemsArray.controls; track $index; let i=$index){
+            <tr [formGroupName]="i" class="hover:bg-gray-50">
+              <td class="border border-gray-300 px-2 py-2">{{ i + 1 }}</td>
 
-              <!-- Dynamic columns -->
-              <td *ngFor="let col of table_data" class="border px-2 py-2">
-                <ng-container [ngSwitch]="col.type">
-                  <!-- Number / Text / Date -->
-                  <app-text-input
-                    *ngSwitchCase="'number'"
-                    [controlName]="col.key"
-                    [placeholder]="col.placeholder"
-                    label=""
-                  ></app-text-input>
-
-                  <app-date-picker
-                    *ngSwitchCase="'date'"
-                    [controlName]="col.key"
-                    label=""
-                  ></app-date-picker>
-
-                  <!-- Select -->
-                  <app-select-input
-                    *ngSwitchCase="'select'"
-                    [options]="col.options || []"
-                    [controlName]="col.key"
-                    placeholder="Select"
-                    label=""
-                  ></app-select-input>
-
-                  <!-- File -->
-                  <app-file-uploader
-                    *ngSwitchCase="'file'"
-                    [formControlName]="col.key"
-                  ></app-file-uploader>
-                  <div
-                    *ngIf="item.get(col.key)?.value?.name"
-                    class="text-xs text-blue-600 mt-1"
+              @for (col of table_data; track $index; let index=$index) {
+              <td class="border border-gray-300 px-2 py-2">
+                @switch (col.type) { @case ('number') {
+                <app-text-input
+                  [controlName]="col.key"
+                  [placeholder]="col.placeholder"
+                  label=""
+                ></app-text-input>
+                } @case ('text') {
+                <app-text-input
+                  [controlName]="col.key"
+                  [placeholder]="col.placeholder"
+                  label=""
+                ></app-text-input>
+                } @case ('date') {
+                <app-date-picker
+                  [controlName]="col.key"
+                  label=""
+                ></app-date-picker>
+                }@case ('select') {
+                <app-select-input
+                  [options]="col.options || []"
+                  [controlName]="col.key"
+                  placeholder="Select"
+                  label=""
+                ></app-select-input>
+                }@case ('file') {
+                <app-file-uploader
+                  [formControlName]="col.key"
+                ></app-file-uploader>
+                @if(item.get(col.key)?.value?.name){
+                <div class="text-xs text-blue-600 mt-1">
+                  {{ item.get(col.key)?.value?.name }}
+                </div>
+                } } @case ('button') {
+                <div class="flex gap-1">
+                  <button
+                    type="button"
+                    pButton
+                    severity="danger"
+                    (click)="removeFormItem(i)"
+                    [disabled]="formItemsArray.length === 1"
                   >
-                    {{ item.get(col.key)?.value?.name }}
-                  </div>
-
-                  <!-- Button actions -->
-                  <div *ngSwitchCase="'button'" class="flex gap-1">
-                    <button
-                      type="button"
-                      pButton
-                      severity="danger"
-                      (click)="removeFormItem(i)"
-                      [disabled]="formItemsArray.length === 1"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </ng-container>
+                    Delete
+                  </button>
+                </div>
+                } }
               </td>
+              }
             </tr>
+            }
           </tbody>
         </table>
       </div>
@@ -101,13 +97,13 @@
         </div>
 
         <div class="flex gap-3">
-          <!-- <button
+          <button
             type="button"
             (click)="clearAllItems()"
             class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
           >
             Очистить все
-          </button> -->
+          </button>
 
           <button
             type="submit"

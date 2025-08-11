@@ -7,6 +7,7 @@ import { SelectInput } from '../../../../shared/inputs/select-input/select-input
 import { DatePicker } from '../../../../shared/inputs/date-picker/date-picker';
 import { FileUploadModule } from 'primeng/fileupload';
 import { FileUploader } from '../../../../shared/inputs/file-uploader/file-uploader';
+import { ButtonModule } from 'primeng/button';
 interface TableColumn {
   key: string;
   name: string;
@@ -20,12 +21,9 @@ interface TableColumn {
   selector: 'app-receipts',
   standalone: true, // standalone ekanligini belgilash kerak
   imports: [
-    NgFor,
-    NgIf,
-    NgSwitch,
-    NgSwitchCase,
-    ReactiveFormsModule, // ✅ Reactive forms directivelar uchun
-    FormsModule, // ✅ Agar ngModel ishlatsa
+    ButtonModule,
+    ReactiveFormsModule,
+    FormsModule,
     TextInput,
     SelectInput,
     DatePicker,
@@ -154,18 +152,32 @@ export class Receipts {
 
   addFormItem() {
     const group: FormGroup = this.fb.group({});
-    console.log('🚀 ~ Receipts ~ addFormItem ~ group:', group);
     this.table_data.forEach((col) => {
       if (col.type !== 'button') {
-        group.addControl(col.key, this.fb.control(''));
+        let defaultValue: any = '';
+        if (col.type === 'number') {
+          defaultValue = col.placeholder || '0.00'; // Use placeholder as default or fallback to '0.00'
+        } else if (
+          col.type === 'select' &&
+          col.options &&
+          col.options.length > 0
+        ) {
+          defaultValue = col.options[0].code; // Set first option as default for select
+        } else if (col.type === 'date') {
+          defaultValue = null; // Or set a default date, e.g., new Date()
+        } else if (col.type === 'file') {
+          defaultValue = null; // Files typically start as null
+        }
+        group.addControl(col.key, this.fb.control(defaultValue));
       }
     });
     this.formItemsArray.push(group);
-    console.log('🚀 ~ Receipts ~ addFormItem ~ group:', group);
-    console.log(this.formItemsArray);
   }
 
   removeFormItem(index: number) {
+    console.log('🚀 ~ Receipts ~ removeFormItem ~ index:', index);
+    console.log(this.formItemsArray);
+
     this.formItemsArray.removeAt(index);
   }
 
@@ -178,6 +190,7 @@ export class Receipts {
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
   }
+  clearAllItems() {}
   onSubmit() {
     console.log(this.mainForm.value);
   }
