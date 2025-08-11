@@ -7,6 +7,7 @@ import { ComissionCrud } from './comission-crud/comission-crud';
 import { Commitment } from './commitment/commitment';
 import { Settings } from './settings/settings';
 import { Booking } from './booking/booking';
+import { Receipts } from './receipts/receipts';
 
 @Component({
   selector: 'app-forms-page',
@@ -19,6 +20,7 @@ import { Booking } from './booking/booking';
     Commitment,
     Settings,
     Booking,
+    Receipts,
   ],
 })
 export class FormsPage implements OnInit {
@@ -47,6 +49,10 @@ export class FormsPage implements OnInit {
     {
       title: 'Брони',
       value: 'booking',
+    },
+    {
+      title: 'Поступления',
+      value: 'receipts',
     },
   ];
   ngOnInit() {
