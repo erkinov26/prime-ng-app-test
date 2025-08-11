@@ -4,12 +4,20 @@ import { TabsModule } from 'primeng/tabs';
 import { RequestResource } from './request-resource/request-resource';
 import { Operation } from './operation/operation';
 import { ComissionCrud } from './comission-crud/comission-crud';
-import { Commitment } from "./commitment/commitment";
+import { Commitment } from './commitment/commitment';
+import { Settings } from './settings/settings';
 
 @Component({
   selector: 'app-forms-page',
   templateUrl: 'forms.html',
-  imports: [TabsModule, RequestResource, Operation, ComissionCrud, Commitment],
+  imports: [
+    TabsModule,
+    RequestResource,
+    Operation,
+    ComissionCrud,
+    Commitment,
+    Settings,
+  ],
 })
 export class FormsPage implements OnInit {
   private router = inject(Router);
@@ -29,6 +37,10 @@ export class FormsPage implements OnInit {
     {
       title: 'Добавление обязательство',
       value: 'commitment',
+    },
+    {
+      title: 'Настройка режима работи',
+      value: 'settings',
     },
   ];
   ngOnInit() {

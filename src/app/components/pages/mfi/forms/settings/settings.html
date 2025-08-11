@@ -1,0 +1,47 @@
+<h1 class="text-2xl font-medium mb-4">Настройка режима работи</h1>
+
+<form [formGroup]="settings" class="flex w-full flex-wrap gap-2 justify-center">
+  @for (item of input_fields; track $index; let i = $index) { @if (item.type ===
+  'text' || item.type === 'number') {
+  <app-text-input
+    [controlName]="item.controlName"
+    [disabled]="item.disabled || false"
+    [label]="item.label"
+    [placeholder]="item.placeholder"
+    class="{{ item.class }} my-2"
+  />
+  } @else if (item.type === 'select') {
+  <app-select-input
+    [controlName]="item.controlName"
+    [disabled]="item.disabled || false"
+    [label]="item.label"
+    [placeholder]="item.placeholder"
+    [options]="item.options || []"
+    class="{{ item.class }} my-2"
+  />
+  } @else if (item.type==='date') {
+  <app-date-picker
+    [controlName]="item.controlName"
+    [label]="item.label"
+    [placeholder]="item.placeholder"
+    class="{{ item.class }}"
+  />
+  }@else if(item.type==='checkbox'){
+  <app-checkbox
+    [label]="item.label"
+    [controlName]="item.controlName"
+    class="{{ item.class }}"
+  />
+  } }
+
+  <div class="flex justify-end w-full mt-4">
+    <button
+      pButton
+      severity="secondary"
+      (click)="onSubmit()"
+      [disabled]="!settings.valid"
+    >
+      Отправить
+    </button>
+  </div>
+</form>

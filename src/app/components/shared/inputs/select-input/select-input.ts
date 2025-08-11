@@ -18,6 +18,7 @@ import { SelectModule } from 'primeng/select';
       options && options.length ? label : 'No Option to Select'
     }}</label>
     <p-select
+      size="small"
       [placeholder]="placeholder"
       class="w-full min-h-[35px]"
       [options]="options || []"
@@ -40,7 +41,6 @@ export class SelectInput implements OnInit, OnDestroy {
   @Input({ required: true }) controlName!: string;
   @Input() placeholder: string = '';
   @Input() disabled: boolean = false;
-  @Input() externallClass: string = '';
 
   private parentContainer = inject(ControlContainer);
 
