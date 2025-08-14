@@ -1,0 +1,408 @@
+<form
+  class="flex flex-col flex-auto"
+  [formGroup]="form"
+  (ngSubmit)="submit(form)"
+>
+  <h1 class="text-center text-xl font-normal text-gray-600">
+    Условия финансирования импортного контракта
+  </h1>
+  <div class="grid grid-cols-12 gap-5 pt-2">
+    <div class="col-span-12 flex justify-end">
+      <p-float-label class="w-40">
+        <p-select
+          size="small"
+          inputId="branch"
+          [options]="[]"
+          [fluid]="true"
+          optionLabel="name"
+          optionValue="code"
+          appendTo="body"
+          formControlName="branch"
+          class="w-full"
+        />
+        <label for="branch"> Филиал </label>
+      </p-float-label>
+    </div>
+    <div class="col-span-6">
+      <p-selectbutton
+        size="small"
+        [options]="stateOptions"
+        optionLabel="label"
+        optionValue="value"
+        aria-labelledby="basic"
+        formControlName="unique_type"
+      />
+    </div>
+    <div class="col-span-2">
+      <div class="flex gap-2 items-center">
+        <p-checkbox
+          inputId="is_reser_wout_tranche"
+          [binary]="true"
+          [indeterminate]="true"
+          formControlName="is_reser_wout_tranche"
+        />
+        <label for="is_reser_wout_tranche" class="ml-2">
+          Бронь без транша
+        </label>
+      </div>
+    </div>
+    <div class="col-span-4">
+      <p-float-label>
+        <input
+          pInputText
+          pSize="small"
+          size="small"
+          inputId="branch"
+          [fluid]="true"
+          formControlName="note"
+        />
+        <label for="note"> Примечание </label>
+      </p-float-label>
+    </div>
+    <div class="col-span-4">
+      <!-- <label for="Уникальный код/ID кред. анкета"></label> -->
+      <p-iconfield>
+        <input
+          type="text"
+          size="small"
+          pSize="small"
+          placeholder="Уникальный код/ID кред. анкета"
+          inputId="unique_id"
+          formControlName="unique_id"
+          pInputText
+          class="w-full"
+        />
+        <p-inputicon class="pi pi-search" />
+      </p-iconfield>
+    </div>
+
+    <h1 class="text-md font-medium col-span-12">Условия Кредита</h1>
+    <div
+      class="border rounded-md col-span-12 p-2 border-gray-400"
+      formGroupName="loan_terms"
+    >
+      <div class="grid grid-cols-12 gap-5">
+        <div class="col-span-6">
+          <p-float-label variant="on">
+            <input
+              pInputText
+              size="small"
+              class="w-full"
+              id="project_initiator"
+              pSize="small"
+              formControlName="project_initiator"
+            />
+            <label for="project_initiator"> Инициатор проекта </label>
+          </p-float-label>
+        </div>
+        <div class="col-span-6">
+          <p-float-label variant="on">
+            <input
+              pInputText
+              pSize="small"
+              class="w-full"
+              id="import_contract_subject"
+              formControlName="import_contract_subject"
+            />
+            <label for="import_contract_subject">
+              Предмет импортного контракта
+            </label>
+          </p-float-label>
+        </div>
+        <div class="col-span-6 gap-2 flex flex-col" formArrayName="supplier">
+          @for (item of supplier.controls; track item; let i = $index) {
+          <div class="flex items-start gap-2">
+            <div [formGroupName]="i" class="flex w-full flex-col gap-1">
+              @if (i===0) {
+              <label for="supplier-{{ i }}" class="font-bold block">
+                Поставщик
+              </label>
+              }
+              <input
+                pInputText
+                pSize="small"
+                class="w-full"
+                id="supplier-{{ i }}"
+                size="small"
+                formControlName="value"
+              />
+            </div>
+
+            @if (i !== 0) {
+            <p-button
+              type="button"
+              (click)="removeSupplier(i)"
+              pButton
+              variant="outlined"
+              severity="danger"
+              icon="pi pi-times"
+              size="small"
+            />
+            }
+          </div>
+          }
+
+          <div class="flex justify-end">
+            <p-button
+              type="button"
+              (click)="addSupplier()"
+              label="Добавить"
+              icon="pi pi-plus"
+              size="small"
+            />
+          </div>
+        </div>
+
+        <div class="col-span-6 border rounded-md p-2 border-gray-400">
+          <div
+            class="col-span-12 gap-2 flex flex-col"
+            formArrayName="credit_info"
+          >
+            @for (item of creditInfo.controls; track item; let i = $index) {
+            <div class="grid grid-cols-12 gap-2" [formGroupName]="i">
+              <!-- Payment terms -->
+              <div class="col-span-5">
+                @if (i === 0) {
+                <label for="payment_terms-{{ i }}" class="font-bold block mb-1">
+                  Условия платежа
+                </label>
+                }
+                <p-select
+                  size="small"
+                  class="w-full"
+                  inputId="payment_terms-{{ i }}"
+                  [options]="[]"
+                  [fluid]="true"
+                  optionLabel="name"
+                  optionValue="code"
+                  appendTo="body"
+                  formControlName="payment_terms"
+                  class="w-full"
+                />
+              </div>
+
+              <!-- Amount -->
+              <div class="col-span-3">
+                @if (i === 0) {
+                <label for="amount-{{ i }}" class="font-bold block mb-1">
+                  Сумма
+                </label>
+                }
+                <input
+                  pSize="small"
+                  pInputText
+                  size="small"
+                  class="w-full"
+                  id="amount-{{ i }}"
+                  formControlName="amount"
+                />
+              </div>
+
+              <!-- Currency -->
+              <div class="col-span-3">
+                @if (i === 0) {
+                <label for="currency-{{ i }}" class="font-bold block mb-1">
+                  Валюта
+                </label>
+                }
+                <p-select
+                  size="small"
+                  class="w-full"
+                  inputId="currency-{{ i }}"
+                  [options]="[]"
+                  [fluid]="true"
+                  optionLabel="name"
+                  optionValue="code"
+                  appendTo="body"
+                  formControlName="currency"
+                />
+                <!-- <input
+                  pInputText
+                  size="small"
+                  class="w-full"
+                  id="currency-{{ i }}"
+                  formControlName="currency"
+                /> -->
+              </div>
+
+              <!-- Delete button -->
+              <div class="col-span-1 flex items-end">
+                @if (i !== 0) {
+                <p-button
+                  type="button"
+                  (click)="removeCreditInfo(i)"
+                  pButton
+                  variant="outlined"
+                  severity="danger"
+                  size="small"
+                  icon="pi pi-times"
+                />
+                }
+              </div>
+            </div>
+            }
+
+            <!-- Add button -->
+            <div class="flex justify-end mt-2">
+              <p-button
+                type="button"
+                (click)="addCreditInfo()"
+                label="Добавить"
+                icon="pi pi-plus"
+                size="small"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-span-6">
+          <div class="grid grid-cols-12 gap-2">
+            <div class="col-span-9">
+              <p-float-label variant="on">
+                <input
+                  pInputText
+                  pSize="small"
+                  id="number"
+                  formControlName="number"
+                  class="w-full"
+                />
+                <label for="number">Номер</label>
+              </p-float-label>
+            </div>
+
+            <div class="col-span-3">
+              <p-float-label variant="on">
+                <p-datepicker
+                  size="small"
+                  id="contract_date"
+                  formControlName="contract_date"
+                  class="w-full"
+                ></p-datepicker>
+                <label for="contract_date">Дата контракта</label>
+              </p-float-label>
+            </div>
+
+            <div
+              formGroupName="bank_credit_amount"
+              class="col-span-12 grid grid-cols-12 gap-2"
+            >
+              <div class="col-span-9">
+                <p-float-label variant="on">
+                  <input
+                    pInputText
+                    pSize="small"
+                    id="value"
+                    formControlName="value"
+                    class="w-full"
+                  />
+                  <label for="value">Сумма кредита</label>
+                </p-float-label>
+              </div>
+              <div class="col-span-3">
+                <p-float-label variant="on">
+                  <p-select
+                    size="small"
+                    inputId="currency"
+                    [options]="[]"
+                    [fluid]="true"
+                    optionLabel="name"
+                    optionValue="code"
+                    appendTo="body"
+                    formControlName="currency"
+                    class="w-full"
+                  />
+                  <label for="currency">Валюта</label>
+                </p-float-label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-6">
+          <p-selectbutton
+            size="small"
+            [options]="[
+              { label: 'Линия', value: 'line' },
+              { label: 'Транш', value: 'tranche' }
+            ]"
+            optionLabel="label"
+            optionValue="value"
+            class="mb-2"
+            aria-labelledby="basic"
+            formControlName="unique_type"
+          />
+          <input
+            type="file"
+            pInputText
+            pSize="small"
+            size="small"
+            inputId="number"
+            [fluid]="true"
+            formControlName=""
+          />
+        </div>
+      </div>
+    </div>
+    <h1 class="text-md font-medium col-span-12">Источник финансирования</h1>
+    <div
+      class="col-span-12 border p-4 rounded-md border-gray-400"
+      formArrayName="funding_source"
+    >
+      @for (group of funding_array.controls; track $index; let i = $index) {
+      <div [formGroupName]="i" class="grid grid-cols-12 gap-4 mb-3">
+        <div class="col-span-6">
+          @if (i === 0) {
+          <label for="loan_term-{{ i }}" class="font-bold block mb-1">
+            Срок кредита
+          </label>
+          }
+          <p-datepicker
+            size="small"
+            id="loan_term-{{ i }}"
+            formControlName="loan_term"
+            class="w-full"
+          ></p-datepicker>
+        </div>
+
+        <div class="col-span-5">
+          @if (i === 0) {
+          <label for="grace_period-{{ i }}" class="font-bold block mb-1">
+            Льготный период
+          </label>
+          }
+          <p-datepicker
+            size="small"
+            id="grace_period-{{ i }}"
+            formControlName="grace_period"
+            class="w-full"
+          ></p-datepicker>
+        </div>
+
+        @if (i !== 0) {
+        <div class="col-span-1 flex items-center">
+          <p-button
+            type="button"
+            (click)="removeFundingSource(i)"
+            pButton
+            variant="outlined"
+            severity="danger"
+            label="Удалить"
+            size="small"
+            icon="pi pi-times"
+          />
+        </div>
+        }
+      </div>
+      }
+
+      <div class="flex justify-end mt-3">
+        <p-button
+          type="button"
+          (click)="addFundingSource()"
+          label="Добавить"
+          icon="pi pi-plus"
+          size="small"
+        />
+      </div>
+    </div>
+  </div>
+</form>

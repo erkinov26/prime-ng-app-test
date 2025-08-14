@@ -8,6 +8,7 @@ import { Commitment } from './commitment/commitment';
 import { Settings } from './settings/settings';
 import { Booking } from './booking/booking';
 import { Receipts } from './receipts/receipts';
+import { ConvenantForm } from './convenant-form/convenant-form';
 
 @Component({
   selector: 'app-forms-page',
@@ -20,6 +21,7 @@ import { Receipts } from './receipts/receipts';
     Commitment,
     Settings,
     Booking,
+    ConvenantForm,
     Receipts,
   ],
 })
@@ -53,6 +55,10 @@ export class FormsPage implements OnInit {
     {
       title: 'Поступления',
       value: 'receipts',
+    },
+    {
+      title: 'Convenant Form',
+      value: 'convenant',
     },
   ];
   ngOnInit() {

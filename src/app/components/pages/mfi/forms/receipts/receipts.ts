@@ -1,6 +1,6 @@
 import { NgFor, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TextInput } from '../../../../shared/inputs/text-input/text-input';
 import { SelectInput } from '../../../../shared/inputs/select-input/select-input';
@@ -19,7 +19,7 @@ interface TableColumn {
 
 @Component({
   selector: 'app-receipts',
-  standalone: true, // standalone ekanligini belgilash kerak
+  standalone: true,
   imports: [
     ButtonModule,
     ReactiveFormsModule,
@@ -152,25 +152,40 @@ export class Receipts {
 
   addFormItem() {
     const group: FormGroup = this.fb.group({});
+
     this.table_data.forEach((col) => {
       if (col.type !== 'button') {
         let defaultValue: any = '';
+        let validators = [];
+
         if (col.type === 'number') {
-          defaultValue = col.placeholder || '0.00'; // Use placeholder as default or fallback to '0.00'
+          defaultValue = col.placeholder || '0.00';
+          validators.push(
+            Validators.required,
+            Validators.pattern(/^\d+(\.\d{1,2})?$/)
+          );
         } else if (
           col.type === 'select' &&
           col.options &&
           col.options.length > 0
         ) {
-          defaultValue = col.options[0].code; // Set first option as default for select
+          defaultValue = col.options[0].code;
+          validators.push(Validators.required);
         } else if (col.type === 'date') {
-          defaultValue = null; // Or set a default date, e.g., new Date()
+          defaultValue = null;
+          validators.push(Validators.required);
         } else if (col.type === 'file') {
-          defaultValue = null; // Files typically start as null
+          defaultValue = null;
+          // Fayl majburiy bo‘lishini istasangiz:
+          // validators.push(Validators.required);
+        } else {
+          validators.push(Validators.required);
         }
-        group.addControl(col.key, this.fb.control(defaultValue));
+
+        group.addControl(col.key, this.fb.control(defaultValue, validators));
       }
     });
+
     this.formItemsArray.push(group);
   }
 
