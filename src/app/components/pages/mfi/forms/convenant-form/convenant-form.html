@@ -405,5 +405,39 @@
         />
       </div>
     </div>
+    <h1 class="text-md font-medium col-span-12">Условия финансирования</h1>
+    <div class="col-span-12" formGroupName="financing_terms">
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-6 flex flex-col gap-4">
+          <p-float-label variant="on">
+            <p-datepicker
+              size="small"
+              id="loan_term"
+              formControlName="loan_term"
+              class="w-full"
+            ></p-datepicker>
+            <label for="loan_term">Срок кредита</label>
+          </p-float-label>
+          <p-float-label variant="on">
+            <p-datepicker
+              size="small"
+              id="grace_period"
+              formControlName="grace_period"
+              class="w-full"
+            ></p-datepicker>
+            <label for="grace_period">Лыготный период</label>
+          </p-float-label>
+          <p-float-label variant="on">
+            <p-datepicker
+              size="small"
+              id="tranche_term"
+              formControlName="tranche_term"
+              class="w-full"
+            ></p-datepicker>
+            <label for="tranche_term">Срок транша</label>
+          </p-float-label>
+        </div>
+      </div>
+    </div>
   </div>
 </form>
