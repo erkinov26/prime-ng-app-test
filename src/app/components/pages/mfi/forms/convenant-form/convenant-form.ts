@@ -33,6 +33,7 @@ export interface CreditBlankForm {
   is_reser_wout_tranche: FormControl<boolean>;
   loan_terms: FormGroup<{
     project_initiator: FormControl<string>;
+    unique_type: FormControl<string>;
     import_contract_subject: FormControl<string>;
     supplier: FormArray<
       FormGroup<{
@@ -152,7 +153,7 @@ export interface CreditBlankPayload {
       value: string;
     }[];
     number: string;
-    contract_date: string;  
+    contract_date: string;
     bank_credit_amount: {
       value: string;
       currency: string;
@@ -162,8 +163,8 @@ export interface CreditBlankPayload {
       amount: string;
       currency: string;
     }[];
-    lt_line: string | null; 
-    lt_tranche: string | null;  
+    lt_line: string | null;
+    lt_tranche: string | null;
   };
   funding_source: {
     loan_term: string;
@@ -251,7 +252,6 @@ export class ConvenantForm extends FormComponent {
             value: new FormControl('', { nonNullable: true }),
           }),
         ]),
-
         number: new FormControl('', { nonNullable: true }),
         contract_date: new FormControl(new Date(), { nonNullable: true }),
 
@@ -267,7 +267,7 @@ export class ConvenantForm extends FormComponent {
             currency: new FormControl('', { nonNullable: true }),
           }),
         ]),
-
+        unique_type: new FormControl('', { nonNullable: true }),
         lt_line: new FormControl<File | null>(null),
         lt_tranche: new FormControl<File | null>(null),
       }),
@@ -312,12 +312,12 @@ export class ConvenantForm extends FormComponent {
       }),
     });
   }
-  get loanTerms() {
+  get loan_terms() {
     return this.form.get('loan_terms') as FormGroup;
   }
 
   get supplier() {
-    return this.loanTerms.get('supplier') as FormArray;
+    return this.loan_terms.get('supplier') as FormArray;
   }
   addSupplier() {
     this.supplier.push(
@@ -331,7 +331,7 @@ export class ConvenantForm extends FormComponent {
     this.supplier.removeAt(index);
   }
   get creditInfo() {
-    return this.loanTerms.controls['credit_info'] as FormArray;
+    return this.loan_terms.controls['credit_info'] as FormArray;
   }
 
   addCreditInfo() {
@@ -346,7 +346,7 @@ export class ConvenantForm extends FormComponent {
 
   removeCreditInfo(index: number) {
     this.creditInfo.removeAt(index);
-  } 
+  }
   get funding_array() {
     return this.form.controls['funding_source'] as FormArray;
   }
