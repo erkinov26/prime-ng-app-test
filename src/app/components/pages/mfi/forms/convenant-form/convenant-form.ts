@@ -13,7 +13,7 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { InputNumber } from 'primeng/inputnumber';
 import { InputText, InputTextModule } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
-import { Textarea } from 'primeng/textarea';
+import { TextareaModule } from 'primeng/textarea';
 import { FormComponent } from '../../../../../core/form';
 import { useLoading } from '../../../../../core/use-loading';
 
@@ -86,6 +86,10 @@ export interface CreditBlankForm {
       value: FormControl<string>;
       type: FormControl<string>;
     }>;
+  }>;
+  early_repayment_condition: FormGroup<{
+    first_area: FormControl<string>;
+    second_area: FormControl<string>;
   }>;
 }
 export interface CreditBlankFormRawValue {
@@ -211,11 +215,13 @@ export interface CreditBlankPayload {
     SelectButtonModule,
     IconField,
     InputIcon,
+    TextareaModule,
   ],
   templateUrl: './convenant-form.html',
   styleUrl: './convenant-form.css',
 })
 export class ConvenantForm extends FormComponent {
+  textarea_value: string = `Срок данной одобренной заявки действителен до 11.09.2025 По истечению данного срока, заявка считается недействительной без предоставления обосновывающих и подтверждающих документов для продления "бронирования", так как Департамент по работе с финансовыми институтами и инвесторами не гарантирует неизменность индикативных ставок после данного срока. *3mEuribor меняется каждый год в июне, сентябре, декабре и марте (окончательная ставка 3mEuribor предостовляется согласно уведомлению иностранного банка).`;
   stateOptions = [
     { label: 'Кредитный анкета', value: 'credit_blank_id' },
     { label: 'Уникальный код', value: 'unique_code' },
@@ -294,12 +300,17 @@ export class ConvenantForm extends FormComponent {
 
         floating_rate: new FormGroup({
           value: new FormControl('', { nonNullable: true }),
-          type: new FormControl('', { nonNullable: true }),
+          type: new FormControl(
+            { value: 'percent', disabled: true },
+            { nonNullable: true }
+          ),
         }),
-
         tax_rate: new FormGroup({
           value: new FormControl('', { nonNullable: true }),
-          type: new FormControl('', { nonNullable: true }),
+          type: new FormControl(
+            { value: '', disabled: true },
+            { nonNullable: true }
+          ),
         }),
 
         repayment_freq: new FormControl('', { nonNullable: true }),
@@ -309,6 +320,10 @@ export class ConvenantForm extends FormComponent {
           value: new FormControl('', { nonNullable: true }),
           type: new FormControl('', { nonNullable: true }),
         }),
+      }),
+      early_repayment_condition: new FormGroup({
+        first_area: new FormControl('', { nonNullable: true }),
+        second_area: new FormControl('', { nonNullable: true }),
       }),
     });
   }
