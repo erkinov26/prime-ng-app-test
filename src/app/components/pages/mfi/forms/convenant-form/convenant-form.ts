@@ -48,7 +48,7 @@ export interface CreditBlankForm {
       }>
     >;
     lt_line: FormControl<File | null>;
-    lt_tranche: FormControl<File | null>;
+    // lt_tranche: FormControl<File | null>;
   }>;
   funding_source: FormArray<
     FormGroup<{
@@ -86,60 +86,7 @@ export interface CreditBlankForm {
     second_area: FormControl<string>;
   }>;
 }
-export interface CreditBlankFormRawValue {
-  branch: string;
-  unique_id: string;
-  is_reser_wout_tranche: boolean;
-  loan_terms: {
-    project_initiator: string;
-    import_contract_subject: string;
-    supplier: {
-      value: string;
-    }[];
-    number: string;
-    contract_date: Date;
-    bank_credit_amount: {
-      value: string;
-      currency: string;
-    };
-    credit_info: {
-      payment_terms: string;
-      amount: string;
-      currency: string;
-    }[];
-    lt_line: File | null;
-    lt_tranche: File | null;
-  };
-  funding_source: {
-    loan_term: Date;
-    grace_period: Date;
-  }[];
-  financing_terms: {
-    loan_term: Date;
-    grace_period: Date;
-    tranche_term: Date;
-    creditLineAmount: {
-      value: string;
-      currency: string;
-    };
-    total_interest_rate: string;
-    foreign_bank_margin: string;
-    floating_rate: {
-      value: string;
-      type: string;
-    };
-    tax_rate: {
-      value: string;
-      type: string;
-    };
-    repayment_freq: string;
-    freq: string;
-    comission_type: {
-      value: string;
-      type: string;
-    };
-  };
-}
+
 export interface CreditBlankPayload {
   branch: string;
   unique_id: string;
@@ -162,7 +109,7 @@ export interface CreditBlankPayload {
       currency: string;
     }[];
     lt_line: string | null;
-    lt_tranche: string | null;
+    // lt_tranche: string | null;
   };
   funding_source: {
     loan_term: string;
@@ -270,7 +217,7 @@ export class ConvenantForm extends FormComponent {
         ]),
         unique_type: new FormControl('line', { nonNullable: true }),
         lt_line: new FormControl<File | null>(null),
-        lt_tranche: new FormControl<File | null>(null),
+        // lt_tranche: new FormControl<File | null>(null),
       }),
 
       funding_source: new FormArray([
