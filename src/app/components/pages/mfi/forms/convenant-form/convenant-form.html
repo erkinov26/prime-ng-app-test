@@ -20,21 +20,21 @@
           formControlName="branch"
           class="w-full"
         />
-        <label for="branch"> Филиал </label>
+        <label for="branch" class="!font-normal"> Филиал </label>
       </p-float-label>
     </div>
-    <div class="col-span-6">
-      <p-selectbutton
-        size="small"
-        [options]="stateOptions"
-        optionLabel="label"
-        optionValue="value"
-        aria-labelledby="basic"
-        formControlName="unique_type"
-      />
-    </div>
-    <div class="col-span-2">
-      <div class="flex gap-2 items-center">
+    <div class="col-span-12 flex items-center justify-between gap-4">
+      <div class="w-[56%]">
+        <p-selectbutton
+          size="small"
+          [options]="stateOptions"
+          optionLabel="label"
+          optionValue="value"
+          aria-labelledby="basic"
+          formControlName="unique_type"
+        />
+      </div>
+      <div class="w-[20%] flex gap-1 items-center justify-end">
         <p-checkbox
           inputId="is_reser_wout_tranche"
           [binary]="true"
@@ -45,28 +45,29 @@
           Бронь без транша
         </label>
       </div>
+      <div class="w-[34%]">
+        <p-float-label>
+          <input
+            pInputText
+            pSize="small"
+            size="small"
+            inputId="branch"
+            [fluid]="true"
+            formControlName="note"
+          />
+          <label for="note" class="!font-normal"> Примечание </label>
+        </p-float-label>
+      </div>
     </div>
-    <div class="col-span-4">
-      <p-float-label>
-        <input
-          pInputText
-          pSize="small"
-          size="small"
-          inputId="branch"
-          [fluid]="true"
-          formControlName="note"
-        />
-        <label for="note"> Примечание </label>
-      </p-float-label>
-    </div>
-    <div class="col-span-4">
-      <!-- <label for="Уникальный код/ID кред. анкета"></label> -->
+    <div class="col-span-4 flex flex-col gap-1">
+      <label for="unique_id" class="text-[#334155] font-normal"
+        >Уникальный код/ID кред. анкета</label
+      >
       <p-iconfield>
         <input
           type="text"
           size="small"
           pSize="small"
-          placeholder="Уникальный код/ID кред. анкета"
           inputId="unique_id"
           formControlName="unique_id"
           pInputText
@@ -78,7 +79,7 @@
 
     <h1 class="text-md font-medium col-span-12">Условия Кредита</h1>
     <div
-      class="border rounded-md col-span-12 p-2 border-gray-400"
+      class="border-2 rounded-[12px] col-span-12 p-4 py-6 border-gray-300"
       formGroupName="loan_terms"
     >
       <div class="grid grid-cols-12 gap-5">
@@ -92,7 +93,9 @@
               pSize="small"
               formControlName="project_initiator"
             />
-            <label for="project_initiator"> Инициатор проекта </label>
+            <label for="project_initiator" class="!font-normal">
+              Инициатор проекта
+            </label>
           </p-float-label>
         </div>
         <div class="col-span-6">
@@ -104,17 +107,17 @@
               id="import_contract_subject"
               formControlName="import_contract_subject"
             />
-            <label for="import_contract_subject">
+            <label for="import_contract_subject" class="!font-normal">
               Предмет импортного контракта
             </label>
           </p-float-label>
         </div>
         <div class="col-span-6 gap-2 flex flex-col" formArrayName="supplier">
           @for (item of supplier.controls; track item; let i = $index) {
-          <div class="flex items-start gap-2">
-            <div [formGroupName]="i" class="flex w-full flex-col gap-1">
+          <div [formGroupName]="i" class="flex items-center w-full">
+            <div class="w-[95%]">
               @if (i===0) {
-              <label for="supplier-{{ i }}" class="font-bold block">
+              <label for="supplier-{{ i }}" class="font-normal block mb-1">
                 Поставщик
               </label>
               }
@@ -129,128 +132,126 @@
             </div>
 
             @if (i !== 0) {
-            <p-button
-              type="button"
-              (click)="removeSupplier(i)"
-              pButton
-              variant="outlined"
-              severity="danger"
-              icon="pi pi-times"
-              size="small"
-            />
+            <div class="w-[5%] flex justify-end items-center">
+              <div
+                (click)="removeSupplier(i)"
+                class="flex items-center hover:cursor-pointer justify-center rounded-md w-[22px] h-[22px] bg-[#CBD5E180]"
+              >
+                <i class="pi pi-minus text-red-500"></i>
+              </div>
+            </div>
             }
           </div>
           }
-
-          <div class="flex justify-end">
-            <p-button
-              type="button"
+          <div class="flex justify-end w-[95%]">
+            <span
+              class="text-sm hover:cursor-pointer font-normal text-[#005aa0]"
               (click)="addSupplier()"
-              label="Добавить"
-              icon="pi pi-plus"
-              size="small"
-            />
+            >
+              Добавить +
+            </span>
           </div>
         </div>
 
-        <div class="col-span-6 border rounded-md p-2 border-gray-400">
+        <div
+          class="col-span-6 border-2 rounded-[12px] p-3 py-4 border-gray-300"
+        >
           <div
             class="col-span-12 gap-2 flex flex-col"
             formArrayName="credit_info"
           >
             @for (item of creditInfo.controls; track item; let i = $index) {
-            <div class="grid grid-cols-12 gap-2" [formGroupName]="i">
+            <div class="flex" [formGroupName]="i">
               <!-- Payment terms -->
-              <div class="col-span-5">
-                @if (i === 0) {
-                <label for="payment_terms-{{ i }}" class="font-bold block mb-1">
-                  Условия платежа
-                </label>
-                }
-                <p-select
-                  size="small"
-                  class="w-full"
-                  inputId="payment_terms-{{ i }}"
-                  [options]="[]"
-                  [fluid]="true"
-                  optionLabel="name"
-                  optionValue="code"
-                  appendTo="body"
-                  formControlName="payment_terms"
-                  class="w-full"
-                />
-              </div>
+              <div class="flex w-[95%] justify-between">
+                <div class="w-[35%]">
+                  @if (i === 0) {
+                  <label
+                    for="payment_terms-{{ i }}"
+                    class="font-normal block mb-1"
+                  >
+                    Условия платежа
+                  </label>
+                  }
+                  <p-select
+                    size="small"
+                    class="w-full"
+                    inputId="payment_terms-{{ i }}"
+                    [options]="[]"
+                    [fluid]="true"
+                    optionLabel="name"
+                    optionValue="code"
+                    appendTo="body"
+                    formControlName="payment_terms"
+                    class="w-full"
+                  />
+                </div>
 
-              <!-- Amount -->
-              <div class="col-span-3">
-                @if (i === 0) {
-                <label for="amount-{{ i }}" class="font-bold block mb-1">
-                  Сумма
-                </label>
-                }
-                <input
-                  pSize="small"
-                  pInputText
-                  size="small"
-                  class="w-full"
-                  id="amount-{{ i }}"
-                  formControlName="amount"
-                />
-              </div>
+                <!-- Amount -->
+                <div class="w-[30%]">
+                  @if (i === 0) {
+                  <label for="amount-{{ i }}" class="font-normal block mb-1">
+                    Сумма
+                  </label>
+                  }
+                  <input
+                    pSize="small"
+                    pInputText
+                    size="small"
+                    class="w-full"
+                    id="amount-{{ i }}"
+                    formControlName="amount"
+                  />
+                </div>
 
-              <!-- Currency -->
-              <div class="col-span-3">
-                @if (i === 0) {
-                <label for="currency-{{ i }}" class="font-bold block mb-1">
-                  Валюта
-                </label>
-                }
-                <p-select
-                  size="small"
-                  class="w-full"
-                  inputId="currency-{{ i }}"
-                  [options]="[]"
-                  [fluid]="true"
-                  optionLabel="name"
-                  optionValue="code"
-                  appendTo="body"
-                  formControlName="currency"
-                />
-                <!-- <input
+                <!-- Currency -->
+                <div class="w-[30%]">
+                  @if (i === 0) {
+                  <label for="currency-{{ i }}" class="font-normal block mb-1">
+                    Валюта
+                  </label>
+                  }
+                  <p-select
+                    size="small"
+                    class="w-full"
+                    inputId="currency-{{ i }}"
+                    [options]="[]"
+                    [fluid]="true"
+                    optionLabel="name"
+                    optionValue="code"
+                    appendTo="body"
+                    formControlName="currency"
+                  />
+                  <!-- <input
                   pInputText
                   size="small"
                   class="w-full"
                   id="currency-{{ i }}"
                   formControlName="currency"
                 /> -->
+                </div>
               </div>
-
               <!-- Delete button -->
-              <div class="col-span-1 flex items-end">
-                @if (i !== 0) {
-                <p-button
-                  type="button"
+              @if (i !== 0) {
+              <div class="w-[5%] flex justify-end items-center">
+                <div
                   (click)="removeCreditInfo(i)"
-                  pButton
-                  variant="outlined"
-                  severity="danger"
-                  size="small"
-                  icon="pi pi-times"
-                />
-                }
+                  class="flex items-center hover:cursor-pointer justify-center rounded-md w-[22px] h-[22px] bg-[#CBD5E180]"
+                >
+                  <i class="pi pi-minus text-red-500"></i>
+                </div>
               </div>
+              }
             </div>
             }
 
             <!-- Add button -->
-            <div class="flex justify-end mt-2">
-              <p-button
-                type="button"
+            <div class="w-[95%] flex justify-end">
+              <span
+                class="text-sm hover:cursor-pointer font-normal text-[#005aa0]"
                 (click)="addCreditInfo()"
-                label="Добавить"
-                icon="pi pi-plus"
-                size="small"
-              />
+                >Добавить +</span
+              >
             </div>
           </div>
         </div>
@@ -265,7 +266,7 @@
                   formControlName="number"
                   class="w-full"
                 />
-                <label for="number">Номер</label>
+                <label for="number" class="!font-normal">Номер</label>
               </p-float-label>
             </div>
 
@@ -277,7 +278,9 @@
                   formControlName="contract_date"
                   class="w-full"
                 ></p-datepicker>
-                <label for="contract_date">Дата контракта</label>
+                <label for="contract_date" class="!font-normal"
+                  >Дата контракта</label
+                >
               </p-float-label>
             </div>
 
@@ -294,7 +297,7 @@
                     formControlName="value"
                     class="w-full"
                   />
-                  <label for="value">Сумма кредита</label>
+                  <label for="value" class="!font-normal">Сумма кредита</label>
                 </p-float-label>
               </div>
               <div class="col-span-3">
@@ -310,7 +313,7 @@
                     formControlName="currency"
                     class="w-full"
                   />
-                  <label for="currency">Валюта</label>
+                  <label for="currency" class="!font-normal">Валюта</label>
                 </p-float-label>
               </div>
             </div>
@@ -345,69 +348,63 @@
     </div>
     <h1 class="text-md font-medium col-span-12">Источник финансирования</h1>
     <div
-      class="col-span-12 border p-4 rounded-md border-gray-400"
+      class="col-span-12 border-2 p-4 rounded-md border-gray-300"
       formArrayName="funding_source"
     >
       @for (group of funding_array.controls; track $index; let i = $index) {
-      <div [formGroupName]="i" class="grid grid-cols-12 gap-4 mb-3">
-        <div class="col-span-6">
-          @if (i === 0) {
-          <label for="loan_term-{{ i }}" class="font-bold block mb-1">
-            Срок кредита
-          </label>
-          }
-          <p-datepicker
-            size="small"
-            id="loan_term-{{ i }}"
-            formControlName="loan_term"
-            class="w-full"
-          ></p-datepicker>
-        </div>
+      <div [formGroupName]="i" class="flex justify-between mb-3">
+        <div class="flex w-[98%] justify-between">
+          <div class="w-[49%]">
+            @if (i === 0) {
+            <label for="loan_term-{{ i }}" class="font-normal block mb-1">
+              Срок кредита
+            </label>
+            }
+            <p-datepicker
+              size="small"
+              id="loan_term-{{ i }}"
+              formControlName="loan_term"
+              class="w-full"
+            ></p-datepicker>
+          </div>
 
-        <div class="col-span-5">
-          @if (i === 0) {
-          <label for="grace_period-{{ i }}" class="font-bold block mb-1">
-            Льготный период
-          </label>
-          }
-          <p-datepicker
-            size="small"
-            id="grace_period-{{ i }}"
-            formControlName="grace_period"
-            class="w-full"
-          ></p-datepicker>
+          <div class="w-[49%]">
+            @if (i === 0) {
+            <label for="grace_period-{{ i }}" class="font-normal block mb-1">
+              Льготный период
+            </label>
+            }
+            <p-datepicker
+              size="small"
+              id="grace_period-{{ i }}"
+              formControlName="grace_period"
+              class="w-full"
+            ></p-datepicker>
+          </div>
         </div>
-
         @if (i !== 0) {
-        <div class="col-span-1 flex items-center">
-          <p-button
-            type="button"
+        <div class="w-[2%] flex justify-end items-center">
+          <div
             (click)="removeFundingSource(i)"
-            pButton
-            variant="outlined"
-            severity="danger"
-            label="Удалить"
-            size="small"
-            icon="pi pi-times"
-          />
+            class="flex items-center hover:cursor-pointer justify-center rounded-md w-[22px] h-[22px] bg-[#CBD5E180]"
+          >
+            <i class="pi pi-minus text-red-500"></i>
+          </div>
         </div>
         }
       </div>
       }
-
-      <div class="flex justify-end mt-3">
-        <p-button
-          type="button"
-          (click)="addFundingSource()"
-          label="Добавить"
-          icon="pi pi-plus"
-          size="small"
-        />
-      </div>
     </div>
-    <h1 class="text-md font-medium col-span-12">Условия финансирования</h1>
+    <div class="col-span-12 flex justify-end">
+      <span
+        class="text-sm hover:cursor-pointer font-normal text-[#005aa0]"
+        (click)="addFundingSource()"
+        >Добавить +</span
+      >
+    </div>
+    <h1 class="text-md font-medium col-span-12">Источник финансирования</h1>
     <div
-      class="col-span-12 border rounded-md border-gray-400 p-4"
+      class="col-span-12 border-2 rounded-[12px] border-gray-300 py-6 p-4"
       formGroupName="financing_terms"
     >
       <div class="grid grid-cols-12 gap-4">
@@ -419,7 +416,7 @@
               formControlName="loan_term"
               class="w-full"
             ></p-datepicker>
-            <label for="loan_term">Срок кредита</label>
+            <label for="loan_term" class="!font-normal">Срок кредита</label>
           </p-float-label>
           <p-float-label variant="on">
             <p-datepicker
@@ -428,7 +425,9 @@
               formControlName="grace_period"
               class="w-full"
             ></p-datepicker>
-            <label for="grace_period">Лыготный период</label>
+            <label for="grace_period" class="!font-normal"
+              >Лыготный период</label
+            >
           </p-float-label>
           <p-float-label variant="on">
             <p-datepicker
@@ -437,7 +436,7 @@
               formControlName="tranche_term"
               class="w-full"
             ></p-datepicker>
-            <label for="tranche_term">Срок транша</label>
+            <label for="tranche_term" class="!font-normal">Срок транша</label>
           </p-float-label>
           <div class="grid grid-cols-3 gap-4" formGroupName="creditLineAmount">
             <div class="col-span-2">
@@ -449,7 +448,7 @@
                   formControlName="value"
                   class="w-full"
                 />
-                <label for="value"
+                <label for="value" class="!font-normal"
                   >Финансируемая за счет кредитной линии (Сумма)</label
                 >
               </p-float-label>
@@ -467,7 +466,7 @@
                   formControlName="currency"
                   class="w-full"
                 />
-                <label for="currency">Валюта</label>
+                <label for="currency" class="!font-normal">Валюта</label>
               </p-float-label>
             </div>
           </div>
@@ -479,7 +478,9 @@
               formControlName="total_interest_rate"
               class="w-full"
             />
-            <label for="total_interest_rate">Общая процентная ставка</label>
+            <label for="total_interest_rate" class="!font-normal"
+              >Общая процентная ставка</label
+            >
           </p-float-label>
         </div>
         <div class="col-span-6 flex flex-col gap-4">
@@ -491,7 +492,9 @@
               formControlName="foreign_bank_margin"
               class="w-full"
             />
-            <label for="foreign_bank_margin">Маржа инобанка</label>
+            <label for="foreign_bank_margin" class="!font-normal"
+              >Маржа инобанка</label
+            >
           </p-float-label>
           <div class="gap-4 grid grid-cols-3" formGroupName="floating_rate">
             <div class="col-span-2">
@@ -507,7 +510,7 @@
                   formControlName="value"
                   class="w-full"
                 />
-                <label for="value">Плавающая ставка</label>
+                <label for="value" class="!font-normal">Плавающая ставка</label>
               </p-float-label>
             </div>
             <div class="col-span-1">
@@ -537,7 +540,7 @@
                   formControlName="value"
                   class="w-full"
                 />
-                <label for="value">Налоговая ставка</label>
+                <label for="value" class="!font-normal">Налоговая ставка</label>
               </p-float-label>
             </div>
             <div class="col-span-1">
@@ -565,7 +568,9 @@
               formControlName="repayment_freq"
               class="w-full"
             />
-            <label for="repayment_freq">Периодичность о.д.</label>
+            <label for="repayment_freq" class="!font-normal"
+              >Периодичность о.д.</label
+            >
           </p-float-label>
           <p-float-label variant="on">
             <p-select
@@ -579,7 +584,7 @@
               formControlName="freq"
               class="w-full"
             />
-            <label for="freq">Периодичность </label>
+            <label for="freq" class="!font-normal">Периодичность </label>
           </p-float-label>
           <div class="gap-4 grid grid-cols-3" formGroupName="comission_type">
             <div class="col-span-2">
@@ -595,7 +600,7 @@
                   formControlName="value"
                   class="w-full"
                 />
-                <label for="value">Вид комиссии</label>
+                <label for="value" class="!font-normal">Вид комиссии</label>
               </p-float-label>
             </div>
             <div class="col-span-1">
@@ -616,7 +621,7 @@
     </div>
     <h1 class="text-md font-medium col-span-12">Условия финансирования</h1>
     <div
-      class="col-span-12 border border-gray-400 rounded-md p-4"
+      class="col-span-12 border-2 border-gray-300 rounded-[12px] p-4"
       formGroupName="early_repayment_condition"
     >
       <textarea
@@ -643,7 +648,7 @@
 
 <div class="flex flex-col gap-4 my-4">
   <h1 class="text-md font-medium col-span-12">Примечание</h1>
-  <div class="border border-gray-400 rounded-md p-4">
+  <div class="border-2 border-gray-300 rounded-[12px] p-4">
     <textarea
       pTextarea
       pSize="small"

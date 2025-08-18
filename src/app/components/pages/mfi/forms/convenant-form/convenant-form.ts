@@ -235,7 +235,7 @@ export class ConvenantForm extends FormComponent {
         nonNullable: true,
         validators: [Validators.required],
       }),
-      unique_type: new FormControl('', {
+      unique_type: new FormControl('credit_blank_id', {
         nonNullable: true,
         validators: [Validators.required],
       }),
@@ -273,7 +273,7 @@ export class ConvenantForm extends FormComponent {
             currency: new FormControl('', { nonNullable: true }),
           }),
         ]),
-        unique_type: new FormControl('', { nonNullable: true }),
+        unique_type: new FormControl('line', { nonNullable: true }),
         lt_line: new FormControl<File | null>(null),
         lt_tranche: new FormControl<File | null>(null),
       }),
@@ -301,7 +301,7 @@ export class ConvenantForm extends FormComponent {
         floating_rate: new FormGroup({
           value: new FormControl('', { nonNullable: true }),
           type: new FormControl(
-            { value: 'percent', disabled: true },
+            { value: '', disabled: true },
             { nonNullable: true }
           ),
         }),
@@ -318,7 +318,10 @@ export class ConvenantForm extends FormComponent {
 
         comission_type: new FormGroup({
           value: new FormControl('', { nonNullable: true }),
-          type: new FormControl('', { nonNullable: true }),
+          type: new FormControl(
+            { value: '', disabled: true },
+            { nonNullable: true }
+          ),
         }),
       }),
       early_repayment_condition: new FormGroup({
