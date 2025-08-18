@@ -35,7 +35,7 @@ export interface CreditBlankForm {
       }>
     >;
     number: FormControl<string>;
-    contract_date: FormControl<Date>;
+    contract_date: FormControl<Date | null>;
     bank_credit_amount: FormGroup<{
       value: FormControl<string>;
       currency: FormControl<string>;
@@ -52,14 +52,14 @@ export interface CreditBlankForm {
   }>;
   funding_source: FormArray<
     FormGroup<{
-      loan_term: FormControl<Date>;
-      grace_period: FormControl<Date>;
+      loan_term: FormControl<Date | null>;
+      grace_period: FormControl<Date | null>;
     }>
   >;
   financing_terms: FormGroup<{
-    loan_term: FormControl<Date>;
-    grace_period: FormControl<Date>;
-    tranche_term: FormControl<Date>;
+    loan_term: FormControl<Date | null>;
+    grace_period: FormControl<Date | null>;
+    tranche_term: FormControl<Date | null>;
     creditLineAmount: FormGroup<{
       value: FormControl<string>;
       currency: FormControl<string>;
@@ -252,7 +252,9 @@ export class ConvenantForm extends FormComponent {
           }),
         ]),
         number: new FormControl('', { nonNullable: true }),
-        contract_date: new FormControl(new Date(), { nonNullable: true }),
+        contract_date: new FormControl<Date | null>(null, {
+          nonNullable: true,
+        }),
 
         bank_credit_amount: new FormGroup({
           value: new FormControl('', { nonNullable: true }),
@@ -273,15 +275,17 @@ export class ConvenantForm extends FormComponent {
 
       funding_source: new FormArray([
         new FormGroup({
-          loan_term: new FormControl(new Date(), { nonNullable: true }),
-          grace_period: new FormControl(new Date(), { nonNullable: true }),
+          loan_term: new FormControl<Date | null>(null, { nonNullable: true }),
+          grace_period: new FormControl<Date | null>(null, {
+            nonNullable: true,
+          }),
         }),
       ]),
 
       financing_terms: new FormGroup({
-        loan_term: new FormControl(new Date(), { nonNullable: true }),
-        grace_period: new FormControl(new Date(), { nonNullable: true }),
-        tranche_term: new FormControl(new Date(), { nonNullable: true }),
+        loan_term: new FormControl<Date | null>(null, { nonNullable: true }),
+        grace_period: new FormControl<Date | null>(null, { nonNullable: true }),
+        tranche_term: new FormControl<Date | null>(null, { nonNullable: true }),
 
         creditLineAmount: new FormGroup({
           value: new FormControl('', { nonNullable: true }),
