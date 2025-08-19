@@ -11,16 +11,18 @@
       <p-float-label class="w-40">
         <p-select
           size="small"
-          inputId="branch"
+          [inputId]="ECreditBlanForm.BRANCH"
           [options]="[]"
           [fluid]="true"
           optionLabel="name"
           optionValue="code"
           appendTo="body"
-          formControlName="branch"
+          [formControlName]="ECreditBlanForm.BRANCH"
           class="w-full"
         />
-        <label for="branch" class="!font-normal"> Филиал </label>
+        <label [for]="ECreditBlanForm.BRANCH" class="!font-normal">
+          Филиал
+        </label>
       </p-float-label>
     </div>
     <div class="col-span-12 flex items-center justify-between gap-4">
@@ -31,17 +33,17 @@
           optionLabel="label"
           optionValue="value"
           aria-labelledby="basic"
-          formControlName="unique_type"
+          [formControlName]="ECreditBlanForm.UNIQUE_TYPE"
         />
       </div>
       <div class="w-[20%] flex gap-1 items-center justify-end">
         <p-checkbox
-          inputId="is_reser_wout_tranche"
+          [inputId]="ECreditBlanForm.IS_RESER_WOUT_TRANCHE"
           [binary]="true"
           [indeterminate]="true"
-          formControlName="is_reser_wout_tranche"
+          [formControlName]="ECreditBlanForm.IS_RESER_WOUT_TRANCHE"
         />
-        <label for="is_reser_wout_tranche" class="ml-2">
+        <label [for]="ECreditBlanForm.IS_RESER_WOUT_TRANCHE" class="ml-2">
           Бронь без транша
         </label>
       </div>
@@ -51,16 +53,20 @@
             pInputText
             pSize="small"
             size="small"
-            inputId="branch"
+            [id]="ECreditBlanForm.NOTE"
             [fluid]="true"
-            formControlName="note"
+            [formControlName]="ECreditBlanForm.NOTE"
           />
-          <label for="note" class="!font-normal"> Примечание </label>
+          <label [for]="ECreditBlanForm.NOTE" class="!font-normal">
+            Примечание
+          </label>
         </p-float-label>
       </div>
     </div>
     <div class="col-span-4 flex flex-col gap-1">
-      <label for="unique_id" class="text-[#334155] font-normal"
+      <label
+        [for]="ECreditBlanForm.UNIQUE_ID"
+        class="text-[#334155] font-normal"
         >Уникальный код/ID кред. анкета</label
       >
       <p-iconfield>
@@ -68,8 +74,8 @@
           type="text"
           size="small"
           pSize="small"
-          inputId="unique_id"
-          formControlName="unique_id"
+          [id]="ECreditBlanForm.UNIQUE_ID"
+          [formControlName]="ECreditBlanForm.UNIQUE_ID"
           pInputText
           class="w-full"
         />
@@ -80,7 +86,7 @@
     <h1 class="text-md font-medium col-span-12">Условия Кредита</h1>
     <div
       class="border-2 rounded-[12px] col-span-12 p-4 py-6 border-gray-300"
-      formGroupName="loan_terms"
+      [formGroupName]="ECreditBlanForm.LOAN_TERMS"
     >
       <div class="grid grid-cols-12 gap-5">
         <div class="col-span-6">
@@ -89,11 +95,11 @@
               pInputText
               size="small"
               class="w-full"
-              id="project_initiator"
+              [id]="ELoanTerms.PROJECT_INITATOR"
               pSize="small"
-              formControlName="project_initiator"
+              [formControlName]="ELoanTerms.PROJECT_INITATOR"
             />
-            <label for="project_initiator" class="!font-normal">
+            <label [for]="ELoanTerms.PROJECT_INITATOR" class="!font-normal">
               Инициатор проекта
             </label>
           </p-float-label>
@@ -104,20 +110,29 @@
               pInputText
               pSize="small"
               class="w-full"
-              id="import_contract_subject"
-              formControlName="import_contract_subject"
+              [id]="ELoanTerms.IMPORT_CONTRACT_SUBJECT"
+              [formControlName]="ELoanTerms.IMPORT_CONTRACT_SUBJECT"
             />
-            <label for="import_contract_subject" class="!font-normal">
+            <label
+              [for]="ELoanTerms.IMPORT_CONTRACT_SUBJECT"
+              class="!font-normal"
+            >
               Предмет импортного контракта
             </label>
           </p-float-label>
         </div>
-        <div class="col-span-6 gap-2 flex flex-col" formArrayName="supplier">
+        <div
+          class="col-span-6 gap-2 flex flex-col border-2 rounded-[12px] p-3 py-4 border-gray-300"
+          [formArrayName]="ELoanTerms.SUPPLIER"
+        >
           @for (item of supplier.controls; track item; let i = $index) {
-          <div [formGroupName]="i" class="flex items-center w-full">
-            <div class="w-[95%]">
+          <div [formGroupName]="i" class="grid grid-cols-16 w-full gap-4">
+            <div class="col-span-5">
               @if (i===0) {
-              <label for="supplier-{{ i }}" class="font-normal block mb-1">
+              <label
+                for="{{ ELoanTerms.SUPPLIER }}-{{ i }}"
+                class="font-normal block mb-1"
+              >
                 Поставщик
               </label>
               }
@@ -125,14 +140,50 @@
                 pInputText
                 pSize="small"
                 class="w-full"
-                id="supplier-{{ i }}"
+                id="{{ ELoanTerms.SUPPLIER }}-{{ i }}"
                 size="small"
-                formControlName="value"
+                [formControlName]="ESupplier.VALUE"
               />
             </div>
 
+            <div class="col-span-5">
+              @if (i===0) {
+              <label
+                for="{{ ELoanTerms.SUPPLIER }}-{{ i }}"
+                class="font-normal block mb-1"
+              >
+                Номер
+              </label>
+              }
+              <input
+                pInputText
+                pSize="small"
+                id="{{ ELoanTerms.SUPPLIER }}-{{ i }}"
+                [formControlName]="ESupplier.NUMBER"
+                class="w-full"
+              />
+            </div>
+
+            <div class="col-span-5">
+              @if (i===0) {
+              <label
+                for="{{ ELoanTerms.SUPPLIER }}-{{ i }}"
+                class="font-normal block mb-1"
+              >
+                Дата контракта
+              </label>
+              }
+              <p-datepicker
+                size="small"
+                id="{{ ELoanTerms.SUPPLIER }}-{{ i }}"
+                [iconDisplay]="'input'"
+                [showIcon]="true"
+                [formControlName]="ESupplier.CONTRACT_DATE"
+                class="w-full"
+              ></p-datepicker>
+            </div>
             @if (i !== 0) {
-            <div class="w-[5%] flex justify-end items-center">
+            <div class="col-span-1 flex justify-end items-center">
               <div
                 (click)="removeSupplier(i)"
                 class="flex items-center hover:cursor-pointer justify-center rounded-md w-[22px] h-[22px] bg-[#CBD5E180]"
@@ -154,140 +205,112 @@
         </div>
 
         <div
-          class="col-span-6 border-2 rounded-[12px] p-3 py-4 border-gray-300"
+          class="col-span-6 flex flex-col border-2 gap-2 rounded-[12px] p-3 py-4 border-gray-300"
+          [formArrayName]="ELoanTerms.CREDIT_INFO"
         >
-          <div
-            class="col-span-12 gap-2 flex flex-col"
-            formArrayName="credit_info"
-          >
-            @for (item of creditInfo.controls; track item; let i = $index) {
-            <div class="flex" [formGroupName]="i">
-              <!-- Payment terms -->
-              <div class="flex w-[95%] justify-between">
-                <div class="w-[35%]">
-                  @if (i === 0) {
-                  <label
-                    for="payment_terms-{{ i }}"
-                    class="font-normal block mb-1"
-                  >
-                    Условия платежа
-                  </label>
-                  }
-                  <p-select
-                    size="small"
-                    class="w-full"
-                    inputId="payment_terms-{{ i }}"
-                    [options]="[]"
-                    [fluid]="true"
-                    optionLabel="name"
-                    optionValue="code"
-                    appendTo="body"
-                    formControlName="payment_terms"
-                    class="w-full"
-                  />
-                </div>
+          @for (item of creditInfo.controls; track item; let i = $index) {
+          <div class="grid grid-cols-16 gap-4" [formGroupName]="i">
+            <!-- Payment terms -->
+            <div class="col-span-5">
+              @if (i === 0) {
+              <label
+                for="{{ ECreditInfo.PAYMENT_TERMS }}-{{ i }}"
+                class="font-normal block mb-1"
+              >
+                Условия платежа
+              </label>
+              }
+              <p-select
+                size="small"
+                class="w-full"
+                inputId="{{ ECreditInfo.PAYMENT_TERMS }}-{{ i }}"
+                [options]="[]"
+                [fluid]="true"
+                optionLabel="name"
+                optionValue="code"
+                appendTo="body"
+                [formControlName]="ECreditInfo.PAYMENT_TERMS"
+                class="w-full"
+              />
+            </div>
 
-                <!-- Amount -->
-                <div class="w-[30%]">
-                  @if (i === 0) {
-                  <label for="amount-{{ i }}" class="font-normal block mb-1">
-                    Сумма
-                  </label>
-                  }
-                  <input
-                    pSize="small"
-                    pInputText
-                    size="small"
-                    class="w-full"
-                    id="amount-{{ i }}"
-                    formControlName="amount"
-                  />
-                </div>
+            <!-- Amount -->
+            <div class="col-span-5">
+              @if (i === 0) {
+              <label
+                for="{{ ECreditInfo.AMOUNT }}-{{ i }}"
+                class="font-normal block mb-1"
+              >
+                Сумма
+              </label>
+              }
+              <input
+                pSize="small"
+                pInputText
+                size="small"
+                class="w-full"
+                id="{{ ECreditInfo.AMOUNT }}-{{ i }}"
+                formControlName="amount"
+              />
+            </div>
 
-                <!-- Currency -->
-                <div class="w-[30%]">
-                  @if (i === 0) {
-                  <label for="currency-{{ i }}" class="font-normal block mb-1">
-                    Валюта
-                  </label>
-                  }
-                  <p-select
-                    size="small"
-                    class="w-full"
-                    inputId="currency-{{ i }}"
-                    [options]="[]"
-                    [fluid]="true"
-                    optionLabel="name"
-                    optionValue="code"
-                    appendTo="body"
-                    formControlName="currency"
-                  />
-                  <!-- <input
+            <!-- Currency -->
+            <div class="col-span-5">
+              @if (i === 0) {
+              <label
+                for="{{ ECreditInfo.CURRENCY }}-{{ i }}"
+                class="font-normal block mb-1"
+              >
+                Валюта
+              </label>
+              }
+              <p-select
+                size="small"
+                class="w-full"
+                inputId="{{ ECreditInfo.CURRENCY }}-{{ i }}"
+                [options]="[]"
+                [fluid]="true"
+                optionLabel="name"
+                optionValue="code"
+                appendTo="body"
+                [formControlName]="ECreditInfo.CURRENCY"
+              />
+              <!-- <input
                   pInputText
                   size="small"
                   class="w-full"
                   id="currency-{{ i }}"
                   formControlName="currency"
                 /> -->
-                </div>
+            </div>
+
+            <!-- Delete button -->
+            @if (i !== 0) {
+            <div class="col-span-1 flex justify-end items-center">
+              <div
+                (click)="removeCreditInfo(i)"
+                class="flex items-center hover:cursor-pointer justify-center rounded-md w-[22px] h-[22px] bg-[#CBD5E180]"
+              >
+                <i class="pi pi-minus text-red-500"></i>
               </div>
-              <!-- Delete button -->
-              @if (i !== 0) {
-              <div class="w-[5%] flex justify-end items-center">
-                <div
-                  (click)="removeCreditInfo(i)"
-                  class="flex items-center hover:cursor-pointer justify-center rounded-md w-[22px] h-[22px] bg-[#CBD5E180]"
-                >
-                  <i class="pi pi-minus text-red-500"></i>
-                </div>
-              </div>
-              }
             </div>
             }
+          </div>
+          }
 
-            <!-- Add button -->
-            <div class="w-[95%] flex justify-end">
-              <span
-                class="text-sm hover:cursor-pointer font-normal text-[#005aa0]"
-                (click)="addCreditInfo()"
-                >Добавить +</span
-              >
-            </div>
+          <!-- Add button -->
+          <div class="w-[95%] flex justify-end">
+            <span
+              class="text-sm hover:cursor-pointer font-normal text-[#005aa0]"
+              (click)="addCreditInfo()"
+              >Добавить +</span
+            >
           </div>
         </div>
         <div class="col-span-6">
           <div class="grid grid-cols-12 gap-2">
-            <div class="col-span-9">
-              <p-float-label variant="on">
-                <input
-                  pInputText
-                  pSize="small"
-                  id="number"
-                  formControlName="number"
-                  class="w-full"
-                />
-                <label for="number" class="!font-normal">Номер</label>
-              </p-float-label>
-            </div>
-
-            <div class="col-span-3">
-              <p-float-label variant="on">
-                <p-datepicker
-                  size="small"
-                  id="contract_date"
-                  [iconDisplay]="'input'"
-                  [showIcon]="true"
-                  formControlName="contract_date"
-                  class="w-full"
-                ></p-datepicker>
-                <label for="contract_date" class="!font-normal"
-                  >Дата контракта</label
-                >
-              </p-float-label>
-            </div>
-
             <div
-              formGroupName="bank_credit_amount"
+              [formGroupName]="ELoanTerms.BANK_CREDIT_AMOUNT"
               class="col-span-12 grid grid-cols-12 gap-2"
             >
               <div class="col-span-9">
@@ -295,27 +318,31 @@
                   <input
                     pInputText
                     pSize="small"
-                    id="value"
-                    formControlName="value"
+                    [id]="EBankCreditAmount.VALUE"
+                    [formControlName]="EBankCreditAmount.VALUE"
                     class="w-full"
                   />
-                  <label for="value" class="!font-normal">Сумма кредита</label>
+                  <label [for]="EBankCreditAmount.VALUE" class="!font-normal"
+                    >Сумма кредита</label
+                  >
                 </p-float-label>
               </div>
               <div class="col-span-3">
                 <p-float-label variant="on">
                   <p-select
                     size="small"
-                    inputId="currency"
+                    [inputId]="EBankCreditAmount.CURRENCY"
                     [options]="[]"
                     [fluid]="true"
                     optionLabel="name"
                     optionValue="code"
                     appendTo="body"
-                    formControlName="currency"
+                    [formControlName]="EBankCreditAmount.CURRENCY"
                     class="w-full"
                   />
-                  <label for="currency" class="!font-normal">Валюта</label>
+                  <label [for]="EBankCreditAmount.CURRENCY" class="!font-normal"
+                    >Валюта</label
+                  >
                 </p-float-label>
               </div>
             </div>
@@ -333,7 +360,7 @@
             optionValue="value"
             class="mb-2"
             aria-labelledby="basic"
-            formControlName="unique_type"
+            [formControlName]="ELoanTerms.UNIQUE_TYPE"
           />
           <input
             type="file"
@@ -342,7 +369,7 @@
             size="small"
             inputId="number"
             [fluid]="true"
-            formControlName="lt_line"
+            [formControlName]="ELoanTerms.LT_LINE"
           />
           <!-- <input
             type="file"
@@ -357,19 +384,17 @@
       </div>
     </div>
     <h1 class="text-md font-medium col-span-12">Источник финансирования</h1>
-    <div
-      class="col-span-12 border-2 p-4 rounded-md border-gray-300"
-      formArrayName="funding_source"
-    >
+    <div class="col-span-12 flex flex-col gap-4" formArrayName="funding_source">
       @for (group of funding_array.controls; track $index; let i = $index) {
-      <div [formGroupName]="i" class="flex justify-between mb-3">
-        <div class="flex w-[98%] justify-between">
-          <div class="w-[49%]">
-            @if (i === 0) {
+      <div
+        [formGroupName]="i"
+        class="flex justify-between mb-3 border-2 p-4 rounded-md border-gray-300"
+      >
+        <div class="grid grid-cols-16 gap-2 justify-between">
+          <div class="col-span-8">
             <label for="loan_term-{{ i }}" class="font-normal block mb-1">
               Срок кредита
             </label>
-            }
             <p-datepicker
               size="small"
               [iconDisplay]="'input'"
@@ -380,12 +405,10 @@
             ></p-datepicker>
           </div>
 
-          <div class="w-[49%]">
-            @if (i === 0) {
+          <div class="col-span-8">
             <label for="grace_period-{{ i }}" class="font-normal block mb-1">
               Льготный период
             </label>
-            }
             <p-datepicker
               [iconDisplay]="'input'"
               [showIcon]="true"
@@ -395,17 +418,248 @@
               class="w-full"
             ></p-datepicker>
           </div>
-        </div>
-        @if (i !== 0) {
-        <div class="w-[2%] flex justify-end items-center">
           <div
-            (click)="removeFundingSource(i)"
-            class="flex items-center hover:cursor-pointer justify-center rounded-md w-[22px] h-[22px] bg-[#CBD5E180]"
+            class="col-span-16 border-2 rounded-[12px] border-gray-300 py-6 p-4"
+            formGroupName="financing_terms"
           >
-            <i class="pi pi-minus text-red-500"></i>
+            <div class="grid grid-cols-12 gap-4">
+              <div class="col-span-6">
+                <p-float-label variant="on">
+                  <p-datepicker
+                    size="small"
+                    id="tranche_term"
+                    [iconDisplay]="'input'"
+                    [showIcon]="true"
+                    formControlName="tranche_term"
+                    class="w-full"
+                  ></p-datepicker>
+                  <label for="tranche_term" class="!font-normal"
+                    >Срок транша</label
+                  >
+                </p-float-label>
+              </div>
+              <div class="col-span-6">
+                <div
+                  class="grid grid-cols-3 gap-4"
+                  formGroupName="creditLineAmount"
+                >
+                  <div class="col-span-2">
+                    <p-float-label variant="on">
+                      <input
+                        pInputText
+                        pSize="small"
+                        id="value"
+                        formControlName="value"
+                        class="w-full"
+                      />
+                      <label for="value" class="!font-normal"
+                        >Финансируемая за счет кредитной линии (Сумма)</label
+                      >
+                    </p-float-label>
+                  </div>
+                  <div class="col-span-1">
+                    <p-float-label variant="on">
+                      <p-select
+                        size="small"
+                        inputId="currency"
+                        [options]="[]"
+                        [fluid]="true"
+                        optionLabel="name"
+                        optionValue="code"
+                        appendTo="body"
+                        formControlName="currency"
+                        class="w-full"
+                      />
+                      <label for="currency" class="!font-normal">Валюта</label>
+                    </p-float-label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-6">
+                <p-float-label variant="on">
+                  <input
+                    pInputText
+                    pSize="small"
+                    id="total_interest_rate"
+                    formControlName="total_interest_rate"
+                    class="w-full"
+                  />
+                  <label for="total_interest_rate" class="!font-normal"
+                    >Общая процентная ставка</label
+                  >
+                </p-float-label>
+              </div>
+              <div class="col-span-6">
+                <p-float-label variant="on">
+                  <input
+                    pInputText
+                    pSize="small"
+                    id="foreign_bank_margin"
+                    formControlName="foreign_bank_margin"
+                    class="w-full"
+                  />
+                  <label for="foreign_bank_margin" class="!font-normal"
+                    >Маржа инобанка</label
+                  >
+                </p-float-label>
+              </div>
+              <div class="col-span-6">
+                <p-float-label variant="on">
+                  <p-select
+                    size="small"
+                    inputId="repayment_freq"
+                    [options]="[]"
+                    [fluid]="true"
+                    optionLabel="value"
+                    optionValue="code"
+                    appendTo="body"
+                    formControlName="repayment_freq"
+                    class="w-full"
+                  />
+                  <label for="repayment_freq" class="!font-normal"
+                    >Периодичность о.д.</label
+                  >
+                </p-float-label>
+              </div>
+              <div class="col-span-6">
+                <div
+                  class="gap-4 grid grid-cols-3"
+                  formGroupName="floating_rate"
+                >
+                  <div class="col-span-2">
+                    <p-float-label variant="on">
+                      <p-select
+                        size="small"
+                        inputId="value"
+                        [options]="[]"
+                        [fluid]="true"
+                        optionLabel="value"
+                        optionValue="code"
+                        appendTo="body"
+                        formControlName="value"
+                        class="w-full"
+                      />
+                      <label for="value" class="!font-normal"
+                        >Плавающая ставка</label
+                      >
+                    </p-float-label>
+                  </div>
+                  <div class="col-span-1">
+                    <p-iconfield>
+                      <p-inputicon class="pi pi-percentage" />
+                      <input
+                        formControlName="type"
+                        type="type"
+                        pInputText
+                        pSize="small"
+                        class="w-full"
+                      />
+                    </p-iconfield>
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-6">
+                <p-float-label variant="on">
+                  <p-select
+                    size="small"
+                    inputId="freq"
+                    [options]="[]"
+                    [fluid]="true"
+                    optionLabel="value"
+                    optionValue="code"
+                    appendTo="body"
+                    formControlName="freq"
+                    class="w-full"
+                  />
+                  <label for="freq" class="!font-normal">Периодичность </label>
+                </p-float-label>
+              </div>
+
+              <div class="col-span-6">
+                <div class="gap-4 grid grid-cols-3" formGroupName="tax_rate">
+                  <div class="col-span-2">
+                    <p-float-label variant="on">
+                      <p-select
+                        size="small"
+                        inputId="value"
+                        [options]="[]"
+                        [fluid]="true"
+                        optionLabel="value"
+                        optionValue="code"
+                        appendTo="body"
+                        formControlName="value"
+                        class="w-full"
+                      />
+                      <label for="value" class="!font-normal"
+                        >Налоговая ставка</label
+                      >
+                    </p-float-label>
+                  </div>
+                  <div class="col-span-1">
+                    <p-iconfield>
+                      <p-inputicon class="pi pi-percentage" />
+                      <input
+                        formControlName="type"
+                        type="type"
+                        pInputText
+                        pSize="small"
+                        class="w-full"
+                      />
+                    </p-iconfield>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-span-6">
+                <div
+                  class="gap-4 grid grid-cols-3"
+                  formGroupName="comission_type"
+                >
+                  <div class="col-span-2">
+                    <p-float-label variant="on">
+                      <p-select
+                        size="small"
+                        inputId="value"
+                        [options]="[]"
+                        [fluid]="true"
+                        optionLabel="value"
+                        optionValue="code"
+                        appendTo="body"
+                        formControlName="value"
+                        class="w-full"
+                      />
+                      <label for="value" class="!font-normal"
+                        >Вид комиссии</label
+                      >
+                    </p-float-label>
+                  </div>
+                  <div class="col-span-1">
+                    <p-iconfield>
+                      <p-inputicon class="pi pi-percentage" />
+                      <input
+                        formControlName="type"
+                        type="type"
+                        pInputText
+                        pSize="small"
+                        class="w-full"
+                      />
+                    </p-iconfield>
+                  </div>
+                </div>
+              </div>
+              @if (i !== 0) {
+              <div class="col-span-6 flex justify-end items-center">
+                <div
+                  (click)="removeFundingSource(i)"
+                  class="flex items-center hover:cursor-pointer justify-center rounded-md w-[22px] h-[22px] bg-[#CBD5E180]"
+                >
+                  <i class="pi pi-minus text-red-500"></i>
+                </div>
+              </div>
+              }
+            </div>
           </div>
         </div>
-        }
       </div>
       }
     </div>
@@ -418,241 +672,9 @@
     </div>
     <h1 class="text-md font-medium col-span-12">Источник финансирования</h1>
     <div
-      class="col-span-12 border-2 rounded-[12px] border-gray-300 py-6 p-4"
-      formGroupName="financing_terms"
-    >
-      <div class="grid grid-cols-12 gap-4">
-        <div class="col-span-6 flex flex-col gap-4">
-          <p-float-label variant="on">
-            <p-datepicker
-              size="small"
-              id="loan_term"
-              [iconDisplay]="'input'"
-              [showIcon]="true"
-              formControlName="loan_term"
-              class="w-full"
-            ></p-datepicker>
-            <label for="loan_term" class="!font-normal">Срок кредита</label>
-          </p-float-label>
-          <p-float-label variant="on">
-            <p-datepicker
-              size="small"
-              id="grace_period"
-              [iconDisplay]="'input'"
-              [showIcon]="true"
-              formControlName="grace_period"
-              class="w-full"
-            ></p-datepicker>
-            <label for="grace_period" class="!font-normal"
-              >Лыготный период</label
-            >
-          </p-float-label>
-          <p-float-label variant="on">
-            <p-datepicker
-              size="small"
-              id="tranche_term"
-              [iconDisplay]="'input'"
-              [showIcon]="true"
-              formControlName="tranche_term"
-              class="w-full"
-            ></p-datepicker>
-            <label for="tranche_term" class="!font-normal">Срок транша</label>
-          </p-float-label>
-          <div class="grid grid-cols-3 gap-4" formGroupName="creditLineAmount">
-            <div class="col-span-2">
-              <p-float-label variant="on">
-                <input
-                  pInputText
-                  pSize="small"
-                  id="value"
-                  formControlName="value"
-                  class="w-full"
-                />
-                <label for="value" class="!font-normal"
-                  >Финансируемая за счет кредитной линии (Сумма)</label
-                >
-              </p-float-label>
-            </div>
-            <div class="col-span-1">
-              <p-float-label variant="on">
-                <p-select
-                  size="small"
-                  inputId="currency"
-                  [options]="[]"
-                  [fluid]="true"
-                  optionLabel="name"
-                  optionValue="code"
-                  appendTo="body"
-                  formControlName="currency"
-                  class="w-full"
-                />
-                <label for="currency" class="!font-normal">Валюта</label>
-              </p-float-label>
-            </div>
-          </div>
-          <p-float-label variant="on">
-            <input
-              pInputText
-              pSize="small"
-              id="total_interest_rate"
-              formControlName="total_interest_rate"
-              class="w-full"
-            />
-            <label for="total_interest_rate" class="!font-normal"
-              >Общая процентная ставка</label
-            >
-          </p-float-label>
-        </div>
-        <div class="col-span-6 flex flex-col gap-4">
-          <p-float-label variant="on">
-            <input
-              pInputText
-              pSize="small"
-              id="foreign_bank_margin"
-              formControlName="foreign_bank_margin"
-              class="w-full"
-            />
-            <label for="foreign_bank_margin" class="!font-normal"
-              >Маржа инобанка</label
-            >
-          </p-float-label>
-          <div class="gap-4 grid grid-cols-3" formGroupName="floating_rate">
-            <div class="col-span-2">
-              <p-float-label variant="on">
-                <p-select
-                  size="small"
-                  inputId="value"
-                  [options]="[]"
-                  [fluid]="true"
-                  optionLabel="value"
-                  optionValue="code"
-                  appendTo="body"
-                  formControlName="value"
-                  class="w-full"
-                />
-                <label for="value" class="!font-normal">Плавающая ставка</label>
-              </p-float-label>
-            </div>
-            <div class="col-span-1">
-              <p-iconfield>
-                <p-inputicon class="pi pi-percentage" />
-                <input
-                  formControlName="type"
-                  type="type"
-                  pInputText
-                  pSize="small"
-                  class="w-full"
-                />
-              </p-iconfield>
-            </div>
-          </div>
-          <div class="gap-4 grid grid-cols-3" formGroupName="tax_rate">
-            <div class="col-span-2">
-              <p-float-label variant="on">
-                <p-select
-                  size="small"
-                  inputId="value"
-                  [options]="[]"
-                  [fluid]="true"
-                  optionLabel="value"
-                  optionValue="code"
-                  appendTo="body"
-                  formControlName="value"
-                  class="w-full"
-                />
-                <label for="value" class="!font-normal">Налоговая ставка</label>
-              </p-float-label>
-            </div>
-            <div class="col-span-1">
-              <p-iconfield>
-                <p-inputicon class="pi pi-percentage" />
-                <input
-                  formControlName="type"
-                  type="type"
-                  pInputText
-                  pSize="small"
-                  class="w-full"
-                />
-              </p-iconfield>
-            </div>
-          </div>
-          <p-float-label variant="on">
-            <p-select
-              size="small"
-              inputId="repayment_freq"
-              [options]="[]"
-              [fluid]="true"
-              optionLabel="value"
-              optionValue="code"
-              appendTo="body"
-              formControlName="repayment_freq"
-              class="w-full"
-            />
-            <label for="repayment_freq" class="!font-normal"
-              >Периодичность о.д.</label
-            >
-          </p-float-label>
-          <p-float-label variant="on">
-            <p-select
-              size="small"
-              inputId="freq"
-              [options]="[]"
-              [fluid]="true"
-              optionLabel="value"
-              optionValue="code"
-              appendTo="body"
-              formControlName="freq"
-              class="w-full"
-            />
-            <label for="freq" class="!font-normal">Периодичность </label>
-          </p-float-label>
-          <div class="gap-4 grid grid-cols-3" formGroupName="comission_type">
-            <div class="col-span-2">
-              <p-float-label variant="on">
-                <p-select
-                  size="small"
-                  inputId="value"
-                  [options]="[]"
-                  [fluid]="true"
-                  optionLabel="value"
-                  optionValue="code"
-                  appendTo="body"
-                  formControlName="value"
-                  class="w-full"
-                />
-                <label for="value" class="!font-normal">Вид комиссии</label>
-              </p-float-label>
-            </div>
-            <div class="col-span-1">
-              <p-iconfield>
-                <p-inputicon class="pi pi-percentage" />
-                <input
-                  formControlName="type"
-                  type="type"
-                  pInputText
-                  pSize="small"
-                  class="w-full"
-                />
-              </p-iconfield>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <h1 class="text-md font-medium col-span-12">Условия финансирования</h1>
-    <div
       class="col-span-12 border-2 border-gray-300 rounded-[12px] p-4"
       formGroupName="early_repayment_condition"
     >
-      <textarea
-        pTextarea
-        pSize="small"
-        id="value"
-        formControlName="first_area"
-        class="w-full"
-        [autoResize]="true"
-        rows="5"
-      ></textarea>
       <textarea
         pTextarea
         pSize="small"

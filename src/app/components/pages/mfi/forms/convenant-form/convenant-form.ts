@@ -18,101 +18,22 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { Checkbox } from 'primeng/checkbox';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
- 
-
-export interface CreditBlankForm {
-  branch: FormControl<string>;
-  unique_type: FormControl<string>;
-  unique_id: FormControl<string>;
-  note: FormControl<string>;
-  is_reser_wout_tranche: FormControl<boolean>;
-  loan_terms: FormGroup<{
-    project_initiator: FormControl<string>;
-    unique_type: FormControl<string>;
-    import_contract_subject: FormControl<string>;
-    supplier: FormArray<FormGroup<{ value: FormControl<string> }>>;
-    number: FormControl<string>;
-    contract_date: FormControl<Date | null>;
-    bank_credit_amount: FormGroup<{
-      value: FormControl<string>;
-      currency: FormControl<string>;
-    }>;
-    credit_info: FormArray<
-      FormGroup<{
-        payment_terms: FormControl<string>;
-        amount: FormControl<string>;
-        currency: FormControl<string>;
-      }>
-    >;
-    lt_line: FormControl<File | null>;
-    // lt_tranche: FormControl<File | null>;
-  }>;
-  funding_source: FormArray<
-    FormGroup<{
-      loan_term: FormControl<Date | null>;
-      grace_period: FormControl<Date | null>;
-    }>
-  >;
-  financing_terms: FormGroup<{
-    loan_term: FormControl<Date | null>;
-    grace_period: FormControl<Date | null>;
-    tranche_term: FormControl<Date | null>;
-    creditLineAmount: FormGroup<{
-      value: FormControl<string>;
-      currency: FormControl<string>;
-    }>;
-    total_interest_rate: FormControl<string>;
-    foreign_bank_margin: FormControl<string>;
-    floating_rate: FormGroup<{
-      value: FormControl<string>;
-      type: FormControl<string>;
-    }>;
-    tax_rate: FormGroup<{
-      value: FormControl<string>;
-      type: FormControl<string>;
-    }>;
-    repayment_freq: FormControl<string>;
-    freq: FormControl<string>;
-    comission_type: FormGroup<{
-      value: FormControl<string>;
-      type: FormControl<string>;
-    }>;
-  }>;
-  early_repayment_condition: FormGroup<{
-    first_area: FormControl<string>;
-    second_area: FormControl<string>;
-  }>;
-}
-
-export interface CreditBlankPayload {
-  branch: string;
-  unique_id: string;
-  is_reser_wout_tranche: boolean;
-  loan_terms: {
-    project_initiator: string;
-    import_contract_subject: string;
-    supplier: { value: string }[];
-    number: string;
-    contract_date: string;
-    bank_credit_amount: { value: string; currency: string };
-    credit_info: { payment_terms: string; amount: string; currency: string }[];
-    lt_line: string | null;
-  };
-  funding_source: { loan_term: string; grace_period: string }[];
-  financing_terms: {
-    loan_term: string;
-    grace_period: string;
-    tranche_term: string;
-    creditLineAmount: { value: string; currency: string };
-    total_interest_rate: string;
-    foreign_bank_margin: string;
-    floating_rate: { value: string; type: string };
-    tax_rate: { value: string; type: string };
-    repayment_freq: string;
-    freq: string;
-    comission_type: { value: string; type: string };
-  };
-}
+import {
+  CreditBlankForm,
+  CreditBlankPayload,
+  EBankCreditAmount,
+  EComissionType,
+  ECreditBlanForm,
+  ECreditInfo,
+  ECreditLineAmount,
+  EEarlyRepaymentCondition,
+  EFinancingTerms,
+  EFloatingRate,
+  EFundingSource,
+  ELoanTerms,
+  ESupplier,
+  ETaxRate,
+} from './core/covenant.interface';
 
 @Component({
   selector: 'app-convenant-form',
@@ -138,188 +59,286 @@ export class ConvenantForm extends FormComponent {
     { label: 'Кредитный анкета', value: 'credit_blank_id' },
     { label: 'Уникальный код', value: 'unique_code' },
   ];
+  ECreditBlanForm = ECreditBlanForm;
+  ELoanTerms = ELoanTerms;
+  ESupplier = ESupplier;
+  EBankCreditAmount = EBankCreditAmount;
+  ECreditInfo = ECreditInfo;
+  ECreditLineAmount = ECreditLineAmount;
+  EFundingSource = EFundingSource;
+  EFinancingTerms = EFinancingTerms;
+  EFloatingRate = EFloatingRate;
+  ETaxRate = ETaxRate;
+  EComissionType = EComissionType;
+  EEarlyRepaymentCondition = EEarlyRepaymentCondition;
 
   mapFormToPayload(formValue: any): CreditBlankPayload {
     return {
-      branch: formValue.branch,
-      unique_id: formValue.unique_id,
-      is_reser_wout_tranche: formValue.is_reser_wout_tranche,
-      loan_terms: {
-        project_initiator: formValue.loan_terms.project_initiator,
-        import_contract_subject: formValue.loan_terms.import_contract_subject,
-        supplier: formValue.loan_terms.supplier.map((s: { value: string }) => ({
-          value: s.value,
+      [ECreditBlanForm.BRANCH]: formValue[ECreditBlanForm.BRANCH],
+      [ECreditBlanForm.UNIQUE_ID]: formValue[ECreditBlanForm.UNIQUE_ID],
+      [ECreditBlanForm.IS_RESER_WOUT_TRANCHE]:
+        formValue[ECreditBlanForm.IS_RESER_WOUT_TRANCHE],
+
+      [ECreditBlanForm.LOAN_TERMS]: {
+        [ELoanTerms.PROJECT_INITATOR]:
+          formValue[ECreditBlanForm.LOAN_TERMS][ELoanTerms.PROJECT_INITATOR],
+        [ELoanTerms.IMPORT_CONTRACT_SUBJECT]:
+          formValue[ECreditBlanForm.LOAN_TERMS][
+            ELoanTerms.IMPORT_CONTRACT_SUBJECT
+          ],
+        [ELoanTerms.SUPPLIER]: formValue[ECreditBlanForm.LOAN_TERMS][
+          ELoanTerms.SUPPLIER
+        ].map((s: any) => ({
+          [ESupplier.VALUE]: s[ESupplier.VALUE],
+          [ESupplier.NUMBER]: s[ESupplier.NUMBER],
+          [ESupplier.CONTRACT_DATE]: s[ESupplier.CONTRACT_DATE]
+            ? new Date(s[ESupplier.CONTRACT_DATE]).toISOString()
+            : '',
         })),
-        number: formValue.loan_terms.number,
-        contract_date: formValue.loan_terms.contract_date
-          ? new Date(formValue.loan_terms.contract_date).toISOString()
-          : '',
-        bank_credit_amount: {
-          value: formValue.loan_terms.bank_credit_amount.value,
-          currency: formValue.loan_terms.bank_credit_amount.currency,
+        [ELoanTerms.BANK_CREDIT_AMOUNT]: {
+          [EBankCreditAmount.VALUE]:
+            formValue[ECreditBlanForm.LOAN_TERMS][
+              ELoanTerms.BANK_CREDIT_AMOUNT
+            ][EBankCreditAmount.VALUE],
+          [EBankCreditAmount.CURRENCY]:
+            formValue[ECreditBlanForm.LOAN_TERMS][
+              ELoanTerms.BANK_CREDIT_AMOUNT
+            ][EBankCreditAmount.CURRENCY],
         },
-        credit_info: formValue.loan_terms.credit_info.map(
-          (ci: {
-            payment_terms: string;
-            amount: string;
-            currency: string;
-          }) => ({
-            payment_terms: ci.payment_terms,
-            amount: ci.amount,
-            currency: ci.currency,
-          })
-        ),
-        lt_line: formValue.loan_terms.lt_line
-          ? formValue.loan_terms.lt_line.name
+        [ELoanTerms.CREDIT_INFO]: formValue[ECreditBlanForm.LOAN_TERMS][
+          ELoanTerms.CREDIT_INFO
+        ].map((ci: any) => ({
+          [ECreditInfo.PAYMENT_TERMS]: ci[ECreditInfo.PAYMENT_TERMS],
+          [ECreditInfo.AMOUNT]: ci[ECreditInfo.AMOUNT],
+          [ECreditInfo.CURRENCY]: ci[ECreditInfo.CURRENCY],
+        })),
+        [ELoanTerms.LT_LINE]: formValue[ECreditBlanForm.LOAN_TERMS][
+          ELoanTerms.LT_LINE
+        ]
+          ? formValue[ECreditBlanForm.LOAN_TERMS][ELoanTerms.LT_LINE].name
           : null,
       },
-      funding_source: formValue.funding_source.map(
-        (fs: { loan_term: Date; grace_period: Date }) => ({
-          loan_term: fs.loan_term ? new Date(fs.loan_term).toISOString() : '',
-          grace_period: fs.grace_period
-            ? new Date(fs.grace_period).toISOString()
-            : '',
-        })
-      ),
-      financing_terms: {
-        loan_term: formValue.financing_terms.loan_term
-          ? new Date(formValue.financing_terms.loan_term).toISOString()
+
+      [ECreditBlanForm.FUNDING_SOURCE]: formValue[
+        ECreditBlanForm.FUNDING_SOURCE
+      ].map((fs: any) => ({
+        [EFundingSource.LOAN_TERM]: fs[EFundingSource.LOAN_TERM]
+          ? new Date(fs[EFundingSource.LOAN_TERM]).toISOString()
           : '',
-        grace_period: formValue.financing_terms.grace_period
-          ? new Date(formValue.financing_terms.grace_period).toISOString()
+        [EFundingSource.GRACE_PERIOD]: fs[EFundingSource.GRACE_PERIOD]
+          ? new Date(fs[EFundingSource.GRACE_PERIOD]).toISOString()
           : '',
-        tranche_term: formValue.financing_terms.tranche_term
-          ? new Date(formValue.financing_terms.tranche_term).toISOString()
-          : '',
-        creditLineAmount: {
-          value: formValue.financing_terms.creditLineAmount.value,
-          currency: formValue.financing_terms.creditLineAmount.currency,
+        [EFundingSource.FINANCING_TERMS]: {
+          [EFinancingTerms.CREDIT_LINE_AMOUNT]: {
+            [ECreditLineAmount.VALUE]:
+              fs[EFundingSource.FINANCING_TERMS][
+                EFinancingTerms.CREDIT_LINE_AMOUNT
+              ][ECreditLineAmount.VALUE],
+            [ECreditLineAmount.CURRENCY]:
+              fs[EFundingSource.FINANCING_TERMS][
+                EFinancingTerms.CREDIT_LINE_AMOUNT
+              ][ECreditLineAmount.CURRENCY],
+          },
+          [EFinancingTerms.TOTAL_INTEREST_RATE]:
+            fs[EFundingSource.FINANCING_TERMS][
+              EFinancingTerms.TOTAL_INTEREST_RATE
+            ],
+          [EFinancingTerms.FOREIGN_BANK_MARGIN]:
+            fs[EFundingSource.FINANCING_TERMS][
+              EFinancingTerms.FOREIGN_BANK_MARGIN
+            ],
+          [EFinancingTerms.FLOATING_RATE]: {
+            [EFloatingRate.VALUE]:
+              fs[EFundingSource.FINANCING_TERMS][EFinancingTerms.FLOATING_RATE][
+                EFloatingRate.VALUE
+              ],
+            [EFloatingRate.TYPE]:
+              fs[EFundingSource.FINANCING_TERMS][EFinancingTerms.FLOATING_RATE][
+                EFloatingRate.TYPE
+              ],
+          },
+          [EFinancingTerms.TAX_RATE]: {
+            [ETaxRate.VALUE]:
+              fs[EFundingSource.FINANCING_TERMS][EFinancingTerms.TAX_RATE][
+                ETaxRate.VALUE
+              ],
+            [ETaxRate.TYPE]:
+              fs[EFundingSource.FINANCING_TERMS][EFinancingTerms.TAX_RATE][
+                ETaxRate.TYPE
+              ],
+          },
+          [EFinancingTerms.REPAYMENT_FREQ]:
+            fs[EFundingSource.FINANCING_TERMS][EFinancingTerms.REPAYMENT_FREQ],
+          [EFinancingTerms.FREQ]:
+            fs[EFundingSource.FINANCING_TERMS][EFinancingTerms.FREQ],
+          [EFinancingTerms.COMISSION_TYPE]: {
+            [EComissionType.VALUE]:
+              fs[EFundingSource.FINANCING_TERMS][
+                EFinancingTerms.COMISSION_TYPE
+              ][EComissionType.VALUE],
+            [EComissionType.TYPE]:
+              fs[EFundingSource.FINANCING_TERMS][
+                EFinancingTerms.COMISSION_TYPE
+              ][EComissionType.TYPE],
+          },
         },
-        total_interest_rate: formValue.financing_terms.total_interest_rate,
-        foreign_bank_margin: formValue.financing_terms.foreign_bank_margin,
-        floating_rate: {
-          value: formValue.financing_terms.floating_rate.value,
-          type: formValue.financing_terms.floating_rate.type,
-        },
-        tax_rate: {
-          value: formValue.financing_terms.tax_rate.value,
-          type: formValue.financing_terms.tax_rate.type,
-        },
-        repayment_freq: formValue.financing_terms.repayment_freq,
-        freq: formValue.financing_terms.freq,
-        comission_type: {
-          value: formValue.financing_terms.comission_type.value,
-          type: formValue.financing_terms.comission_type.type,
-        },
-      },
+      })),
     };
   }
 
   constructor() {
     super();
     this.form = new FormGroup<CreditBlankForm>({
-      branch: new FormControl('', {
+      [ECreditBlanForm.BRANCH]: new FormControl('', {
         nonNullable: true,
         validators: [Validators.required],
       }),
-      unique_type: new FormControl('credit_blank_id', {
+      [ECreditBlanForm.UNIQUE_TYPE]: new FormControl('credit_blank_id', {
         nonNullable: true,
         validators: [Validators.required],
       }),
-      note: new FormControl('', {
+      [ECreditBlanForm.UNIQUE_ID]: new FormControl('', {
         nonNullable: true,
         validators: [Validators.required],
       }),
-      unique_id: new FormControl('', {
+      [ECreditBlanForm.NOTE]: new FormControl('', {
         nonNullable: true,
         validators: [Validators.required],
       }),
-      is_reser_wout_tranche: new FormControl(false, { nonNullable: true }),
+      [ECreditBlanForm.IS_RESER_WOUT_TRANCHE]: new FormControl(false, {
+        nonNullable: true,
+      }),
 
-      loan_terms: new FormGroup({
-        project_initiator: new FormControl('', { nonNullable: true }),
-        import_contract_subject: new FormControl('', { nonNullable: true }),
-        supplier: new FormArray([
-          new FormGroup({ value: new FormControl('', { nonNullable: true }) }),
-        ]),
-        number: new FormControl('', { nonNullable: true }),
-        contract_date: new FormControl<Date | null>(null, {
+      [ECreditBlanForm.LOAN_TERMS]: new FormGroup({
+        [ELoanTerms.PROJECT_INITATOR]: new FormControl('', {
           nonNullable: true,
         }),
-        bank_credit_amount: new FormGroup({
-          value: new FormControl('', { nonNullable: true }),
-          currency: new FormControl('', { nonNullable: true }),
+        [ELoanTerms.UNIQUE_TYPE]: new FormControl('line', {
+          nonNullable: true,
         }),
-        credit_info: new FormArray([
+        [ELoanTerms.IMPORT_CONTRACT_SUBJECT]: new FormControl('', {
+          nonNullable: true,
+        }),
+
+        [ELoanTerms.SUPPLIER]: new FormArray([
           new FormGroup({
-            payment_terms: new FormControl('', { nonNullable: true }),
-            amount: new FormControl('', { nonNullable: true }),
-            currency: new FormControl('', { nonNullable: true }),
+            [ESupplier.VALUE]: new FormControl('', { nonNullable: true }),
+            [ESupplier.NUMBER]: new FormControl('', { nonNullable: true }),
+            [ESupplier.CONTRACT_DATE]: new FormControl<Date | null>(null, {
+              nonNullable: true,
+            }),
           }),
         ]),
-        unique_type: new FormControl('line', { nonNullable: true }),
-        lt_line: new FormControl<File | null>(null),
+
+        [ELoanTerms.BANK_CREDIT_AMOUNT]: new FormGroup({
+          [EBankCreditAmount.VALUE]: new FormControl('', { nonNullable: true }),
+          [EBankCreditAmount.CURRENCY]: new FormControl('', {
+            nonNullable: true,
+          }),
+        }),
+
+        [ELoanTerms.CREDIT_INFO]: new FormArray([
+          new FormGroup({
+            [ECreditInfo.PAYMENT_TERMS]: new FormControl('', {
+              nonNullable: true,
+            }),
+            [ECreditInfo.AMOUNT]: new FormControl('', { nonNullable: true }),
+            [ECreditInfo.CURRENCY]: new FormControl('', { nonNullable: true }),
+          }),
+        ]),
+
+        [ELoanTerms.LT_LINE]: new FormControl<File | null>(null),
+        // [ELoanTerms.LT_TRANCHE]: new FormControl<File | null>(null),
       }),
 
-      funding_source: new FormArray([
+      [ECreditBlanForm.FUNDING_SOURCE]: new FormArray([
         new FormGroup({
-          loan_term: new FormControl<Date | null>(null, { nonNullable: true }),
-          grace_period: new FormControl<Date | null>(null, {
+          [EFundingSource.LOAN_TERM]: new FormControl<Date | null>(null, {
             nonNullable: true,
+          }),
+          [EFundingSource.GRACE_PERIOD]: new FormControl<Date | null>(null, {
+            nonNullable: true,
+          }),
+
+          [EFundingSource.FINANCING_TERMS]: new FormGroup({
+            [EFinancingTerms.LOAN_TERM]: new FormControl<Date | null>(null, {
+              nonNullable: true,
+            }),
+            [EFinancingTerms.GRACE_PERIOD]: new FormControl<Date | null>(null, {
+              nonNullable: true,
+            }),
+            [EFinancingTerms.TRANCHE_TERM]: new FormControl<Date | null>(null, {
+              nonNullable: true,
+            }),
+            [EFinancingTerms.CREDIT_LINE_AMOUNT]: new FormGroup({
+              [ECreditLineAmount.VALUE]: new FormControl('', {
+                nonNullable: true,
+              }),
+              [ECreditLineAmount.CURRENCY]: new FormControl('', {
+                nonNullable: true,
+              }),
+            }),
+            [EFinancingTerms.TOTAL_INTEREST_RATE]: new FormControl('', {
+              nonNullable: true,
+            }),
+            [EFinancingTerms.FOREIGN_BANK_MARGIN]: new FormControl('', {
+              nonNullable: true,
+            }),
+            [EFinancingTerms.FLOATING_RATE]: new FormGroup({
+              [EFloatingRate.VALUE]: new FormControl('', { nonNullable: true }),
+              [EFloatingRate.TYPE]: new FormControl(
+                { value: '', disabled: true },
+                { nonNullable: true }
+              ),
+            }),
+            [EFinancingTerms.TAX_RATE]: new FormGroup({
+              [ETaxRate.VALUE]: new FormControl('', { nonNullable: true }),
+              [ETaxRate.TYPE]: new FormControl(
+                { value: '', disabled: true },
+                { nonNullable: true }
+              ),
+            }),
+            [EFinancingTerms.REPAYMENT_FREQ]: new FormControl('', {
+              nonNullable: true,
+            }),
+            [EFinancingTerms.FREQ]: new FormControl('', { nonNullable: true }),
+            [EFinancingTerms.COMISSION_TYPE]: new FormGroup({
+              [EComissionType.VALUE]: new FormControl('', {
+                nonNullable: true,
+              }),
+              [EComissionType.TYPE]: new FormControl(
+                { value: '', disabled: true },
+                { nonNullable: true }
+              ),
+            }),
           }),
         }),
       ]),
 
-      financing_terms: new FormGroup({
-        loan_term: new FormControl<Date | null>(null, { nonNullable: true }),
-        grace_period: new FormControl<Date | null>(null, { nonNullable: true }),
-        tranche_term: new FormControl<Date | null>(null, { nonNullable: true }),
-        creditLineAmount: new FormGroup({
-          value: new FormControl('', { nonNullable: true }),
-          currency: new FormControl('', { nonNullable: true }),
+      [ECreditBlanForm.EARLY_REPAYMENT_CONDITION]: new FormGroup({
+        [EEarlyRepaymentCondition.FIRST_AREA]: new FormControl('', {
+          nonNullable: true,
         }),
-        total_interest_rate: new FormControl('', { nonNullable: true }),
-        foreign_bank_margin: new FormControl('', { nonNullable: true }),
-        floating_rate: new FormGroup({
-          value: new FormControl('', { nonNullable: true }),
-          type: new FormControl(
-            { value: '', disabled: true },
-            { nonNullable: true }
-          ),
-        }),
-        tax_rate: new FormGroup({
-          value: new FormControl('', { nonNullable: true }),
-          type: new FormControl(
-            { value: '', disabled: true },
-            { nonNullable: true }
-          ),
-        }),
-        repayment_freq: new FormControl('', { nonNullable: true }),
-        freq: new FormControl('', { nonNullable: true }),
-        comission_type: new FormGroup({
-          value: new FormControl('', { nonNullable: true }),
-          type: new FormControl(
-            { value: '', disabled: true },
-            { nonNullable: true }
-          ),
-        }),
-      }),
-      early_repayment_condition: new FormGroup({
-        first_area: new FormControl('', { nonNullable: true }),
-        second_area: new FormControl('', { nonNullable: true }),
       }),
     });
   }
 
   get loan_terms() {
-    return this.form.get('loan_terms') as FormGroup;
+    return this.form.get([ECreditBlanForm.LOAN_TERMS]) as FormGroup;
   }
   get supplier() {
-    return this.loan_terms.get('supplier') as FormArray;
+    return this.loan_terms.get([ELoanTerms.SUPPLIER]) as FormArray;
   }
+
   addSupplier() {
     this.supplier.push(
-      new FormGroup({ value: new FormControl('', { nonNullable: true }) })
+      new FormGroup({
+        [ESupplier.VALUE]: new FormControl('', { nonNullable: true }),
+        [ESupplier.NUMBER]: new FormControl('', { nonNullable: true }),
+        [ESupplier.CONTRACT_DATE]: new FormControl(new Date(), {
+          nonNullable: true,
+        }),
+      })
     );
   }
   removeSupplier(index: number) {
@@ -327,14 +346,16 @@ export class ConvenantForm extends FormComponent {
   }
 
   get creditInfo() {
-    return this.loan_terms.controls['credit_info'] as FormArray;
+    return this[ECreditBlanForm.LOAN_TERMS].controls[
+      ELoanTerms.CREDIT_INFO
+    ] as FormArray;
   }
   addCreditInfo() {
     this.creditInfo.push(
       new FormGroup({
-        payment_terms: new FormControl('', { nonNullable: true }),
-        amount: new FormControl('', { nonNullable: true }),
-        currency: new FormControl('', { nonNullable: true }),
+        [ECreditInfo.PAYMENT_TERMS]: new FormControl('', { nonNullable: true }),
+        [ECreditInfo.AMOUNT]: new FormControl('', { nonNullable: true }),
+        [ECreditInfo.CURRENCY]: new FormControl('', { nonNullable: true }),
       })
     );
   }
@@ -343,16 +364,76 @@ export class ConvenantForm extends FormComponent {
   }
 
   get funding_array() {
-    return this.form.controls['funding_source'] as FormArray;
+    return this.form.controls[ECreditBlanForm.FUNDING_SOURCE] as FormArray;
   }
   addFundingSource() {
     this.funding_array.push(
       new FormGroup({
-        loan_term: new FormControl(new Date(), { nonNullable: true }),
-        grace_period: new FormControl(new Date(), { nonNullable: true }),
+        [EFundingSource.LOAN_TERM]: new FormControl(new Date(), {
+          nonNullable: true,
+        }),
+        [EFundingSource.GRACE_PERIOD]: new FormControl(new Date(), {
+          nonNullable: true,
+        }),
+        [EFundingSource.FINANCING_TERMS]: new FormGroup({
+          [EFinancingTerms.LOAN_TERM]: new FormControl(new Date(), {
+            nonNullable: true,
+          }),
+          [EFinancingTerms.GRACE_PERIOD]: new FormControl(new Date(), {
+            nonNullable: true,
+          }),
+          [EFinancingTerms.TRANCHE_TERM]: new FormControl(new Date(), {
+            nonNullable: true,
+          }),
+          [EFinancingTerms.CREDIT_LINE_AMOUNT]: new FormGroup({
+            [ECreditLineAmount.VALUE]: new FormControl('', {
+              nonNullable: true,
+            }),
+            [ECreditLineAmount.CURRENCY]: new FormControl('', {
+              nonNullable: true,
+            }),
+          }),
+          [EFinancingTerms.TOTAL_INTEREST_RATE]: new FormControl('', {
+            nonNullable: true,
+          }),
+          [EFinancingTerms.FOREIGN_BANK_MARGIN]: new FormControl('', {
+            nonNullable: true,
+          }),
+          [EFinancingTerms.FLOATING_RATE]: new FormGroup({
+            [EFloatingRate.VALUE]: new FormControl('', {
+              nonNullable: true,
+            }),
+            [EFloatingRate.TYPE]: new FormControl('', {
+              nonNullable: true,
+            }),
+          }),
+          [EFinancingTerms.TAX_RATE]: new FormGroup({
+            [ETaxRate.VALUE]: new FormControl('', {
+              nonNullable: true,
+            }),
+            [ETaxRate.TYPE]: new FormControl('', {
+              nonNullable: true,
+            }),
+          }),
+          [EFinancingTerms.REPAYMENT_FREQ]: new FormControl('', {
+            nonNullable: true,
+          }),
+          [EFinancingTerms.FREQ]: new FormControl('', {
+            nonNullable: true,
+          }),
+          [EFinancingTerms.COMISSION_TYPE]: new FormGroup({
+            [EComissionType.VALUE]: new FormControl('', {
+              nonNullable: true,
+            }),
+            [EComissionType.TYPE]: new FormControl('', {
+              nonNullable: true,
+            }),
+          }),
+        }),
       })
     );
   }
+
   removeFundingSource(index: number) {
     this.funding_array.removeAt(index);
   }
