@@ -4,6 +4,7 @@ import { Transh } from './components/pages/mfi/transh/transh';
 import { AgentList } from './components/pages/agents/agent-list/agent-list';
 import { MfiCreditLine } from './components/pages/mfi/credit-line/credit-line';
 import { FormsPage } from './components/pages/mfi/forms/forms';
+import { Test } from './components/pages/mfi/test/test';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,7 @@ export const routes: Routes = [
           { path: 'credit-line', component: MfiCreditLine },
           { path: 'transh', component: Transh },
           { path: 'forms', component: FormsPage },
+          { path: 'test', component: Test },
         ],
       },
       {

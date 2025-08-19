@@ -61,6 +61,10 @@ export class Layout implements OnInit {
       label: 'Forms',
       routerLink: 'mfi/forms',
     },
+    {
+      label: 'Test',
+      routerLink: 'mfi/test',
+    },
   ];
   agentsRoutes: MenuItem[] = [
     { label: 'Agents List', routerLink: 'agents/agents-list' },
