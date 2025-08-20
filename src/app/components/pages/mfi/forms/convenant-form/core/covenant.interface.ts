@@ -5,6 +5,7 @@ export enum ECreditBlanForm {
   UNIQUE_TYPE = 'unique_type',
   UNIQUE_ID = 'unique_id',
   NOTE = 'note',
+  NOTE_DESC = 'note_desc',
   IS_RESER_WOUT_TRANCHE = 'is_reser_wout_tranche',
   LOAN_TERMS = 'loan_terms',
   FUNDING_SOURCE = 'funding_source',
@@ -83,6 +84,7 @@ export interface CreditBlankForm {
   [ECreditBlanForm.UNIQUE_TYPE]: FormControl<string>;
   [ECreditBlanForm.UNIQUE_ID]: FormControl<string>;
   [ECreditBlanForm.NOTE]: FormControl<string>;
+  [ECreditBlanForm.NOTE_DESC]: FormControl<string>;
   [ECreditBlanForm.IS_RESER_WOUT_TRANCHE]: FormControl<boolean>;
 
   [ECreditBlanForm.LOAN_TERMS]: FormGroup<{
@@ -154,6 +156,8 @@ export interface CreditBlankForm {
 export interface CreditBlankPayload {
   [ECreditBlanForm.BRANCH]: string;
   [ECreditBlanForm.UNIQUE_ID]: string;
+  [ECreditBlanForm.NOTE]: FormControl<string>;
+  [ECreditBlanForm.NOTE_DESC]: FormControl<string>;
   [ECreditBlanForm.IS_RESER_WOUT_TRANCHE]: boolean;
   [ECreditBlanForm.LOAN_TERMS]: {
     [ELoanTerms.PROJECT_INITATOR]: string;

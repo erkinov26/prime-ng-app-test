@@ -76,6 +76,9 @@ export class ConvenantForm extends FormComponent {
     return {
       [ECreditBlanForm.BRANCH]: formValue[ECreditBlanForm.BRANCH],
       [ECreditBlanForm.UNIQUE_ID]: formValue[ECreditBlanForm.UNIQUE_ID],
+      [ECreditBlanForm.NOTE]: formValue[ECreditBlanForm.NOTE],
+      [ECreditBlanForm.NOTE_DESC]: formValue[ECreditBlanForm.NOTE_DESC],
+
       [ECreditBlanForm.IS_RESER_WOUT_TRANCHE]:
         formValue[ECreditBlanForm.IS_RESER_WOUT_TRANCHE],
 
@@ -202,6 +205,10 @@ export class ConvenantForm extends FormComponent {
         validators: [Validators.required],
       }),
       [ECreditBlanForm.NOTE]: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      [ECreditBlanForm.NOTE_DESC]: new FormControl('', {
         nonNullable: true,
         validators: [Validators.required],
       }),

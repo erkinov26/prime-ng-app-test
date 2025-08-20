@@ -704,9 +704,18 @@
     >
       <textarea
         pTextarea
-        pSize="small"
-        id="value"
         [formControlName]="EEarlyRepaymentCondition.FIRST_AREA"
+        class="w-full"
+        [autoResize]="true"
+        rows="5"
+      ></textarea>
+    </div>
+    <h1 class="text-md font-medium col-span-12">Примечание</h1>
+    <div class="col-span-12 border-2 border-gray-300 rounded-[12px] p-4">
+      <textarea
+        pTextarea
+        [formControlName]="ECreditBlanForm.NOTE_DESC"
+        style="background: white"
         class="w-full"
         [autoResize]="true"
         rows="5"
@@ -714,19 +723,3 @@
     </div>
   </div>
 </form>
-
-<div class="flex flex-col gap-2 mt-4">
-  <h1 class="text-md font-medium col-span-12">Примечание</h1>
-  <div class="border-2 border-gray-300 rounded-[12px] p-4">
-    <textarea
-      pTextarea
-      pSize="small"
-      [value]="textarea_value"
-      style="background: white"
-      class="w-full"
-      [disabled]="true"
-      [autoResize]="true"
-      rows="4"
-    ></textarea>
-  </div>
-</div>
