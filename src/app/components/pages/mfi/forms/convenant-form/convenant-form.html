@@ -384,280 +384,302 @@
       </div>
     </div>
     <h1 class="text-md font-medium col-span-12">Источник финансирования</h1>
-    <div class="col-span-12 flex flex-col gap-4" formArrayName="funding_source">
+    <div
+      class="col-span-12 flex flex-col gap-4"
+      [formArrayName]="ECreditBlanForm.FUNDING_SOURCE"
+    >
       @for (group of funding_array.controls; track $index; let i = $index) {
       <div
         [formGroupName]="i"
-        class="flex justify-between mb-3 border-2 p-4 rounded-md border-gray-300"
+        class="grid grid-cols-16 gap-4 justify-between mb-3 border-2 p-4 rounded-md border-gray-300"
       >
-        <div class="grid grid-cols-16 gap-2 justify-between">
-          <div class="col-span-8">
-            <label for="loan_term-{{ i }}" class="font-normal block mb-1">
-              Срок кредита
-            </label>
-            <p-datepicker
-              size="small"
-              [iconDisplay]="'input'"
-              [showIcon]="true"
-              id="loan_term-{{ i }}"
-              formControlName="loan_term"
-              class="w-full"
-            ></p-datepicker>
-          </div>
-
-          <div class="col-span-8">
-            <label for="grace_period-{{ i }}" class="font-normal block mb-1">
-              Льготный период
-            </label>
-            <p-datepicker
-              [iconDisplay]="'input'"
-              [showIcon]="true"
-              size="small"
-              id="grace_period-{{ i }}"
-              formControlName="grace_period"
-              class="w-full"
-            ></p-datepicker>
-          </div>
-          <div
-            class="col-span-16 border-2 rounded-[12px] border-gray-300 py-6 p-4"
-            formGroupName="financing_terms"
+        <div class="col-span-8">
+          <label
+            for="{{ EFundingSource.LOAN_TERM }}-{{ i }}"
+            class="font-normal block mb-1"
           >
-            <div class="grid grid-cols-12 gap-4">
-              <div class="col-span-6">
-                <p-float-label variant="on">
-                  <p-datepicker
-                    size="small"
-                    id="tranche_term"
-                    [iconDisplay]="'input'"
-                    [showIcon]="true"
-                    formControlName="tranche_term"
-                    class="w-full"
-                  ></p-datepicker>
-                  <label for="tranche_term" class="!font-normal"
-                    >Срок транша</label
-                  >
-                </p-float-label>
-              </div>
-              <div class="col-span-6">
-                <div
-                  class="grid grid-cols-3 gap-4"
-                  formGroupName="creditLineAmount"
-                >
-                  <div class="col-span-2">
-                    <p-float-label variant="on">
-                      <input
-                        pInputText
-                        pSize="small"
-                        id="value"
-                        formControlName="value"
-                        class="w-full"
-                      />
-                      <label for="value" class="!font-normal"
-                        >Финансируемая за счет кредитной линии (Сумма)</label
-                      >
-                    </p-float-label>
-                  </div>
-                  <div class="col-span-1">
-                    <p-float-label variant="on">
-                      <p-select
-                        size="small"
-                        inputId="currency"
-                        [options]="[]"
-                        [fluid]="true"
-                        optionLabel="name"
-                        optionValue="code"
-                        appendTo="body"
-                        formControlName="currency"
-                        class="w-full"
-                      />
-                      <label for="currency" class="!font-normal">Валюта</label>
-                    </p-float-label>
-                  </div>
-                </div>
-              </div>
-              <div class="col-span-6">
-                <p-float-label variant="on">
-                  <input
-                    pInputText
-                    pSize="small"
-                    id="total_interest_rate"
-                    formControlName="total_interest_rate"
-                    class="w-full"
-                  />
-                  <label for="total_interest_rate" class="!font-normal"
-                    >Общая процентная ставка</label
-                  >
-                </p-float-label>
-              </div>
-              <div class="col-span-6">
-                <p-float-label variant="on">
-                  <input
-                    pInputText
-                    pSize="small"
-                    id="foreign_bank_margin"
-                    formControlName="foreign_bank_margin"
-                    class="w-full"
-                  />
-                  <label for="foreign_bank_margin" class="!font-normal"
-                    >Маржа инобанка</label
-                  >
-                </p-float-label>
-              </div>
-              <div class="col-span-6">
-                <p-float-label variant="on">
-                  <p-select
-                    size="small"
-                    inputId="repayment_freq"
-                    [options]="[]"
-                    [fluid]="true"
-                    optionLabel="value"
-                    optionValue="code"
-                    appendTo="body"
-                    formControlName="repayment_freq"
-                    class="w-full"
-                  />
-                  <label for="repayment_freq" class="!font-normal"
-                    >Периодичность о.д.</label
-                  >
-                </p-float-label>
-              </div>
-              <div class="col-span-6">
-                <div
-                  class="gap-4 grid grid-cols-3"
-                  formGroupName="floating_rate"
-                >
-                  <div class="col-span-2">
-                    <p-float-label variant="on">
-                      <p-select
-                        size="small"
-                        inputId="value"
-                        [options]="[]"
-                        [fluid]="true"
-                        optionLabel="value"
-                        optionValue="code"
-                        appendTo="body"
-                        formControlName="value"
-                        class="w-full"
-                      />
-                      <label for="value" class="!font-normal"
-                        >Плавающая ставка</label
-                      >
-                    </p-float-label>
-                  </div>
-                  <div class="col-span-1">
-                    <p-iconfield>
-                      <p-inputicon class="pi pi-percentage" />
-                      <input
-                        formControlName="type"
-                        type="type"
-                        pInputText
-                        pSize="small"
-                        class="w-full"
-                      />
-                    </p-iconfield>
-                  </div>
-                </div>
-              </div>
-              <div class="col-span-6">
-                <p-float-label variant="on">
-                  <p-select
-                    size="small"
-                    inputId="freq"
-                    [options]="[]"
-                    [fluid]="true"
-                    optionLabel="value"
-                    optionValue="code"
-                    appendTo="body"
-                    formControlName="freq"
-                    class="w-full"
-                  />
-                  <label for="freq" class="!font-normal">Периодичность </label>
-                </p-float-label>
-              </div>
+            Срок кредита
+          </label>
+          <p-datepicker
+            size="small"
+            [iconDisplay]="'input'"
+            [showIcon]="true"
+            id="{{ EFundingSource.LOAN_TERM }}-{{ i }}"
+            [formControlName]="EFundingSource.LOAN_TERM"
+            class="w-full"
+          ></p-datepicker>
+        </div>
 
-              <div class="col-span-6">
-                <div class="gap-4 grid grid-cols-3" formGroupName="tax_rate">
-                  <div class="col-span-2">
-                    <p-float-label variant="on">
-                      <p-select
-                        size="small"
-                        inputId="value"
-                        [options]="[]"
-                        [fluid]="true"
-                        optionLabel="value"
-                        optionValue="code"
-                        appendTo="body"
-                        formControlName="value"
-                        class="w-full"
-                      />
-                      <label for="value" class="!font-normal"
-                        >Налоговая ставка</label
-                      >
-                    </p-float-label>
-                  </div>
-                  <div class="col-span-1">
-                    <p-iconfield>
-                      <p-inputicon class="pi pi-percentage" />
-                      <input
-                        formControlName="type"
-                        type="type"
-                        pInputText
-                        pSize="small"
-                        class="w-full"
-                      />
-                    </p-iconfield>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-span-6">
-                <div
-                  class="gap-4 grid grid-cols-3"
-                  formGroupName="comission_type"
+        <div class="col-span-8">
+          <label
+            for="{{ EFundingSource.GRACE_PERIOD }}-{{ i }}"
+            class="font-normal block mb-1"
+          >
+            Льготный период
+          </label>
+          <p-datepicker
+            [iconDisplay]="'input'"
+            [showIcon]="true"
+            size="small"
+            id="{{ EFundingSource.GRACE_PERIOD }}-{{ i }}"
+            [formControlName]="EFundingSource.GRACE_PERIOD"
+            class="w-full"
+          ></p-datepicker>
+        </div>
+        <div
+          class="col-span-16 border-2 rounded-[12px] border-gray-300 py-6 p-4"
+          [formGroupName]="EFundingSource.FINANCING_TERMS"
+        >
+          <div class="grid grid-cols-12 gap-4">
+            <div class="col-span-6">
+              <p-float-label variant="on">
+                <p-datepicker
+                  size="small"
+                  [id]="EFinancingTerms.TRANCHE_TERM"
+                  [iconDisplay]="'input'"
+                  [showIcon]="true"
+                  [formControlName]="EFinancingTerms.TRANCHE_TERM"
+                  class="w-full"
+                ></p-datepicker>
+                <label [for]="EFinancingTerms.TRANCHE_TERM" class="!font-normal"
+                  >Срок транша</label
                 >
-                  <div class="col-span-2">
-                    <p-float-label variant="on">
-                      <p-select
-                        size="small"
-                        inputId="value"
-                        [options]="[]"
-                        [fluid]="true"
-                        optionLabel="value"
-                        optionValue="code"
-                        appendTo="body"
-                        formControlName="value"
-                        class="w-full"
-                      />
-                      <label for="value" class="!font-normal"
-                        >Вид комиссии</label
-                      >
-                    </p-float-label>
-                  </div>
-                  <div class="col-span-1">
-                    <p-iconfield>
-                      <p-inputicon class="pi pi-percentage" />
-                      <input
-                        formControlName="type"
-                        type="type"
-                        pInputText
-                        pSize="small"
-                        class="w-full"
-                      />
-                    </p-iconfield>
-                  </div>
-                </div>
-              </div>
-              @if (i !== 0) {
-              <div class="col-span-6 flex justify-end items-center">
-                <div
-                  (click)="removeFundingSource(i)"
-                  class="flex items-center hover:cursor-pointer justify-center rounded-md w-[22px] h-[22px] bg-[#CBD5E180]"
-                >
-                  <i class="pi pi-minus text-red-500"></i>
-                </div>
-              </div>
-              }
+              </p-float-label>
             </div>
+            <div class="col-span-6">
+              <div
+                class="grid grid-cols-3 gap-4"
+                [formGroupName]="EFinancingTerms.CREDIT_LINE_AMOUNT"
+              >
+                <div class="col-span-2">
+                  <p-float-label variant="on">
+                    <input
+                      pInputText
+                      pSize="small"
+                      [id]="ECreditLineAmount.VALUE"
+                      [formControlName]="ECreditLineAmount.VALUE"
+                      class="w-full"
+                    />
+                    <label [for]="ECreditLineAmount.VALUE" class="!font-normal"
+                      >Финансируемая за счет кредитной линии (Сумма)</label
+                    >
+                  </p-float-label>
+                </div>
+                <div class="col-span-1">
+                  <p-float-label variant="on">
+                    <p-select
+                      size="small"
+                      [inputId]="ECreditLineAmount.CURRENCY"
+                      [options]="[]"
+                      [fluid]="true"
+                      optionLabel="name"
+                      optionValue="code"
+                      appendTo="body"
+                      [formControlName]="ECreditLineAmount.CURRENCY"
+                      class="w-full"
+                    />
+                    <label
+                      [for]="ECreditLineAmount.CURRENCY"
+                      class="!font-normal"
+                      >Валюта</label
+                    >
+                  </p-float-label>
+                </div>
+              </div>
+            </div>
+            <div class="col-span-6">
+              <p-float-label variant="on">
+                <input
+                  pInputText
+                  pSize="small"
+                  [id]="EFinancingTerms.TOTAL_INTEREST_RATE"
+                  [formControlName]="EFinancingTerms.TOTAL_INTEREST_RATE"
+                  class="w-full"
+                />
+                <label
+                  [for]="EFinancingTerms.TOTAL_INTEREST_RATE"
+                  class="!font-normal"
+                  >Общая процентная ставка</label
+                >
+              </p-float-label>
+            </div>
+            <div class="col-span-6">
+              <p-float-label variant="on">
+                <input
+                  pInputText
+                  pSize="small"
+                  [id]="EFinancingTerms.FOREIGN_BANK_MARGIN"
+                  [formControlName]="EFinancingTerms.FOREIGN_BANK_MARGIN"
+                  class="w-full"
+                />
+                <label
+                  [for]="EFinancingTerms.FOREIGN_BANK_MARGIN"
+                  class="!font-normal"
+                  >Маржа инобанка</label
+                >
+              </p-float-label>
+            </div>
+            <div class="col-span-6">
+              <p-float-label variant="on">
+                <p-select
+                  size="small"
+                  [inputId]="EFinancingTerms.REPAYMENT_FREQ"
+                  [options]="[]"
+                  [fluid]="true"
+                  optionLabel="value"
+                  optionValue="code"
+                  appendTo="body"
+                  [formControlName]="EFinancingTerms.REPAYMENT_FREQ"
+                  class="w-full"
+                />
+                <label
+                  [for]="EFinancingTerms.REPAYMENT_FREQ"
+                  class="!font-normal"
+                  >Периодичность о.д.</label
+                >
+              </p-float-label>
+            </div>
+            <div class="col-span-6">
+              <div
+                class="gap-4 grid grid-cols-3"
+                [formGroupName]="EFinancingTerms.FLOATING_RATE"
+              >
+                <div class="col-span-2">
+                  <p-float-label variant="on">
+                    <p-select
+                      size="small"
+                      [inputId]="EFloatingRate.VALUE"
+                      [options]="[]"
+                      [fluid]="true"
+                      optionLabel="value"
+                      optionValue="code"
+                      appendTo="body"
+                      [formControlName]="EFloatingRate.VALUE"
+                      class="w-full"
+                    />
+                    <label [for]="EFloatingRate.VALUE" class="!font-normal"
+                      >Плавающая ставка</label
+                    >
+                  </p-float-label>
+                </div>
+                <div class="col-span-1">
+                  <p-iconfield>
+                    <p-inputicon class="pi pi-percentage" />
+                    <input
+                      [formControlName]="EFloatingRate.TYPE"
+                      type="type"
+                      pInputText
+                      pSize="small"
+                      class="w-full"
+                    />
+                  </p-iconfield>
+                </div>
+              </div>
+            </div>
+            <div class="col-span-6">
+              <p-float-label variant="on">
+                <p-select
+                  size="small"
+                  [inputId]="EFinancingTerms.FREQ"
+                  [options]="[]"
+                  [fluid]="true"
+                  optionLabel="value"
+                  optionValue="code"
+                  appendTo="body"
+                  [formControlName]="EFinancingTerms.FREQ"
+                  class="w-full"
+                />
+                <label [for]="EFinancingTerms.FREQ" class="!font-normal"
+                  >Периодичность
+                </label>
+              </p-float-label>
+            </div>
+
+            <div class="col-span-6">
+              <div
+                class="gap-4 grid grid-cols-3"
+                [formGroupName]="EFinancingTerms.TAX_RATE"
+              >
+                <div class="col-span-2">
+                  <p-float-label variant="on">
+                    <p-select
+                      size="small"
+                      [inputId]="ETaxRate.VALUE"
+                      [options]="[]"
+                      [fluid]="true"
+                      optionLabel="value"
+                      optionValue="code"
+                      appendTo="body"
+                      [formControlName]="ETaxRate.VALUE"
+                      class="w-full"
+                    />
+                    <label [for]="ETaxRate.VALUE" class="!font-normal"
+                      >Налоговая ставка</label
+                    >
+                  </p-float-label>
+                </div>
+                <div class="col-span-1">
+                  <p-iconfield>
+                    <p-inputicon class="pi pi-percentage" />
+                    <input
+                      [formControlName]="ETaxRate.TYPE"
+                      type="type"
+                      pInputText
+                      pSize="small"
+                      class="w-full"
+                    />
+                  </p-iconfield>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-span-6">
+              <div
+                class="gap-4 grid grid-cols-3"
+                [formGroupName]="EFinancingTerms.COMISSION_TYPE"
+              >
+                <div class="col-span-2">
+                  <p-float-label variant="on">
+                    <p-select
+                      size="small"
+                      [inputId]="EComissionType.VALUE"
+                      [options]="[]"
+                      [fluid]="true"
+                      optionLabel="value"
+                      optionValue="code"
+                      appendTo="body"
+                      [formControlName]="EComissionType.VALUE"
+                      class="w-full"
+                    />
+                    <label [for]="EComissionType.VALUE" class="!font-normal"
+                      >Вид комиссии</label
+                    >
+                  </p-float-label>
+                </div>
+                <div class="col-span-1">
+                  <p-iconfield>
+                    <p-inputicon class="pi pi-percentage" />
+                    <input
+                      [formControlName]="EComissionType.VALUE"
+                      type="type"
+                      pInputText
+                      pSize="small"
+                      class="w-full"
+                    />
+                  </p-iconfield>
+                </div>
+              </div>
+            </div>
+            @if (i !== 0) {
+            <div class="col-span-6 flex justify-end items-center">
+              <div
+                (click)="removeFundingSource(i)"
+                class="flex items-center hover:cursor-pointer justify-center rounded-md w-[22px] h-[22px] bg-[#CBD5E180]"
+              >
+                <i class="pi pi-minus text-red-500"></i>
+              </div>
+            </div>
+            }
           </div>
         </div>
       </div>
@@ -673,13 +695,13 @@
     <h1 class="text-md font-medium col-span-12">Источник финансирования</h1>
     <div
       class="col-span-12 border-2 border-gray-300 rounded-[12px] p-4"
-      formGroupName="early_repayment_condition"
+      [formGroupName]="ECreditBlanForm.EARLY_REPAYMENT_CONDITION"
     >
       <textarea
         pTextarea
         pSize="small"
         id="value"
-        formControlName="first_area"
+        [formControlName]="EEarlyRepaymentCondition.FIRST_AREA"
         class="w-full"
         [autoResize]="true"
         rows="5"
