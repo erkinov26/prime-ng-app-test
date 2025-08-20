@@ -362,15 +362,20 @@
             aria-labelledby="basic"
             [formControlName]="ELoanTerms.UNIQUE_TYPE"
           />
-          <input
-            type="file"
-            pInputText
-            pSize="small"
-            size="small"
-            inputId="number"
-            [fluid]="true"
-            [formControlName]="ELoanTerms.LT_LINE"
-          />
+          <p-float-label variant="on">
+            <p-select
+              size="small"
+              [inputId]="ELoanTerms.LT_LINE"
+              [options]="[]"
+              [fluid]="true"
+              optionLabel="name"
+              optionValue="code"
+              appendTo="body"
+              [formControlName]="ELoanTerms.LT_LINE"
+              class="w-full"
+            />
+            <label [for]="ELoanTerms.LT_LINE" class="!font-normal">Линия</label>
+          </p-float-label>
           <!-- <input
             type="file"
             pInputText
