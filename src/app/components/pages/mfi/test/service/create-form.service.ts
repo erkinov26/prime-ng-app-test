@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { delay, Observable, of, switchMap, tap, throwError } from 'rxjs';
 
 export enum EUserData {
   EMAIL = 'email',
@@ -96,7 +96,12 @@ export class CreateFormService {
     );
 
     if (!signingUser) {
-      throw new Error('awd');
+      return throwError(() => ({
+        success: false,
+        status: 401,
+        message: 'Invalid email or password',
+        data: null as any, // yoki undefined
+      })).pipe(delay(2000));
     }
 
     return of({
@@ -104,6 +109,6 @@ export class CreateFormService {
       message: 'You have successfully signed in',
       status: 200,
       data: signingUser,
-    }); // ⏳ 2 sekund kutib success qaytaradi
+    }).pipe(delay(2000));
   }
 }

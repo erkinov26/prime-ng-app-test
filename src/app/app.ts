@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Layout } from "./components/layout/layout";
+import { Layout } from './components/layout/layout';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App {
   protected title = 'prime-ng-app';
