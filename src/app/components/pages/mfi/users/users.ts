@@ -10,15 +10,15 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
   imports: [ButtonDirective, LeafletModule, RouterLink],
   template: `
     <h1 class="mb-4 text-xl font-bold">Users</h1>
- 
-    <div class="overflow-hidden">
+
+    <!-- <div class="overflow-hidden">
       <div
         id="map"
         leaflet
         [leafletOptions]="options"
         [leafletLayers]="layers"
       ></div>
-    </div>
+    </div> -->
 
     @if (!data) {
     <h2 class="mt-4 text-gray-500">Loading...</h2>
@@ -38,43 +38,43 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
   `,
   styles: [
     `
-      #map {
-        height: 400px;
-        width: 100%;
-        border-radius: 8px;
-        margin-bottom: 1rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      }
+      // #map {
+      //   height: 400px;
+      //   width: 100%;
+      //   border-radius: 8px;
+      //   margin-bottom: 1rem;
+      //   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      // }
     `,
   ],
 })
 export class Users implements OnInit {
   data: any[] = [];
   userService = inject(UserService);
- 
-  options = {
-    layers: [
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors',
-      }),
-    ],
-    zoom: 2, 
-    center: L.latLng(20, 0),
-  };
 
-  layers: L.Layer[] = []; 
+  // options = {
+  //   layers: [
+  //     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  //       attribution: '&copy; OpenStreetMap contributors',
+  //     }),
+  //   ],
+  //   zoom: 2,
+  //   center: L.latLng(20, 0),
+  // };
+
+  // layers: L.Layer[] = [];
 
   ngOnInit(): void {
     this.userService.getUsers().subscribe((val: any) => {
       this.data = val;
- 
-      this.layers = this.data.map((u) => {
-        const lat = Number(u.address.geo.lat);
-        const lng = Number(u.address.geo.lng);
-        return L.marker([lat, lng]).bindPopup(
-          `<b>${u.name}</b><br>${u.address.city}`
-        );
-      });
+
+      // this.layers = this.data.map((u) => {
+      //   const lat = Number(u.address.geo.lat);
+      //   const lng = Number(u.address.geo.lng);
+      //   return L.marker([lat, lng]).bindPopup(
+      //     `<b>${u.name}</b><br>${u.address.city}`
+      //   );
+      // });
     });
   }
 }
