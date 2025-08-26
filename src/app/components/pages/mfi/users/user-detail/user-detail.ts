@@ -20,7 +20,7 @@ export class UserDetail {
   constructor() {
     this.route.data.subscribe((data) => {
       console.log('resolverdan keldi:', data);
-      this.currentUser = data['user'];
+      this.currentUser = data['userDetail'];
     });
   }
 }

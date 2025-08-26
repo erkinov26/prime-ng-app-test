@@ -7,7 +7,10 @@ import { FormsPage } from './components/pages/mfi/forms/forms';
 import { Test } from './components/pages/mfi/test/test';
 import { RxJs } from './components/pages/mfi/rx-js/rx-js';
 import { DataBinding } from './components/pages/mfi/data-binding/data-binding';
-import { userResolver } from './components/pages/mfi/users/service/user.resolver';
+import {
+  userDetailResolver,
+  userResolver,
+} from './components/pages/mfi/users/service/user.resolver';
 
 export const routes: Routes = [
   {
@@ -62,6 +65,9 @@ export const routes: Routes = [
           },
           {
             path: 'users',
+            resolve: {
+              users: userResolver,
+            },
             loadComponent: () =>
               import('./components/pages/mfi/users/users').then(
                 (res) => res.Users
@@ -70,7 +76,7 @@ export const routes: Routes = [
           {
             path: 'users/:id',
             resolve: {
-              user: userResolver,
+              userDetail: userDetailResolver,
             },
             loadComponent: () =>
               import(

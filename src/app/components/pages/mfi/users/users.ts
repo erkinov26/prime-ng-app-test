@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from './service/user.service';
 import { ButtonDirective } from 'primeng/button';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import * as L from 'leaflet';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
@@ -51,7 +51,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 export class Users implements OnInit {
   data: any[] = [];
   userService = inject(UserService);
-
+  private route = inject(ActivatedRoute);
   // options = {
   //   layers: [
   //     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -63,18 +63,28 @@ export class Users implements OnInit {
   // };
 
   // layers: L.Layer[] = [];
+  // currentUser: any;
 
+  // constructor() {
+  //   this.route.data.subscribe((data) => {
+  //     console.log('resolverdan keldi:', data);
+  //     this.currentUser = data['userDetail'];
+  //   });
+  // }
   ngOnInit(): void {
-    this.userService.getUsers().subscribe((val: any) => {
-      this.data = val;
-
-      // this.layers = this.data.map((u) => {
-      //   const lat = Number(u.address.geo.lat);
-      //   const lng = Number(u.address.geo.lng);
-      //   return L.marker([lat, lng]).bindPopup(
-      //     `<b>${u.name}</b><br>${u.address.city}`
-      //   );
-      // });
+    // this.userService.getUsers().subscribe((val: any) => {
+    //   this.data = val;
+    // this.layers = this.data.map((u) => {
+    //   const lat = Number(u.address.geo.lat);
+    //   const lng = Number(u.address.geo.lng);
+    //   return L.marker([lat, lng]).bindPopup(
+    //     `<b>${u.name}</b><br>${u.address.city}`
+    //   );
+    // });
+    // });
+    this.route.data.subscribe((data) => {
+      console.log('resolverdan data keldi', data);
+      this.data = data['users'];
     });
   }
 }
