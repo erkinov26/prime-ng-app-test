@@ -65,6 +65,14 @@ export class Layout implements OnInit {
       label: 'Test',
       routerLink: 'mfi/test',
     },
+    {
+      label: 'RxJS',
+      routerLink: 'mfi/rx-js',
+    },
+    {
+      label: 'Data Binding',
+      routerLink: 'mfi/data-binding',
+    },
   ];
   agentsRoutes: MenuItem[] = [
     { label: 'Agents List', routerLink: 'agents/agents-list' },
