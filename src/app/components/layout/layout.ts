@@ -73,6 +73,10 @@ export class Layout implements OnInit {
       label: 'Data Binding',
       routerLink: 'mfi/data-binding',
     },
+    {
+      label: 'Users',
+      routerLink: 'mfi/users',
+    },
   ];
   agentsRoutes: MenuItem[] = [
     { label: 'Agents List', routerLink: 'agents/agents-list' },

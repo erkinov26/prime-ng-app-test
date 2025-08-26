@@ -5,7 +5,7 @@ import {
   inject,
 } from '@angular/core';
 import { Child } from './child/child';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, httpResource } from '@angular/common/http';
 import { ButtonDirective } from 'primeng/button';
 
 @Component({
@@ -15,7 +15,7 @@ import { ButtonDirective } from 'primeng/button';
   template: `
     <h1>{{ parentData }}</h1>
     <app-child (dataEvent)="getData($event)" />
-    <button pButton (click)="sendRequest()">Send Request</button>
+    <button pButton>Send Request</button>
   `,
   styleUrl: './data-binding.css',
 })
@@ -30,18 +30,5 @@ export class DataBinding implements AfterContentInit {
 
   ngAfterContentInit(): void {
     this.cdr.detectChanges();
-  }
-
-  sendRequest() {
-    this.http
-      .post(
-        'http://localhost:3000/chat',
-        { message: 'Hello AI 👋' },
-        { headers: { 'Content-Type': 'application/json' } }
-      )
-      .subscribe((res: any) => {
-        console.log(res);
-        this.parentData = res.reply;
-      });
   }
 }
