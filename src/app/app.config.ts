@@ -10,11 +10,11 @@ import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
-import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    importProvidersFrom(HttpClientModule),
+    importProvidersFrom(HttpClient),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
@@ -24,5 +24,6 @@ export const appConfig: ApplicationConfig = {
         preset: Aura,
       },
     }),
+    
   ],
 };
