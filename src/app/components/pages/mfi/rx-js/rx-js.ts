@@ -1,107 +1,71 @@
-import { Component } from '@angular/core';
-import {
-  from,
-  multicast,
-  Subject,
-  Subscription,
-  ConnectableObservable,
-  connect,
-  interval,
-} from 'rxjs';
-import { ButtonDirective } from 'primeng/button';
+import { Component, inject, OnInit } from '@angular/core';
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from 'primeng/tabs';
+import { FirstExample } from './first-example/first-example';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SecondExample } from './second-example/second-example';
+import { MergeMap } from './merge-map/merge-map';
+import { SwitchMap } from './switch-map/switch-map';
 
 @Component({
   selector: 'app-rx-js',
   template: `
-    <!-- EXAMPLE 1 -->
-    <!-- <h1>{{ counter }}</h1>
-    <button pButton severity="danger" (click)="onUnsubscribe()">
-      Unsubscribe
-    </button>
-    <button pButton (click)="onSubscribe()">Subscribe</button>
-    <button pButton severity="warn" (click)="onCounter()">Counter</button> -->
-
-    <!-- EXAMPLE 2 -->
-
-    <h1>Hello rx js</h1>
+    <p-tabs
+      [value]="active_value"
+      (valueChange)="onTabChange($event)"
+      scrollable
+    >
+      <p-tablist>
+        @for(tab of tabs; track tab.value){
+        <p-tab [value]="tab.value">
+          {{ tab.title }}
+        </p-tab>
+        }
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel value="example-1"> <app-first-example /> </p-tabpanel>
+        <p-tabpanel value="example-2"> <app-second-example /> </p-tabpanel>
+        <p-tabpanel value="merge-map"> <app-merge-map /> </p-tabpanel>
+        <p-tabpanel value="switch-map"> <app-switch-map /> </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
   `,
   styleUrls: ['./rx-js.css'],
   imports: [
-    // ButtonDirective
+    Tabs,
+    TabList,
+    TabPanels,
+    TabPanel,
+    Tab,
+    FirstExample,
+    SecondExample,
+    MergeMap,
+    SwitchMap,
   ],
   standalone: true,
 })
-export class RxJs {
-  // EXAMPLE 1
-  // private subject = new Subject<number>();
-  // observable$ = this.subject.asObservable();
-  // counter = 1;
-  // subscription!: Subscription;
-  // setIntervalId: any;
-  // constructor() {
-  //   this.startInterval();
-  //   this.subscription = this.observable$.subscribe((value) => {
-  //     console.log('Olingan qiymat:', value);
-  //   });
-  // }
-  // private startInterval() {
-  //   if (!this.setIntervalId) {
-  //     this.setIntervalId = setInterval(() => {
-  //       this.counter++;
-  //       this.subject.next(this.counter);
-  //     }, 1000);
-  //     console.log('Interval started');
-  //   }
-  // }
-  // onUnsubscribe() {
-  //   if (this.subscription) {
-  //     this.subscription.unsubscribe();
-  //   }
-  //   if (this.setIntervalId) {
-  //     clearInterval(this.setIntervalId);
-  //     this.setIntervalId = null;
-  //   }
-  //   console.log('Unsubscribed and interval cleared!');
-  // }
-  // onSubscribe() {
-  //   this.subscription = this.observable$.subscribe((value) => {
-  //     console.log('New returned value:', value);
-  //   });
-  //   console.log('Subscribed again!');
-  // }
-  // onCounter() {
-  //   this.counter++;
-  //   this.subject.next(this.counter);
-  // }
-  //  EXAMPLE 2
-
-  source = interval(500);
-  subject = new Subject();
-  multicasted = this.source.pipe(
-    multicast(this.subject)
-  ) as ConnectableObservable<number>;
-  subscription1: any;
-  subscription2: any;
-  subscriptionConnect: any;
-  constructor() {
-    this.subscription1 = this.multicasted.subscribe({
-      next: (v) => console.log('observerA', v),
+export class RxJs implements OnInit {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  active_value: string | number = 'comission';
+  tabs = [
+    { title: 'Example 1', value: 'example-1' },
+    { title: 'Example 2', value: 'example-2' },
+    { title: 'Merge Map', value: 'merge-map' },
+    { title: 'Switch Map', value: 'switch-map' },
+  ];
+  ngOnInit() {
+    this.route.queryParams.subscribe((params) => {
+      if (params['tab']) {
+        this.active_value = params['tab'];
+      }
     });
-    // this.multicasted.subscribe({
-    //   next: (v) => console.log('observerB', v),
-    // });
-    this.subscriptionConnect = this.multicasted.connect();
-    setTimeout(() => {
-      this.subscription2 = this.multicasted.subscribe({
-        next: (v) => console.log(v),
-      });
-    }, 600);
-    setTimeout(() => {
-      this.subscription1.unsubscribe();
-    }, 1200);
-    setTimeout(() => {
-      this.subscription2.unsubscribe();
-      this.subscriptionConnect.unsubscribe(); // for the shared Observable execution
-    }, 2000);
+  }
+  onTabChange(value: string | number) {
+    this.active_value = value;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab: value },
+      queryParamsHandling: 'merge',
+    });
   }
 }
