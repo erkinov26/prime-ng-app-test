@@ -6,6 +6,8 @@ import { SecondExample } from './second-example/second-example';
 import { MergeMap } from './merge-map/merge-map';
 import { SwitchMap } from './switch-map/switch-map';
 import { DistinctUntilChanged } from './distinct-until-changed/distinct-until-changed';
+import { ThrottleTime } from './throttle-time/throttle-time';
+import { ForkJoin } from './fork-join/fork-join';
 
 @Component({
   selector: 'app-rx-js',
@@ -27,6 +29,8 @@ import { DistinctUntilChanged } from './distinct-until-changed/distinct-until-ch
         <p-tabpanel value="example-2"> <app-second-example /> </p-tabpanel>
         <p-tabpanel value="merge-map"> <app-merge-map /> </p-tabpanel>
         <p-tabpanel value="switch-map"> <app-switch-map /> </p-tabpanel>
+        <p-tabpanel value="throttle"> <app-throttle-time /> </p-tabpanel>
+        <p-tabpanel value="fork"> <app-fork-join /> </p-tabpanel>
         <p-tabpanel value="distinct-until-changed">
           <app-distinct-until-changed />
         </p-tabpanel>
@@ -45,6 +49,8 @@ import { DistinctUntilChanged } from './distinct-until-changed/distinct-until-ch
     MergeMap,
     SwitchMap,
     DistinctUntilChanged,
+    ThrottleTime,
+    ForkJoin,
   ],
   standalone: true,
 })
@@ -57,7 +63,9 @@ export class RxJs implements OnInit {
     { title: 'Example 2', value: 'example-2' },
     { title: 'Merge Map', value: 'merge-map' },
     { title: 'Switch Map', value: 'switch-map' },
+    { title: 'Fork Join', value: 'fork' },
     { title: 'distinct-until-changed', value: 'distinct-until-changed' },
+    { title: 'Throttle Time', value: 'throttle' },
   ];
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
