@@ -7,13 +7,12 @@ import {
   Router,
   RouterOutlet,
 } from '@angular/router';
-import { MessageService } from 'primeng/api';
 import { ProgressBar } from 'primeng/progressbar';
 import { LoaderService } from './core/services/loader.service';
+import { ToastModule } from 'primeng/toast';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ProgressBar],
-  providers: [MessageService],
+  imports: [RouterOutlet, ProgressBar, ToastModule],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

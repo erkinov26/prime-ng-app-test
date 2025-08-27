@@ -8,7 +8,7 @@ import { Test } from './components/pages/mfi/test/test';
 import { RxJs } from './components/pages/mfi/rx-js/rx-js';
 import { DataBinding } from './components/pages/mfi/data-binding/data-binding';
 import {
-  userDetailResolver,
+  UserDetailResolver,
   userResolver,
 } from './components/pages/mfi/users/service/user.resolver';
 
@@ -76,7 +76,7 @@ export const routes: Routes = [
           {
             path: 'users/:id',
             resolve: {
-              userDetail: userDetailResolver,
+              user: UserDetailResolver,
             },
             loadComponent: () =>
               import(

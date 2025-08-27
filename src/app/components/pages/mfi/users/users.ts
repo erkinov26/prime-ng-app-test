@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { UserService } from './service/user.service';
 import { ButtonDirective } from 'primeng/button';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
@@ -10,9 +9,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
   template: `
     <h1 class="mb-4 text-xl font-bold">Users</h1>
 
-    @if (!data) {
-    <h2 class="mt-4 text-gray-500">Loading...</h2>
-    } @else {
     <ul class="flex flex-col gap-2 mt-4">
       @for (u of data; track $index) {
       <li
@@ -24,7 +20,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
       </li>
       }
     </ul>
-    }
   `,
   styles: [],
 })

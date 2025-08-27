@@ -5,6 +5,7 @@
 /tmp
 /out-tsc
 /bazel-out
+lyrics.txt
 
 # Node
 /node_modules
