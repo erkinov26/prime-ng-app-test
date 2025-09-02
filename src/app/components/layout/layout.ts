@@ -74,6 +74,10 @@ export class Layout implements OnInit {
       routerLink: 'mfi/data-binding',
     },
     {
+      label: 'Patterns',
+      routerLink: 'mfi/patterns',
+    },
+    {
       label: 'Users',
       routerLink: 'mfi/users',
     },

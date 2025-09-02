@@ -83,6 +83,16 @@ export const routes: Routes = [
                 './components/pages/mfi/users/user-detail/user-detail'
               ).then((res) => res.UserDetail),
           },
+          {
+            path: 'patterns',
+            // resolve: {
+            //   user: P,
+            // },
+            loadComponent: () =>
+              import('./components/pages/mfi/patterns/patterns').then(
+                (res) => res.Patterns
+              ),
+          },
         ],
       },
       {
