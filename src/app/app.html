@@ -1,4 +1,7 @@
-@if (ls.loading()) {
-<p-progressbar mode="indeterminate" [style]="{ height: '2px' }" />
-} <p-toast />
+@if (isRouterLazyLoading|async) {<p-progressbar
+  mode="indeterminate"
+  [style]="{ height: '2px' }"
+/>}
+
+<p-toast />
 <router-outlet />

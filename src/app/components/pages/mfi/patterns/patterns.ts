@@ -1,6 +1,7 @@
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
 import {
   BehaviorSubject,
   catchError,
@@ -28,23 +29,36 @@ export interface User {
 @Component({
   selector: 'app-patterns',
   standalone: true,
-  imports: [AsyncPipe, JsonPipe, ButtonDirective],
+  imports: [AsyncPipe, JsonPipe, ButtonDirective, NgOptimizedImage],
   template: `
-    <button pButton (click)="refetch()">Refetch (parallel)</button>
+    <!-- <button pButton (click)="refetch()">Refetch (parallel)</button>
     <button pButton (click)="nextUser()">Next User</button>
     <button pButton (click)="refetch()">Refetch</button>
     <h3>3. Parallel Fetch (user + posts)</h3>
-  
+
     @if (parallelData$ | async; as data) { @if (data.status === 'loading') {
     <h1>Loading...</h1>
     } @else if (data.status === 'error') {
     <h1>Error occurs</h1>
     } @else {
     <pre>{{ data.data | json }}</pre>
-    } }
+    } } -->
+    <div class="pokemons">
+      @for (p of pokemons; track p.id; let i = $index) {
+      <img
+        [ngSrc]="p.image"
+        width="96"
+        height="96"
+        [priority]="i < 10"
+        [placeholder]="placeholderImage"
+        alt="{{ p.name }}"
+      />
+      <p>{{ p.name }}</p>
+      }
+    </div>
   `,
 })
-export class Patterns {
+export class Patterns implements OnInit {
   private http = inject(HttpClient);
 
   // --- umumiy subjectlar ---
@@ -135,5 +149,21 @@ export class Patterns {
 
   refetch() {
     this.refetchSubject.next();
+  }
+  pokemons: any[] = [];
+  placeholderImage = 'assets/placeholder.png';
+
+  ngOnInit() {
+    this.http
+      .get<any>('https://pokeapi.co/api/v2/pokemon?limit=145')
+      .subscribe((data) => {
+        this.pokemons = data.results.map((p: any, index: number) => ({
+          id: index + 1,
+          name: p.name,
+          image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+            index + 1
+          }.png`,
+        }));
+      });
   }
 }
